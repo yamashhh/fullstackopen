@@ -1,0 +1,22 @@
+title https://studies.cs.helsinki.fi/exampleapp/spa POST
+
+note over browser:
+1. form submit event
+default handling of form submit is prevented
+
+2. new note object is created
+
+3. note object is added to the notes array
+
+4. notes are re-rendered based on the updated notes array
+
+5. note object is sent to the server via HTTP POST request
+Contetent-Type: application/json
+end note
+
+browser->server: HTTP POST https://studies.cs.helsinki.fi/exampleapp/new_note_spa
+server-->browser: HTTP status code 201
+
+note over browser:
+console outputs response text from server
+end note
