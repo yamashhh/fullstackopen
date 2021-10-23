@@ -41,7 +41,7 @@ const App = () => {
     <div>
       <h2>Phonebook</h2>
       <FormInput label="filter shown with" onChange={handleFilter} />
-      <h2>add a new</h2>
+      <h3>add a new</h3>
       <PersonForm
         onSubmit={handleSubmit}
         name={newName}
@@ -49,7 +49,7 @@ const App = () => {
         number={newNumber}
         onNumberChange={(event) => setNewNumber(event.target.value)}
       />
-      <h2>Numbers</h2>
+      <h3>Numbers</h3>
       <Persons persons={personsToShow} />
     </div>
   );
