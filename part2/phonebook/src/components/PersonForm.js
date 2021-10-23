@@ -1,4 +1,4 @@
-import PersonFormInput from "./PersonFormInput";
+import FormInput from "./FormInput";
 
 const PersonForm = ({
   onSubmit,
@@ -8,8 +8,8 @@ const PersonForm = ({
   onNumberChange,
 }) => (
   <form onSubmit={onSubmit}>
-    <PersonFormInput label="name" value={name} onChange={onNameChange} />
-    <PersonFormInput label="number" value={number} onChange={onNumberChange} />
+    <FormInput label="name:" value={name} onChange={onNameChange} />
+    <FormInput label="number:" value={number} onChange={onNumberChange} />
     <div>
       <button type="submit">add</button>
     </div>

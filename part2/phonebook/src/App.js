@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Filter from "./components/Filter";
+import FormInput from "./components/FormInput";
 import PersonForm from "./components/PersonForm";
 import Persons from "./components/Persons";
 
@@ -10,9 +10,9 @@ const App = () => {
     { name: "Dan Abramov", number: "12-43-234345", id: 3 },
     { name: "Mary Poppendieck", number: "39-23-6423122", id: 4 },
   ]);
+  const [filteredPersons, setFilteredPersons] = useState([]);
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
-  const [filteredPersons, setFilteredPersons] = useState([]);
 
   const personsToShow = filteredPersons.length ? filteredPersons : persons;
 
@@ -40,7 +40,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <Filter onChange={handleFilter} />
+      <FormInput label="filter shown with" onChange={handleFilter} />
       <h2>add a new</h2>
       <PersonForm
         onSubmit={handleSubmit}
