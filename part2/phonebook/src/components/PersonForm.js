@@ -9,7 +9,12 @@ const PersonForm = ({
 }) => (
   <form onSubmit={onSubmit}>
     <FormInput label="name:" value={name} onChange={onNameChange} />
-    <FormInput label="number:" value={number} onChange={onNumberChange} />
+    <FormInput
+      label="number:"
+      type="tel"
+      value={number}
+      onChange={onNumberChange}
+    />
     <div>
       <button type="submit">add</button>
     </div>

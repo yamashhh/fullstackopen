@@ -1,6 +1,6 @@
-const FormInput = ({ label, value, onChange }) => (
+const FormInput = ({ label, type = "text", value, onChange }) => (
   <label style={{ display: "block" }}>
-    {label} <input type="text" value={value} onChange={onChange} />
+    {label} <input type={type} value={value} onChange={onChange} required />
   </label>
 );
 
