@@ -2,10 +2,10 @@ import express, { json } from "express";
 import morgan from "morgan";
 const PORT = 3001;
 
-morgan.token("request-body", (request) => JSON.stringify(request.body));
-
 const app = express();
 app.use(json());
+
+morgan.token("request-body", (request) => JSON.stringify(request.body));
 app.use(morgan("tiny", { skip: (request) => request.method === "POST" }));
 app.use(
   morgan(

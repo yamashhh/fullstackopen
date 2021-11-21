@@ -1,7 +1,9 @@
-import express from "express";
+import express, { json } from "express";
+import cors from "cors";
 
 const app = express();
-app.use(express.json());
+app.use(cors());
+app.use(json());
 app.use((request, _, next) => {
   console.log("Method:", request.method);
   console.log("Path:  ", request.path);
@@ -9,6 +11,7 @@ app.use((request, _, next) => {
   console.log("---");
   next();
 });
+app.use(express.static("build"));
 
 let notes = [
   {
@@ -67,5 +70,5 @@ app.delete("/api/notes/:id", (request, response) => {
   response.status(204).end();
 });
 
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
