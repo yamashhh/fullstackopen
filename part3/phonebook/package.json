@@ -6,7 +6,11 @@
   "type": "module",
   "scripts": {
     "start": "node index.js",
-    "dev": "nodemon index.js"
+    "dev": "nodemon index.js",
+    "build:ui": "rm -rf build && cd ../../part2/phonebook/ && yarn build --prod && cp -r build ../../part3/phonebook/",
+    "deploy": "git push heroku main",
+    "deploy:full": "yarn build:ui && git add . && git commit -m \"ci: build ui\" && yarn deploy",
+    "logs:prod": "heroku logs --tail"
   },
   "dependencies": {
     "express": "^4.17.1",
