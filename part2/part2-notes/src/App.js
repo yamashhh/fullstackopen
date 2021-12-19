@@ -13,15 +13,7 @@ const App = () => {
   useEffect(() => {
     console.log("effect");
     const fetchData = async () => {
-      // setNotes(await noteService.getAll());
-      setNotes(
-        (await noteService.getAll()).concat({
-          id: 10000,
-          content: "This note is not saved to server",
-          date: "2019-05-30T17:30:31.098Z",
-          important: true,
-        })
-      );
+      setNotes(await noteService.getAll());
       console.log("promise fulfilled");
     };
     fetchData();
@@ -43,14 +35,14 @@ const App = () => {
   };
 
   const toggleImportanceOf = async (id) => {
-    const note = notes.find((n) => n.id === id);
+    const note = notes.find((n) => n._id === id);
     try {
       const returnedNote = await noteService.update(id, {
         ...note,
         important: !note.important,
       });
       setNotes((prev) =>
-        prev.map((note) => (note.id === id ? returnedNote : note))
+        prev.map((note) => (note._id === id ? returnedNote : note))
       );
     } catch (error) {
       error.request.status === 404 || error.response.status === 404
@@ -59,7 +51,7 @@ const App = () => {
           )
         : setErrorMessage(JSON.stringify(error));
       setTimeout(() => setErrorMessage(null), 5000);
-      setNotes((prev) => prev.filter((n) => n.id !== id));
+      setNotes((prev) => prev.filter((n) => n._id !== id));
     }
   };
 
@@ -73,9 +65,9 @@ const App = () => {
       <ul>
         {notesToShow.map((note) => (
           <Note
-            key={note.id}
+            key={note._id}
             note={note}
-            toggleImportance={() => toggleImportanceOf(note.id)}
+            toggleImportance={() => toggleImportanceOf(note._id)}
           />
         ))}
       </ul>
