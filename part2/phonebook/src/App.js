@@ -48,9 +48,9 @@ const App = () => {
         `The person "${person.name}" was not found, or has already been deleted from the server`,
         true
       );
-      return setPersons((prev) => prev.filter((p) => p.id !== person.id));
+      return setPersons((prev) => prev.filter((p) => p._id !== person._id));
     }
-    console.error({ ...error });
+    showMessage(error.response?.data?.error ?? error.message, true);
   };
 
   const handleSubmit = async (event) => {
@@ -73,7 +73,7 @@ const App = () => {
         });
         setPersons((prev) =>
           prev.map((person) =>
-            person.id === updatedPerson.id ? updatedPerson : person
+            person._id === updatedPerson._id ? updatedPerson : person
           )
         );
         return showMessage(`Updated ${updatedPerson.name}`);
@@ -100,8 +100,8 @@ const App = () => {
   const deletePerson = async (person) => {
     if (window.confirm(`Delete ${person.name}?`))
       try {
-        await personsService.deletePerson(person.id);
-        setPersons((prev) => prev.filter((p) => p.id !== person.id));
+        await personsService.deletePerson(person._id);
+        setPersons((prev) => prev.filter((p) => p._id !== person._id));
         showMessage(`Deleted ${person.name}`);
       } catch (error) {
         handleError(error, person);
