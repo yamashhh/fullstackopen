@@ -1,5 +1,4 @@
 import express, { json } from "express";
-import cors from "cors";
 import dotenv from "dotenv";
 import Note from "./models/note.js";
 import mongoose from "mongodb";
@@ -7,7 +6,7 @@ import mongoose from "mongodb";
 dotenv.config();
 
 const app = express();
-app.use(cors());
+app.use(express.static("build"));
 app.use(json());
 app.use((request, _, next) => {
   console.log("Method:", request.method);
@@ -16,7 +15,6 @@ app.use((request, _, next) => {
   console.log("---");
   next();
 });
-app.use(express.static("build"));
 
 app.post("/api/notes", async (request, response) => {
   const body = request.body;
@@ -44,28 +42,54 @@ app.get("/api/notes", async (_, response) => {
   response.json(notes);
 });
 
-app.get("/api/notes/:id", async (request, response) => {
-  if (!mongoose.ObjectId.isValid(request.params.id))
-    return response.status(422).end();
-  const note = await Note.findById(request.params.id);
-  note ? response.json(note) : response.status(404).end();
+app.get("/api/notes/:id", async (request, response, next) => {
+  try {
+    const note = await Note.findById(request.params.id);
+    note ? response.json(note) : response.status(404).end();
+  } catch (error) {
+    next(error);
+  }
 });
 
-app.delete("/api/notes/:id", async (request, response) => {
-  if (!mongoose.ObjectId.isValid(request.params.id))
-    return response.status(422).end();
-  const note = Note.findById(request.params.id);
-  if (note) {
-    try {
-      await note.deleteOne();
-      response.status(204).end();
-      return;
-    } catch (error) {
-      console.error("failed to delete note from database: ", error);
-    }
+app.put("/api/notes/:id", async (request, response, next) => {
+  const { content, important } = request.body;
+
+  try {
+    const updatedNote = await Note.findByIdAndUpdate(
+      request.params.id,
+      { content, important },
+      { new: true }
+    );
+    response.json(updatedNote);
+  } catch (error) {
+    next(error);
   }
-  response.status(404).end();
 });
+
+app.delete("/api/notes/:id", async (request, response, next) => {
+  try {
+    await Note.findByIdAndDelete(request.params.id);
+    response.status(204).end();
+  } catch (error) {
+    next(error);
+  }
+});
+
+const unknownEndpoint = (_, response) => {
+  response.status(404).send({ error: "unknown endpoint" });
+};
+app.use(unknownEndpoint);
+
+const errorHandler = (error, _, response, next) => {
+  console.error(error.message);
+
+  if (error.name === "CastError") {
+    return response.status(400).send({ error: "malformatted id" });
+  }
+
+  next(error);
+};
+app.use(errorHandler);
 
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
