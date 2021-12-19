@@ -16,14 +16,12 @@ app.use((request, _, next) => {
   next();
 });
 
-app.post("/api/notes", async (request, response) => {
-  const body = request.body;
-  if (!body.content)
-    return response.status(400).json({ error: "content missing" });
+app.post("/api/notes", async (request, response, next) => {
+  const { content, important = false } = request.body;
 
   const note = new Note({
-    content: body.content,
-    important: !!body?.important,
+    content,
+    important,
     date: new Date(),
   });
 
@@ -31,7 +29,7 @@ app.post("/api/notes", async (request, response) => {
     const savedNote = await note.save();
     response.json(savedNote);
   } catch (error) {
-    console.error("failed to save note to database: ", error);
+    next(error);
   }
 });
 
@@ -85,6 +83,9 @@ const errorHandler = (error, _, response, next) => {
 
   if (error.name === "CastError") {
     return response.status(400).send({ error: "malformatted id" });
+  }
+  if (error.name === "ValidationError") {
+    return response.status(422).json({ error: error.message });
   }
 
   next(error);

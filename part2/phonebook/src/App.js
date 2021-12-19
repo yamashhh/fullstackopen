@@ -50,7 +50,7 @@ const App = () => {
       );
       return setPersons((prev) => prev.filter((p) => p._id !== person._id));
     }
-    console.error({ ...error });
+    showMessage(error.response?.data?.error ?? error.message, true);
   };
 
   const handleSubmit = async (event) => {

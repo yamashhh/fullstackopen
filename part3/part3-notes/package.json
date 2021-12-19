@@ -9,7 +9,7 @@
     "dev": "nodemon index.js",
     "build:ui": "rm -rf build && cd ../../part2/part2-notes/ && npm run build --prod && cp -r build ../../part3/part3-notes/",
     "deploy": "git push heroku main",
-    "deploy:full": "build:ui && git add . && git commit -m uibuild && git push && deploy",
+    "deploy:full": "yarn build:ui && git add . && git commit -m \"ci: build ui\" && yarn deploy",
     "logs:prod": "heroku logs --tail"
   },
   "dependencies": {
