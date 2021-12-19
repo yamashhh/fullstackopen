@@ -6,9 +6,9 @@ const getAll = async () => (await axios.get(baseUrl)).data;
 const create = async (person) => (await axios.post(baseUrl, person)).data;
 
 const update = async (person) =>
-  (await axios.put(`${baseUrl}/${person.id}`, person)).data;
+  (await axios.put(`${baseUrl}/${person._id}`, person)).data;
 
-const deletePerson = async (id) => await axios.delete(`${baseUrl}/${id}`);
+const deletePerson = async (_id) => await axios.delete(`${baseUrl}/${_id}`);
 
 const personsService = {
   getAll,
