@@ -76,9 +76,9 @@ app.delete('/api/persons/:id', async (request, response, next) => {
 })
 
 app.get('/info', async (_, response) => {
-  const numPersons = await Person.estimatedDocumentCount()
+  const peopleCount = await Person.estimatedDocumentCount()
   return response.send(`
-<p>Phonebook has info for ${numPersons} people</p>
+<p>Phonebook has info for ${peopleCount} people</p>
 <p>${new Date().toString()}</p>
 `)
 })
