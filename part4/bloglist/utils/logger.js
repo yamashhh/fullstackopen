@@ -1,10 +1,12 @@
-const logger = {
-  info(...params) {
-    console.log(...params)
-  },
-  error(...params) {
-    console.error(...params)
-  },
+const info = (...params) => {
+  console.log(...params)
 }
 
-export default logger
+const error = (...params) => {
+  console.error(...params)
+}
+
+export default {
+  info,
+  error,
+}
