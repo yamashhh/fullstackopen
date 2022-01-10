@@ -1,7 +1,7 @@
 import express, { json } from 'express'
 import morgan from 'morgan'
 import dotenv from 'dotenv'
-import Person from './models/person'
+import Person from './models/person.js' // eslint-disable-line import/extensions
 
 dotenv.config()
 const PORT = process.env.PORT || 3001
