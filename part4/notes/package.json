@@ -10,15 +10,27 @@
     "build:ui": "rm -rf build && cd ../../part2/notes/ && npm run build --prod && cp -r build ../../part4/notes/",
     "deploy": "git push heroku main",
     "deploy:full": "yarn build:ui && git add . && git commit -m \"ci: build ui\" && yarn deploy",
-    "logs:prod": "heroku logs --tail"
+    "logs:prod": "heroku logs --tail",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write .",
+    "test": "NODE_OPTIONS=--experimental-vm-modules jest --verbose"
   },
   "dependencies": {
     "cors": "^2.8.5",
-    "dotenv": "^10.0.0",
-    "express": "^4.17.1",
-    "mongoose": "^6.0.13"
+    "dotenv": "^12.0.3",
+    "express": "^4.17.2",
+    "mongoose": "^6.1.6"
   },
   "devDependencies": {
-    "nodemon": "^2.0.14"
+    "eslint": "^8.6.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-config-standard": "^16.0.3",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^6.0.0",
+    "jest": "^27.4.7",
+    "nodemon": "^2.0.15",
+    "prettier": "^2.5.1"
   }
 }
