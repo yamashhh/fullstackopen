@@ -2,7 +2,7 @@ import mongoose from 'mongoose'
 import supertest from 'supertest'
 import app from '../app'
 import Blog from '../models/blog'
-import { biggerList, blogsInDb } from './test_helper'
+import { biggerList, blogsInDb, nonExistingId } from './test_helper'
 
 beforeEach(async () => {
   await Blog.deleteMany({})
@@ -77,6 +77,56 @@ describe('POST /api/blogs', () => {
     }
 
     await api.post('/api/blogs').send(blogWithoutTitleAndUrl).expect(400)
+  })
+})
+
+describe('DELETE /api/blogs/:id', () => {
+  test('a blog can be deleted', async () => {
+    const blogsAtStart = await blogsInDb()
+    const blogToDelete = blogsAtStart[0]
+
+    await api.delete(`/api/blogs/${blogToDelete.id}`).expect(204)
+
+    const blogsAtEnd = await blogsInDb()
+    expect(blogsAtEnd).toHaveLength(blogsAtStart.length - 1)
+    expect(blogsAtEnd).not.toContainEqual(blogToDelete)
+  })
+
+  test('fails with status code 404 if blog is already deleted', async () => {
+    const validNonExistingId = await nonExistingId()
+    await api.delete(`/api/blogs/${validNonExistingId}`).expect(404)
+  })
+})
+
+describe('PATCH /api/blogs/:id', () => {
+  test('amount of likes can be updated', async () => {
+    const blogsAtStart = await blogsInDb()
+    const blogToUpdate = blogsAtStart[0]
+
+    await api
+      .patch(`/api/blogs/${blogToUpdate.id}`)
+      .send({ likes: 42 })
+      .expect(200)
+
+    const blogsAtEnd = await blogsInDb()
+    expect(blogsAtEnd).toHaveLength(blogsAtStart.length)
+    expect(blogsAtEnd[0]).toEqual({ ...blogToUpdate, likes: 42 })
+  })
+
+  test('amount of likes is 0 when it is not defined on update', async () => {
+    const blogsAtStart = await blogsInDb()
+    const blogToUpdate = blogsAtStart[0]
+
+    await api.patch(`/api/blogs/${blogToUpdate.id}`).send({}).expect(200)
+
+    const blogsAtEnd = await blogsInDb()
+    expect(blogsAtEnd).toHaveLength(blogsAtStart.length)
+    expect(blogsAtEnd[0]).toEqual({ ...blogToUpdate, likes: 0 })
+  })
+
+  test('fails with status code 404 if blog does not exist', async () => {
+    const validNonExistingId = await nonExistingId()
+    await api.patch(`/api/blogs/${validNonExistingId}`).send({}).expect(404)
   })
 })
 

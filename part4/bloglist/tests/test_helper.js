@@ -170,3 +170,16 @@ export const biggerListWithManyTopFavorites = [
 
 export const blogsInDb = async () =>
   (await Blog.find({})).map((blog) => blog.toJSON())
+
+export const nonExistingId = async () => {
+  const blog = new Blog({
+    title: 'dummy',
+    author: 'dummy',
+    url: 'dummy',
+    likes: 0,
+  })
+  await blog.save()
+  await blog.delete()
+
+  return blog._id.toString()
+}
