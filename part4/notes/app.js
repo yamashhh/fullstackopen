@@ -1,4 +1,5 @@
 import express, { json } from 'express'
+import 'express-async-errors'
 import notesRouter from './controllers/notes.js'
 import logger from './utils/logger.js'
 import { MONGODB_URI } from './utils/config.js'

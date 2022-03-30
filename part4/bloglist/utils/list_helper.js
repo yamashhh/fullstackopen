@@ -1,18 +1,18 @@
 /**
- * dummy function
- *
- * @param {Array} blogs
- * @returns 1
- */
-export const dummy = (blogs) => {
-  return 1
-}
-
-/**
  * a single blog object
  *
  * @typedef {{_id: string, title: string, author: string, url: string, likes: number}} Blog
  */
+
+/**
+ * dummy function
+ *
+ * @param {Blog[]} blogs
+ * @returns {1}
+ */
+export const dummy = (blogs) => {
+  return 1
+}
 
 /**
  * accepts an array of blogs and returns the total number of likes
@@ -39,6 +39,13 @@ export const favoriteBlog = (blogs) => {
   )?.[0]
 }
 
+/**
+ * https://stackoverflow.com/a/34890276
+ *
+ * @param {any[]} array
+ * @param {string} key
+ * @returns {object}
+ */
 const groupBy = (array, key) => {
   return array.reduce((previousValue, currentValue) => {
     previousValue[currentValue[key]] = previousValue[currentValue[key]] || []
@@ -68,6 +75,18 @@ export const mostBlogs = (blogs) => {
     .sort((a, b) => b.blogs - a.blogs)?.[0]
 }
 
+/**
+ * object representing author with most likes
+ *
+ * @typedef {{author: string, likes: number}} AuthorWithMostLikes
+ */
+
+/**
+ * accepts an array of blogs and returns the author with most likes
+ *
+ * @param {Blog[]} blogs
+ * @returns {AuthorWithMostLikes} author with most likes
+ */
 export const mostLikes = (blogs) => {
   return Object.entries(groupBy(blogs, 'author'))
     .map(([key, value]) => ({
