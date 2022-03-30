@@ -10,7 +10,7 @@
     "lint:fix": "eslint \"**/*.js\" --fix",
     "format": "prettier --write .",
     "dev": "nodemon main",
-    "test": "NODE_OPTIONS=--experimental-vm-modules jest --verbose"
+    "test": "NODE_ENV=test NODE_OPTIONS=--experimental-vm-modules jest --verbose --runInBand"
   },
   "devDependencies": {
     "eslint": "^8.6.0",
@@ -21,7 +21,8 @@
     "eslint-plugin-promise": "^6.0.0",
     "jest": "^27.4.7",
     "nodemon": "^2.0.15",
-    "prettier": "2.5.1"
+    "prettier": "2.5.1",
+    "supertest": "^6.2.2"
   },
   "dependencies": {
     "cors": "^2.8.5",

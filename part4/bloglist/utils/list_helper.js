@@ -1,7 +1,7 @@
 /**
  * a single blog object
  *
- * @typedef {{_id: string, title: string, author: string, url: string, likes: number}} Blog
+ * @typedef {{id: string, title: string, author: string, url: string, likes: number}} Blog
  */
 
 /**

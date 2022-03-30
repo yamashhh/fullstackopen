@@ -3,18 +3,20 @@ import Blog from '../models/blog.js'
 
 const blogsRouter = Router()
 
-blogsRouter.get('/', (request, response) => {
-  Blog.find({}).then((blogs) => {
-    response.json(blogs)
-  })
+blogsRouter.get('/', async (_, response) => {
+  const blogs = await Blog.find({})
+  response.json(blogs)
 })
 
-blogsRouter.post('/', (request, response) => {
-  const blog = new Blog(request.body)
+blogsRouter.post('/', async (request, response) => {
+  const { title, author, url, likes } = request.body
+  if (!title || !url) {
+    return response.status(400).end()
+  }
 
-  blog.save().then((result) => {
-    response.status(201).json(result)
-  })
+  const blog = new Blog({ title, author, url, likes: likes ?? 0 })
+  const result = await blog.save()
+  response.status(201).json(result)
 })
 
 export default blogsRouter
