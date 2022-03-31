@@ -2,7 +2,7 @@ import mongoose from 'mongoose'
 import supertest from 'supertest'
 import app from '../app'
 import Blog from '../models/blog'
-import { biggerList, blogsInDb, nonExistingId } from './test_helper'
+import { biggerList, blogsInDb, nonExistingBlogId } from './test_helper'
 
 beforeEach(async () => {
   await Blog.deleteMany({})
@@ -93,7 +93,7 @@ describe('DELETE /api/blogs/:id', () => {
   })
 
   test('fails with status code 404 if blog is already deleted', async () => {
-    const validNonExistingId = await nonExistingId()
+    const validNonExistingId = await nonExistingBlogId()
     await api.delete(`/api/blogs/${validNonExistingId}`).expect(404)
   })
 })
@@ -125,7 +125,7 @@ describe('PATCH /api/blogs/:id', () => {
   })
 
   test('fails with status code 404 if blog does not exist', async () => {
-    const validNonExistingId = await nonExistingId()
+    const validNonExistingId = await nonExistingBlogId()
     await api.patch(`/api/blogs/${validNonExistingId}`).send({}).expect(404)
   })
 })
