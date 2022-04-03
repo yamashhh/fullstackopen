@@ -5,12 +5,18 @@ import bcrypt from 'bcrypt'
 const usersRouter = express.Router()
 
 usersRouter.get('/', async (_, response) => {
-  const users = await User.find({})
+  const users = await User.find({}).populate('blogs', { likes: 0, user: 0 })
   response.json(users)
 })
 
 usersRouter.post('/', async (request, response) => {
   const { username, name, password } = request.body
+
+  const existingUser = await User.findOne({ username })
+  if (existingUser) {
+    return response.status(409).json({ error: 'Username already taken.' })
+  }
+
   if (!password) {
     return response.status(422).json({ error: 'Password is required.' })
   }
@@ -24,7 +30,7 @@ usersRouter.post('/', async (request, response) => {
 
   const user = await new User({
     username,
-    name,
+    name: name ?? '',
     passwordHash,
   }).save()
   response.status(201).json(user)

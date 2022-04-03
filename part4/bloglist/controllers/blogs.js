@@ -1,27 +1,56 @@
 import { Router } from 'express'
 import Blog from '../models/blog.js'
+import { userExtractor } from '../utils/middleware.js'
 
 const blogsRouter = Router()
 
 blogsRouter.get('/', async (_, response) => {
-  const blogs = await Blog.find({})
+  const blogs = await Blog.find({}).populate('user', {
+    passwordHash: 0,
+    blogs: 0,
+  })
   response.json(blogs)
 })
 
-blogsRouter.post('/', async (request, response) => {
+blogsRouter.post('/', userExtractor, async (request, response) => {
   const { title, author, url, likes } = request.body
   if (!title || !url) {
     return response.status(400).end()
   }
 
-  const blog = new Blog({ title, author, url, likes: likes ?? 0 })
+  const user = request.user
+  if (!user) {
+    return response.status(401).json({ error: 'Failed to identify user.' })
+  }
+
+  const blog = new Blog({
+    title,
+    author,
+    url,
+    likes: likes ?? 0,
+    user: user._id,
+  })
   const result = await blog.save()
+
+  user.blogs = [...user.blogs, result._id]
+  await user.save()
+
   response.status(201).json(result)
 })
 
-blogsRouter.delete('/:id', async (request, response) => {
-  const result = await Blog.findByIdAndDelete(request.params.id)
-  result ? response.status(204).end() : response.status(404).end()
+blogsRouter.delete('/:id', userExtractor, async (request, response) => {
+  const blog = await Blog.findById(request.params.id)
+  if (!blog) {
+    return response.status(404).end()
+  }
+
+  const user = request.user
+  if (!user || user.id !== blog.user.toString()) {
+    return response.status(401).json({ error: 'Credentials mismatch.' })
+  }
+
+  await Blog.deleteOne(blog)
+  response.status(204).end()
 })
 
 blogsRouter.patch('/:id', async (request, response) => {
