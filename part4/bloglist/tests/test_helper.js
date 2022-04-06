@@ -1,4 +1,5 @@
 import Blog from '../models/blog'
+import User from '../models/user'
 
 export const listWithOneBlog = [
   {
@@ -170,3 +171,24 @@ export const biggerListWithManyTopFavorites = [
 
 export const blogsInDb = async () =>
   (await Blog.find({})).map((blog) => blog.toJSON())
+
+export const nonExistingBlogId = async () => {
+  const blog = new Blog({
+    title: 'dummy',
+    author: 'dummy',
+    url: 'dummy',
+    likes: 0,
+  })
+  await blog.save()
+  await blog.delete()
+
+  return blog._id.toString()
+}
+
+export const initialUsers = [
+  { username: 'user_1', name: 'User 1', password: 'password_1' },
+  { username: 'user_2', name: 'User 2', password: 'password_2' },
+]
+
+export const usersInDb = async () =>
+  (await User.find({})).map((user) => user.toJSON())

@@ -35,14 +35,14 @@ const App = () => {
   };
 
   const toggleImportanceOf = async (id) => {
-    const note = notes.find((n) => n._id === id);
+    const note = notes.find((n) => n.id === id);
     try {
       const returnedNote = await noteService.update(id, {
         ...note,
         important: !note.important,
       });
       setNotes((prev) =>
-        prev.map((note) => (note._id === id ? returnedNote : note))
+        prev.map((note) => (note.id === id ? returnedNote : note))
       );
     } catch (error) {
       error.request.status === 404 || error.response.status === 404
@@ -51,7 +51,7 @@ const App = () => {
           )
         : setErrorMessage(JSON.stringify(error));
       setTimeout(() => setErrorMessage(null), 5000);
-      setNotes((prev) => prev.filter((n) => n._id !== id));
+      setNotes((prev) => prev.filter((n) => n.id !== id));
     }
   };
 
@@ -65,9 +65,9 @@ const App = () => {
       <ul>
         {notesToShow.map((note) => (
           <Note
-            key={note._id}
+            key={note.id}
             note={note}
-            toggleImportance={() => toggleImportanceOf(note._id)}
+            toggleImportance={() => toggleImportanceOf(note.id)}
           />
         ))}
       </ul>
