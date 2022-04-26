@@ -1,18 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import blogService from './services/blogs'
 import loginService from './services/login'
-import Blogs from './components/Blogs'
-import LoginForm from './components/LoginForm'
+import Blogs from './components/organisms/Blogs/Blogs'
+import LoginForm from './components/molecules/LoginForm/LoginForm'
 import Snackbar from './components/atoms/Snackbar/Snackbar'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState(null)
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
-  const [title, setTitle] = useState('')
-  const [author, setAuthor] = useState('')
-  const [url, setUrl] = useState('')
   const [message, setMessage] = useState('')
   const [isError, setIsError] = useState(false)
 
@@ -38,17 +33,14 @@ const App = () => {
     }
   }, [])
 
-  const handleLogin = async (event) => {
-    event.preventDefault()
+  const handleLogin = async (credentials) => {
     try {
-      const result = await loginService.login({ username, password })
+      const result = await loginService.login(credentials)
       window.localStorage.setItem(
         'part-5-bloglist-user',
         JSON.stringify(result)
       )
       handleSetUser(result)
-      setUsername('')
-      setPassword('')
       showMessage(`logged in as ${result.name}`)
     } catch (exception) {
       showMessage(exception?.response?.data?.error ?? `${exception}`, true)
@@ -68,21 +60,48 @@ const App = () => {
     getAllBlogs()
   }, [])
 
-  const handleCreate = async (event) => {
-    event.preventDefault()
+  const handleCreate = async (blog) => {
     try {
-      const blog = await blogService.create({
-        title,
-        author,
-        url,
-      })
-      setBlogs((previous) => [...previous, blog])
-      setTitle('')
-      setAuthor('')
-      setUrl('')
-      showMessage(`a new blog ${blog.title} by ${blog.author} added`)
-    } catch (exception) {
-      showMessage(exception?.response?.data?.error ?? `${exception}`, true)
+      const newBlog = await blogService.create(blog)
+      setBlogs((previous) => [...previous, newBlog])
+      showMessage(`a new blog ${newBlog.title} by ${newBlog.author} added`)
+    } catch (error) {
+      showMessage(error?.response?.data?.error ?? `${error}`, true)
+      throw error
+    }
+  }
+
+  const handleUpdate = async (id, blog) => {
+    try {
+      const updatedBlog = await blogService.update(id, blog)
+      setBlogs((previous) =>
+        previous.map((blog) => (blog.id === id ? updatedBlog : blog))
+      )
+      showMessage(`blog ${updatedBlog.title} by ${updatedBlog.author} updated`)
+    } catch (error) {
+      showMessage(error?.response?.data?.error ?? `${error}`, true)
+      throw error
+    }
+  }
+
+  const handleDelete = async (blogToDelete) => {
+    if (
+      window.confirm(
+        `remove blog ${blogToDelete.title} by ${blogToDelete.author}?`
+      )
+    ) {
+      try {
+        await blogService.deleteBlog(blogToDelete.id)
+        setBlogs((previous) =>
+          previous.filter((blog) => blog.id !== blogToDelete.id)
+        )
+        showMessage(
+          `blog ${blogToDelete.title} by ${blogToDelete.author} deleted`
+        )
+      } catch (error) {
+        showMessage(error?.response?.data?.error ?? `${error}`, true)
+        throw error
+      }
     }
   }
 
@@ -96,19 +115,13 @@ const App = () => {
             blogs,
             user,
             handleLogout,
-            title,
-            setTitle,
-            author,
-            setAuthor,
-            url,
-            setUrl,
             handleCreate,
+            handleUpdate,
+            handleDelete,
           }}
         />
       ) : (
-        <LoginForm
-          {...{ handleLogin, username, setUsername, password, setPassword }}
-        />
+        <LoginForm handleLogin={handleLogin} />
       )}
     </main>
   )

@@ -18,6 +18,19 @@ const create = async (blog) => {
   return response.data
 }
 
-const blogService = { setToken, getAll, create }
+const update = async (id, blog) => {
+  const response = await axios.patch(`${baseUrl}/${id}`, blog, {
+    headers: { Authorization: `bearer ${token}` },
+  })
+  return response.data
+}
+
+const deleteBlog = async (id) => {
+  await axios.delete(`${baseUrl}/${id}`, {
+    headers: { Authorization: `bearer ${token}` },
+  })
+}
+
+const blogService = { setToken, getAll, create, update, deleteBlog }
 
 export default blogService
