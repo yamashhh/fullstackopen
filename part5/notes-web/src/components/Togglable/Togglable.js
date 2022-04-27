@@ -11,16 +11,26 @@ const Togglable = forwardRef((props, ref) => {
   });
 
   return isVisible ? (
-    <>
+    <div data-testid="togglableContent">
       {props.children}
-      <button onClick={toggleVisibility} style={{ display: "block" }}>
+      <button
+        data-testid="toggleButton"
+        onClick={toggleVisibility}
+        style={{ display: "block" }}
+      >
         cancel
       </button>
-    </>
+    </div>
   ) : (
-    <button onClick={toggleVisibility} style={{ display: "block" }}>
-      {props.buttonLabel}
-    </button>
+    <div data-testid="togglableContent">
+      <button
+        data-testid="toggleButton"
+        onClick={toggleVisibility}
+        style={{ display: "block" }}
+      >
+        {props.buttonLabel}
+      </button>
+    </div>
   );
 });
 

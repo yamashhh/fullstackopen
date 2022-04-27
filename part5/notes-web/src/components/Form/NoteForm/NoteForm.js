@@ -23,11 +23,14 @@ const NoteForm = ({ createNote }) => {
     >
       <h2>Create a new note</h2>
       <input
+        data-testid="noteInput"
         type="text"
         value={newNote}
         onChange={(event) => setNewNote(event.target.value)}
       />
-      <button type="submit">save</button>
+      <button type="submit" data-testid="saveButton">
+        save
+      </button>
     </form>
   );
 };
