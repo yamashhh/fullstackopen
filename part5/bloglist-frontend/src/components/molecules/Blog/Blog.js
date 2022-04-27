@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import PropTypes from 'prop-types'
 
 const Blog = ({ blog, handleUpdate, handleDelete }) => {
   const [isVisible, setIsVisible] = useState(false)
@@ -27,23 +28,26 @@ const Blog = ({ blog, handleUpdate, handleDelete }) => {
 
   return (
     <article>
-      <h4>
+      <h4 data-testid="blogHeading">
         {blog.title} {blog.author}
-        <button onClick={() => setIsVisible((prev) => !prev)}>
+        <button
+          onClick={() => setIsVisible((prev) => !prev)}
+          data-testid="toggleDetailsButton"
+        >
           {isVisible ? 'hide' : 'view'}
         </button>
       </h4>
       {isVisible && (
         <>
           <ul style={{ listStyle: 'none' }}>
-            <li>{blog.url}</li>
-            <li>
-              {blog.likes}{' '}
+            <li data-testid="blogUrl">{blog.url}</li>
+            <li data-testid="blogLikes">
+              {blog.likes}
               <button onClick={handleLike} disabled={isUpdatingLikes}>
                 like
               </button>
             </li>
-            <li>{blog.user.name}</li>
+            <li data-testid="blogUserName">{blog.user.name}</li>
           </ul>
           <button onClick={handleRemove} disabled={isRemovingBlog}>
             remove
@@ -54,4 +58,17 @@ const Blog = ({ blog, handleUpdate, handleDelete }) => {
   )
 }
 
+Blog.propTypes = {
+  blog: PropTypes.shape({
+    title: PropTypes.string.isRequired,
+    author: PropTypes.string,
+    url: PropTypes.string.isRequired,
+    likes: PropTypes.number.isRequired,
+    user: PropTypes.shape({
+      name: PropTypes.string.isRequired,
+    }).isRequired,
+  }).isRequired,
+  handleUpdate: PropTypes.func.isRequired,
+  handleDelete: PropTypes.func.isRequired,
+}
 export default Blog
