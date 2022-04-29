@@ -43,4 +43,22 @@ describe('<Blog/>', () => {
     expect(blogLikes).toHaveTextContent(blog.likes)
     expect(blogUserName).toHaveTextContent(blog.user.name)
   })
+
+  test('clicking "like" button twice triggers the event handler twice', async () => {
+    render(<Blog {...{ blog, handleUpdate, handleDelete }} />)
+    const toggleDetailsButton = screen.getByTestId('toggleDetailsButton')
+    const user = userEvent.setup()
+
+    // first like event
+    await user.click(toggleDetailsButton)
+    const firstLikeButton = screen.getByTestId('likeButton')
+    await user.click(firstLikeButton)
+
+    // second like event
+    await user.click(toggleDetailsButton)
+    const secondLikeButton = screen.getByTestId('likeButton')
+    await user.click(secondLikeButton)
+
+    expect(handleUpdate).toHaveBeenCalledTimes(2)
+  })
 })

@@ -43,7 +43,11 @@ const Blog = ({ blog, handleUpdate, handleDelete }) => {
             <li data-testid="blogUrl">{blog.url}</li>
             <li data-testid="blogLikes">
               {blog.likes}
-              <button onClick={handleLike} disabled={isUpdatingLikes}>
+              <button
+                onClick={handleLike}
+                disabled={isUpdatingLikes}
+                data-testid="likeButton"
+              >
                 like
               </button>
             </li>

@@ -1,4 +1,4 @@
-const Input = ({ label, type = 'text', value, setValue }) => {
+const Input = ({ label, type = 'text', value, setValue, testId = '' }) => {
   return (
     <label>
       {label}
@@ -6,6 +6,7 @@ const Input = ({ label, type = 'text', value, setValue }) => {
         type={type}
         value={value}
         onChange={(event) => setValue(event.target.value)}
+        data-testid={testId}
       />
     </label>
   )

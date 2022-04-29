@@ -28,10 +28,22 @@ const BlogForm = ({ handleSubmit }) => {
       }}
     >
       <h3>create new</h3>
-      <Input label="title:" value={title} setValue={setTitle} />
-      <Input label="author:" value={author} setValue={setAuthor} />
-      <Input label="url:" value={url} setValue={setUrl} />
-      <button type="submit">create</button>
+      <Input
+        label="title:"
+        value={title}
+        setValue={setTitle}
+        testId="titleInput"
+      />
+      <Input
+        label="author:"
+        value={author}
+        setValue={setAuthor}
+        testId="authorInput"
+      />
+      <Input label="url:" value={url} setValue={setUrl} testId="urlInput" />
+      <button type="submit" data-testid="createButton">
+        create
+      </button>
     </form>
   )
 }
