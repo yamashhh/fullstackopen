@@ -19,7 +19,7 @@ blogsRouter.post(
   async (request, response) => {
     const { title, author, url, likes } = request.body
     if (!title || !url) {
-      return response.status(400).end()
+      return response.status(400).json({ error: 'Title and URL are required.' })
     }
 
     const user = request.user
