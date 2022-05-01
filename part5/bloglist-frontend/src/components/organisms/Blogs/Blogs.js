@@ -24,7 +24,10 @@ const Blogs = ({
 
   return (
     <>
-      <section style={{ display: 'flex', alignItems: 'center' }}>
+      <section
+        style={{ display: 'flex', alignItems: 'center' }}
+        data-testid="userSection"
+      >
         <p>{user.name} logged in</p>
         <button onClick={handleLogout}>logout</button>
       </section>

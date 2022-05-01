@@ -26,14 +26,22 @@ const LoginForm = ({ handleLogin }) => {
         alignItems: 'flex-start',
       }}
     >
-      <Input label="username" value={username} setValue={setUsername} />
+      <Input
+        label="username"
+        value={username}
+        setValue={setUsername}
+        testId="usernameInput"
+      />
       <Input
         label="password"
         type="password"
         value={password}
         setValue={setPassword}
+        testId="passwordInput"
       />
-      <button type="submit">login</button>
+      <button type="submit" data-testid="loginButton">
+        login
+      </button>
     </form>
   )
 }

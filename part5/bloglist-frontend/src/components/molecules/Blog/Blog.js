@@ -21,13 +21,15 @@ const Blog = ({ blog, handleUpdate, handleDelete }) => {
       setIsRemovingBlog(true)
       await handleDelete(blog)
       setIsVisible(false)
+    } catch {
+      // error handling done in handleDelete
     } finally {
       setIsRemovingBlog(false)
     }
   }
 
   return (
-    <article>
+    <article data-testid="blogArticle">
       <h4 data-testid="blogHeading">
         {blog.title} {blog.author}
         <button
@@ -53,7 +55,11 @@ const Blog = ({ blog, handleUpdate, handleDelete }) => {
             </li>
             <li data-testid="blogUserName">{blog.user.name}</li>
           </ul>
-          <button onClick={handleRemove} disabled={isRemovingBlog}>
+          <button
+            onClick={handleRemove}
+            disabled={isRemovingBlog}
+            data-testid="deleteButton"
+          >
             remove
           </button>
         </>

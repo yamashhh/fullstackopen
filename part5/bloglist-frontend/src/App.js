@@ -107,7 +107,9 @@ const App = () => {
 
   return (
     <main>
-      <h2>{user ? 'blogs' : 'Log in to application'}</h2>
+      <h2 data-testid="appHeading">
+        {user ? 'blogs' : 'Log in to application'}
+      </h2>
       {message && <Snackbar {...{ message, isError }} />}
       {user ? (
         <Blogs

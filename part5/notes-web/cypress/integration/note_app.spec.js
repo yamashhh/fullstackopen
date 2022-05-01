@@ -53,7 +53,7 @@ describe("Note app", function () {
 
     it("one out of several notes can be made important", function () {
       cy.createNote({ content: "first note", important: false });
-      cy.createNote({ content: "second note note", important: false });
+      cy.createNote({ content: "second note", important: false });
       cy.createNote({ content: "third note", important: false });
       cy.contains("second note").parent().find("button").as("importanceButton");
       cy.get("@importanceButton").click();
