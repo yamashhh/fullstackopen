@@ -6,11 +6,12 @@ specifiers:
   '@testing-library/react': ^13.1.1
   '@testing-library/user-event': ^14.1.1
   deep-freeze: 0.0.1
+  eslint-config-prettier: ^8.5.0
+  prettier: ^2.6.2
   react: ^18.0.0
   react-dom: ^18.0.0
   react-redux: ^8.0.1
   react-scripts: 5.0.1
-  redux: ^4.2.0
   web-vitals: ^2.1.4
 
 dependencies:
@@ -20,13 +21,14 @@ dependencies:
   '@testing-library/user-event': 14.2.0
   react: 18.1.0
   react-dom: 18.1.0_react@18.1.0
-  react-redux: 8.0.2_zi7aoi7ced5urpsfm5fjpojgnm
+  react-redux: 8.0.2_ef5jwxihqo6n7gxfmzogljlgcm
   react-scripts: 5.0.1_react@18.1.0
-  redux: 4.2.0
   web-vitals: 2.1.4
 
 devDependencies:
   deep-freeze: 0.0.1
+  eslint-config-prettier: 8.5.0
+  prettier: 2.6.2
 
 packages:
 
@@ -1949,7 +1951,7 @@ packages:
     dependencies:
       immer: 9.0.14
       react: 18.1.0
-      react-redux: 8.0.2_zi7aoi7ced5urpsfm5fjpojgnm
+      react-redux: 8.0.2_ef5jwxihqo6n7gxfmzogljlgcm
       redux: 4.2.0
       redux-thunk: 2.4.1_redux@4.2.0
       reselect: 4.1.5
@@ -4355,6 +4357,13 @@ packages:
     optionalDependencies:
       source-map: 0.6.1
     dev: false
+
+  /eslint-config-prettier/8.5.0:
+    resolution: {integrity: sha512-obmWKLUNCnhtQRKc+tmnYuQl0pFU1ibYJQ5BGhTVB08bHe9wC8qUeG7c08dj9XX+AuPj1YSGSQIHl1pnDHZR0Q==}
+    hasBin: true
+    peerDependencies:
+      eslint: '>=7.0.0'
+    dev: true
 
   /eslint-config-react-app/7.0.1_eslint@8.17.0+jest@27.5.1:
     resolution: {integrity: sha512-K6rNzvkIeHaTd8m/QEh1Zko0KI7BACWkkneSs6s9cKZC/J27X3eZR6Upt1jkmZ/4FK+XUOPPxMEN7+lbUXfSlA==}
@@ -7846,6 +7855,12 @@ packages:
     engines: {node: '>= 0.8.0'}
     dev: false
 
+  /prettier/2.6.2:
+    resolution: {integrity: sha512-PkUpF+qoXTqhOeWL9fu7As8LXsIUZ1WYaJiY/a7McAQzxjk82OF0tibkFXVCDImZtWxbvojFjerkiLb0/q8mew==}
+    engines: {node: '>=10.13.0'}
+    hasBin: true
+    dev: true
+
   /pretty-bytes/5.6.0:
     resolution: {integrity: sha512-FFw039TmrBqFK8ma/7OL3sDz/VytdtJr044/QUJtH0wK9lb9jLq9tJyIxUwtQJHwar2BqtiA4iCWSwo9JLkzFg==}
     engines: {node: '>=6'}
@@ -8042,7 +8057,7 @@ packages:
     resolution: {integrity: sha512-Fl7FuabXsJnV5Q1qIOQwx/sagGF18kogb4gpfcG4gjLBWO0WDiiz1ko/ExayuxE7InyQkBLkxRFG5oxY6Uu3Kg==}
     dev: false
 
-  /react-redux/8.0.2_zi7aoi7ced5urpsfm5fjpojgnm:
+  /react-redux/8.0.2_ef5jwxihqo6n7gxfmzogljlgcm:
     resolution: {integrity: sha512-nBwiscMw3NoP59NFCXFf02f8xdo+vSHT/uZ1ldDwF7XaTpzm+Phk97VT4urYBl5TYAPNVaFm12UHAEyzkpNzRA==}
     peerDependencies:
       '@types/react': ^16.8 || ^17.0 || ^18.0
@@ -8070,7 +8085,6 @@ packages:
       react: 18.1.0
       react-dom: 18.1.0_react@18.1.0
       react-is: 18.1.0
-      redux: 4.2.0
       use-sync-external-store: 1.1.0_react@18.1.0
     dev: false
 

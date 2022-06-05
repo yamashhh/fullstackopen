@@ -1,23 +1,17 @@
-import noteReducer from './noteReducer'
+import noteReducer from './notesSlice'
 import deepFreeze from 'deep-freeze'
+import { add, toggleImportance } from './notesSlice'
 
 describe('noteReducer', () => {
   test('returns new state with action NEW_NOTE', () => {
     const state = []
-    const action = {
-      type: 'NEW_NOTE',
-      data: {
-        content: 'the app state is in redux store',
-        important: true,
-        id: 1
-      }
-    }
+    const content = 'the app state is in redux store'
 
     deepFreeze(state)
-    const newState = noteReducer(state, action)
+    const newState = noteReducer(state, add(content))
 
     expect(newState).toHaveLength(1)
-    expect(newState).toContainEqual(action.data)
+    expect(newState).toMatchObject([{ content }])
   })
 
   test('returns new state with action TOGGLE_IMPORTANCE', () => {
@@ -25,32 +19,23 @@ describe('noteReducer', () => {
       {
         content: 'the app state is in redux store',
         important: true,
-        id: 1
+        id: 1,
       },
       {
         content: 'state changes are made with actions',
         important: false,
-        id: 2
-      }]
-  
-    const action = {
-      type: 'TOGGLE_IMPORTANCE',
-      data: {
-        id: 2
-      }
-    }
-  
+        id: 2,
+      },
+    ]
+
     deepFreeze(state)
-    const newState = noteReducer(state, action)
-  
+    const newState = noteReducer(state, toggleImportance(state[1].id))
+
     expect(newState).toHaveLength(2)
-  
     expect(newState).toContainEqual(state[0])
-  
     expect(newState).toContainEqual({
-      content: 'state changes are made with actions',
+      ...state[1],
       important: true,
-      id: 2
     })
   })
 })

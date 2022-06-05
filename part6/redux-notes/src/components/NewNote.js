@@ -1,5 +1,5 @@
 import { useDispatch } from 'react-redux'
-import { createNote } from '../reducers/noteReducer'
+import { add } from '../features/notes/notesSlice'
 
 const NewNote = (props) => {
   const dispatch = useDispatch()
@@ -7,8 +7,8 @@ const NewNote = (props) => {
   const addNote = (event) => {
     event.preventDefault()
     const content = event.target.note.value
+    dispatch(add(content))
     event.target.note.value = ''
-    dispatch(createNote(content))
   }
 
   return (

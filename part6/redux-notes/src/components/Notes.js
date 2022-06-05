@@ -1,30 +1,43 @@
+import { createSelector } from '@reduxjs/toolkit'
 import { useDispatch, useSelector } from 'react-redux'
-import { toggleImportanceOf } from '../reducers/noteReducer'
+import { toggleImportance } from '../features/notes/notesSlice'
 
 const Note = ({ note, handleClick }) => {
-  return(
+  return (
     <li onClick={handleClick}>
-      {note.content} 
+      {note.content}
       <strong> {note.important ? 'important' : ''}</strong>
     </li>
   )
 }
 
+const notesSelector = createSelector(
+  (state) => state.filter,
+  (state) => state.notes,
+  (filter, notes) => {
+    if (filter === 'IMPORTANT') {
+      return notes.filter((note) => note.important)
+    }
+    if (filter === 'NON_IMPORTANT') {
+      return notes.filter((note) => !note.important)
+    }
+    return notes
+  }
+)
+
 const Notes = () => {
   const dispatch = useDispatch()
-  const notes = useSelector(state => state)
+  const notes = useSelector(notesSelector)
 
-  return(
+  return (
     <ul>
-      {notes.map(note =>
+      {notes.map((note) => (
         <Note
           key={note.id}
           note={note}
-          handleClick={() => 
-            dispatch(toggleImportanceOf(note.id))
-          }
+          handleClick={() => dispatch(toggleImportance(note.id))}
         />
-      )}
+      ))}
     </ul>
   )
 }

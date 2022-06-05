@@ -11,19 +11,21 @@
     "react-dom": "^18.0.0",
     "react-redux": "^8.0.1",
     "react-scripts": "5.0.1",
-    "redux": "^4.2.0",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "format": "prettier --check .",
+    "format:write": "prettier --write ."
   },
   "eslintConfig": {
     "extends": [
       "react-app",
-      "react-app/jest"
+      "react-app/jest",
+      "prettier"
     ]
   },
   "browserslist": {
@@ -39,6 +41,8 @@
     ]
   },
   "devDependencies": {
-    "deep-freeze": "0.0.1"
+    "deep-freeze": "0.0.1",
+    "eslint-config-prettier": "^8.5.0",
+    "prettier": "^2.6.2"
   }
 }
