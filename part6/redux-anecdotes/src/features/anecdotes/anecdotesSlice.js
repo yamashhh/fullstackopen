@@ -25,11 +25,11 @@ const anecdotesSlice = createSlice({
       const anecdote = state.find((anecdote) => anecdote.id === action.payload)
       anecdote.votes += 1
     },
-    add(state, action) {
+    addAnecdote(state, action) {
       state.push(initializeAnecdote(action.payload))
     },
   },
 })
 
-export const { vote, add } = anecdotesSlice.actions
+export const { vote, addAnecdote } = anecdotesSlice.actions
 export default anecdotesSlice.reducer

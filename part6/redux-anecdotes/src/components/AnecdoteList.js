@@ -1,6 +1,6 @@
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { createSelector } from '@reduxjs/toolkit'
-import { vote } from '../features/anecdotes/anecdotesSlice'
+import AnecdoteListItem from './AnecdoteListItem'
 
 const anecdotesSelector = createSelector(
   (state) => state.anecdotes,
@@ -9,23 +9,21 @@ const anecdotesSelector = createSelector(
 
 const AnecdoteList = () => {
   const anecdotes = useSelector(anecdotesSelector)
-  const dispatch = useDispatch()
-  const handleVote = (id) => {
-    dispatch(vote(id))
-  }
+  const filter = useSelector((state) => state.filter)
 
   return (
     <ol>
-      {anecdotes.map((anecdote) => {
-        return (
-          <li key={anecdote.id}>
-            {anecdote.content}
-            <br />
-            has {anecdote.votes}
-            <button onClick={() => handleVote(anecdote.id)}>vote</button>
-          </li>
-        )
-      })}
+      {filter
+        ? anecdotes
+            .filter((anecdote) =>
+              anecdote.content.toLowerCase().includes(filter.toLowerCase())
+            )
+            .map((anecdote) => (
+              <AnecdoteListItem key={anecdote.id} anecdote={anecdote} />
+            ))
+        : anecdotes.map((anecdote) => (
+            <AnecdoteListItem key={anecdote.id} anecdote={anecdote} />
+          ))}
     </ol>
   )
 }
