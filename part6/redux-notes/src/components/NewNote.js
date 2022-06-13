@@ -1,15 +1,12 @@
 import { useDispatch } from 'react-redux'
 import { createNote } from '../features/notes/notesSlice'
-import notesService from '../services/notes'
 
-const NewNote = (props) => {
+const NewNote = () => {
   const dispatch = useDispatch()
 
-  const addNote = async (event) => {
+  const addNote = (event) => {
     event.preventDefault()
-    const content = event.target.note.value
-    const note = await notesService.createNew(content)
-    dispatch(createNote(note))
+    dispatch(createNote(event.target.note.value))
     event.target.note.value = ''
   }
 
