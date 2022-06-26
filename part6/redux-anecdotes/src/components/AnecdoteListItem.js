@@ -4,9 +4,9 @@ import { setNotification } from '../features/notification/notificationSlice'
 
 const AnecdoteListItem = ({ anecdote }) => {
   const dispatch = useDispatch()
-  const handleVote = () => {
-    dispatch(vote(anecdote.id))
-    dispatch(setNotification(`you voted for: ${anecdote.content}`))
+  const handleVote = async () => {
+    await dispatch(vote(anecdote))
+    dispatch(setNotification(`you voted for: ${anecdote.content}`, 5))
   }
 
   return (
