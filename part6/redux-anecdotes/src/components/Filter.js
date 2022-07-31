@@ -1,16 +1,14 @@
-import { useSelector, useDispatch } from 'react-redux'
+import { connect } from 'react-redux'
 import { setFilter } from '../features/filter/filterSlice'
 
-const Filter = () => {
+const Filter = ({ filter, setFilter }) => {
   const style = {
     marginBottom: 10,
   }
 
-  const filter = useSelector((state) => state.filter)
-  const dispatch = useDispatch()
   const handleChange = (event) => {
     // input-field value is in variable event.target.value
-    dispatch(setFilter(event.target.value))
+    setFilter(event.target.value)
   }
 
   return (
@@ -20,4 +18,14 @@ const Filter = () => {
   )
 }
 
-export default Filter
+const mapStateToProps = (state) => {
+  return {
+    filter: state.filter,
+  }
+}
+
+const mapDispatchToProps = {
+  setFilter,
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Filter)
