@@ -6,11 +6,15 @@ import LoginForm from './components/molecules/LoginForm/LoginForm'
 import Snackbar from './components/atoms/Snackbar/Snackbar'
 import { setSnackbar } from './features/snackbarSlice'
 import { useDispatch } from 'react-redux'
+import { initializeBlogs } from './features/blogsSlice'
 
 const App = () => {
-  const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState(null)
+
   const dispatch = useDispatch()
+  useEffect(() => {
+    dispatch(initializeBlogs())
+  }, [dispatch])
 
   const handleSetUser = (user) => {
     setUser(user)
@@ -49,35 +53,6 @@ const App = () => {
   const handleLogout = () => {
     window.localStorage.removeItem('part-7-bloglist-user')
     handleSetUser(null)
-  }
-
-  useEffect(() => {
-    const getAllBlogs = async () => {
-      const blogs = await blogService.getAll()
-      setBlogs(blogs)
-    }
-    getAllBlogs()
-  }, [])
-
-  const handleCreate = async (blog) => {
-    try {
-      const newBlog = await blogService.create(blog)
-      setBlogs((previous) => [...previous, newBlog])
-      dispatch(
-        setSnackbar({
-          message: `a new blog ${newBlog.title} by ${newBlog.author} added`,
-          isError: false,
-        })
-      )
-    } catch (error) {
-      dispatch(
-        setSnackbar({
-          message: error?.response?.data?.error ?? `${error}`,
-          isError: true,
-        })
-      )
-      throw error
-    }
   }
 
   const handleUpdate = async (id, blog) => {
@@ -141,10 +116,8 @@ const App = () => {
       {user ? (
         <Blogs
           {...{
-            blogs,
             user,
             handleLogout,
-            handleCreate,
             handleUpdate,
             handleDelete,
           }}

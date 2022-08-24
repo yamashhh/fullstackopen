@@ -34,7 +34,11 @@ blogsRouter.post(
       likes: likes ?? 0,
       user: user._id,
     })
-    const result = await blog.save()
+    await blog.save()
+    const result = await blog.populate('user', {
+      passwordHash: 0,
+      blogs: 0,
+    })
 
     user.blogs = [...user.blogs, result._id]
     await user.save()
