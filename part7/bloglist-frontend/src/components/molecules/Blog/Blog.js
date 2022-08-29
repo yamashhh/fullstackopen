@@ -1,28 +1,65 @@
 import { useState } from 'react'
 import PropTypes from 'prop-types'
+import { useDispatch } from 'react-redux'
+import { deleteBlog, updateBlog } from '../../../features/blogsSlice'
+import { setSnackbar } from '../../../features/snackbarSlice'
 
-const Blog = ({ blog, handleUpdate, handleDelete }) => {
+const Blog = ({ blog }) => {
   const [isVisible, setIsVisible] = useState(false)
   const [isUpdatingLikes, setIsUpdatingLikes] = useState(false)
   const [isRemovingBlog, setIsRemovingBlog] = useState(false)
+  const dispatch = useDispatch()
 
   const handleLike = async () => {
     try {
       setIsUpdatingLikes(true)
-      await handleUpdate(blog.id, { likes: blog.likes + 1 })
+      await dispatch(
+        updateBlog({
+          id: blog.id,
+          blog: { likes: blog.likes + 1 },
+        })
+      ).unwrap()
+      dispatch(
+        setSnackbar({
+          message: `blog ${blog.title} by ${blog.author} updated`,
+          isError: false,
+        })
+      )
       setIsVisible(false)
+    } catch (error) {
+      dispatch(
+        setSnackbar({
+          message: error?.message,
+          isError: true,
+        })
+      )
     } finally {
       setIsUpdatingLikes(false)
     }
   }
 
   const handleRemove = async () => {
+    if (!window.confirm(`remove blog ${blog.title} by ${blog.author}?`)) {
+      return
+    }
+
     try {
       setIsRemovingBlog(true)
-      await handleDelete(blog)
+      await dispatch(deleteBlog(blog)).unwrap()
+      dispatch(
+        setSnackbar({
+          message: `blog ${blog.title} by ${blog.author} deleted`,
+          isError: false,
+        })
+      )
       setIsVisible(false)
-    } catch {
-      // error handling done in handleDelete
+    } catch (error) {
+      dispatch(
+        setSnackbar({
+          message: error?.message,
+          isError: true,
+        })
+      )
     } finally {
       setIsRemovingBlog(false)
     }
@@ -78,7 +115,5 @@ Blog.propTypes = {
       name: PropTypes.string.isRequired,
     }).isRequired,
   }).isRequired,
-  handleUpdate: PropTypes.func.isRequired,
-  handleDelete: PropTypes.func.isRequired,
 }
 export default Blog

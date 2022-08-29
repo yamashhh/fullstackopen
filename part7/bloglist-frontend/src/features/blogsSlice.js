@@ -12,6 +12,14 @@ const blogsSlice = createSlice({
       .addCase(createNewBlog.fulfilled, (state, action) => {
         state.push(action.payload)
       })
+      .addCase(updateBlog.fulfilled, (state, action) => {
+        return state.map((blog) =>
+          blog.id === action.payload.id ? action.payload : blog
+        )
+      })
+      .addCase(deleteBlog.fulfilled, (state, action) => {
+        return state.filter((blog) => blog.id !== action.payload.id)
+      })
   },
 })
 
@@ -37,3 +45,16 @@ export const createNewBlog = createAsyncThunk(
     return newBlog
   }
 )
+
+export const updateBlog = createAsyncThunk(
+  'blogs/updateBlog',
+  async (payload) => {
+    const updatedBlog = await blogsService.update(payload)
+    return updatedBlog
+  }
+)
+
+export const deleteBlog = createAsyncThunk('blogs/deleteBlog', async (blog) => {
+  await blogsService.deleteBlog(blog.id)
+  return blog
+})

@@ -18,7 +18,7 @@ const create = async (blog) => {
   return response.data
 }
 
-const update = async (id, blog) => {
+const update = async ({ id, blog }) => {
   const response = await axios.patch(`${baseUrl}/${id}`, blog, {
     headers: { Authorization: `bearer ${token}` },
   })

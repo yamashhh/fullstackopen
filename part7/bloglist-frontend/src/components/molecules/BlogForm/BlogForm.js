@@ -15,7 +15,7 @@ const BlogForm = () => {
   const handleSubmit = async (event) => {
     event.preventDefault()
     try {
-      dispatch(createNewBlog({ title, author, url }))
+      await dispatch(createNewBlog({ title, author, url })).unwrap()
       dispatch(
         setSnackbar({
           message: `a new blog ${title} by ${author} added`,
@@ -29,7 +29,7 @@ const BlogForm = () => {
     } catch (error) {
       dispatch(
         setSnackbar({
-          message: `${error}`,
+          message: error?.message,
           isError: true,
         })
       )

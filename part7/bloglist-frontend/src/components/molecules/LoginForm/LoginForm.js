@@ -1,19 +1,30 @@
 import { useState } from 'react'
 import Input from '../../atoms/Input/Input'
-import PropTypes from 'prop-types'
+import { useDispatch } from 'react-redux'
+import { login } from '../../../features/userSlice'
+import { setSnackbar } from '../../../features/snackbarSlice'
 
-const LoginForm = ({ handleLogin }) => {
+const LoginForm = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
+  const dispatch = useDispatch()
 
   const handleSubmit = async (event) => {
     event.preventDefault()
     try {
-      await handleLogin({ username, password })
+      await dispatch(login({ username, password })).unwrap()
+      dispatch(
+        setSnackbar({ message: `logged in as ${username}`, isError: false })
+      )
       setUsername('')
       setPassword('')
-    } catch {
-      // error handling done in handleLogin
+    } catch (error) {
+      dispatch(
+        setSnackbar({
+          message: error?.message,
+          isError: true,
+        })
+      )
     }
   }
 
@@ -44,10 +55,6 @@ const LoginForm = ({ handleLogin }) => {
       </button>
     </form>
   )
-}
-
-LoginForm.propTypes = {
-  handleLogin: PropTypes.func.isRequired,
 }
 
 export default LoginForm

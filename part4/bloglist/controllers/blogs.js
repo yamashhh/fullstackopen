@@ -78,7 +78,10 @@ blogsRouter.patch('/:id', async (request, response) => {
     request.params.id,
     { likes: likes ?? 0 },
     { new: true }
-  )
+  ).populate('user', {
+    passwordHash: 0,
+    blogs: 0,
+  })
 
   updatedBlog ? response.json(updatedBlog) : response.status(404).end()
 })
