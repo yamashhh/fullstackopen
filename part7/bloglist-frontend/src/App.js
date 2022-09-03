@@ -1,13 +1,14 @@
 import { useEffect } from 'react'
-import Blogs from './components/organisms/Blogs/Blogs'
-import LoginForm from './components/molecules/LoginForm/LoginForm'
 import Snackbar from './components/atoms/Snackbar/Snackbar'
-import { useSelector, useDispatch } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { initializeBlogs } from './features/blogsSlice'
 import { setUser } from './features/userSlice'
+import { Routes, Route, NavLink } from 'react-router-dom'
+import Users from './pages/Users'
+import Index from './pages/Index'
+import User from './pages/User'
 
 const App = () => {
-  const user = useSelector((state) => state.user)
   const dispatch = useDispatch()
 
   useEffect(() => {
@@ -23,13 +24,28 @@ const App = () => {
   }, [dispatch])
 
   return (
-    <main>
-      <h2 data-testid="appHeading">
-        {user ? 'blogs' : 'Log in to application'}
-      </h2>
-      <Snackbar />
-      {user ? <Blogs user={user} /> : <LoginForm />}
-    </main>
+    <>
+      <header>
+        <nav>
+          <ul>
+            <li>
+              <NavLink to="/">index</NavLink>
+            </li>
+            <li>
+              <NavLink to="/users">users</NavLink>
+            </li>
+          </ul>
+        </nav>
+      </header>
+      <main>
+        <Snackbar />
+        <Routes>
+          <Route path="/" element={<Index />} />
+          <Route path="/users" element={<Users />} />
+          <Route path="/users/:userId" element={<User />} />
+        </Routes>
+      </main>
+    </>
   )
 }
 
