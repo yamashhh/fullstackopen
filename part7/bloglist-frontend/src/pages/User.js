@@ -1,22 +1,24 @@
-import { useState, useEffect } from 'react'
+import { useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
-import usersService from '../services/users'
+import { createSelector } from '@reduxjs/toolkit'
 
 const User = () => {
-  const [users, setUsers] = useState()
-  useEffect(() => {
-    ;(async () => {
-      const users = await usersService.getAll()
-      setUsers(users)
-    })()
-  }, [])
   const { userId } = useParams()
-  const user = users?.find((user) => user.id === userId)
+  const user = useSelector(
+    createSelector(
+      (state) => state.users,
+      (users) => users.find((user) => user.id === userId)
+    )
+  )
 
   return (
     <>
       <h2>added blogs</h2>
-      <ul>{user && user.blogs.map((blog) => <li>{blog.title}</li>)}</ul>
+      <ul>
+        {user?.blogs?.map((blog) => (
+          <li key={blog.id}>{blog.title}</li>
+        ))}
+      </ul>
     </>
   )
 }

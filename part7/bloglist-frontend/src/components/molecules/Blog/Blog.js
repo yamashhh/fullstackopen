@@ -3,12 +3,13 @@ import PropTypes from 'prop-types'
 import { useDispatch } from 'react-redux'
 import { deleteBlog, updateBlog } from '../../../features/blogsSlice'
 import { setSnackbar } from '../../../features/snackbarSlice'
+import { useNavigate } from 'react-router-dom'
 
 const Blog = ({ blog }) => {
-  const [isVisible, setIsVisible] = useState(false)
   const [isUpdatingLikes, setIsUpdatingLikes] = useState(false)
   const [isRemovingBlog, setIsRemovingBlog] = useState(false)
   const dispatch = useDispatch()
+  const navigate = useNavigate()
 
   const handleLike = async () => {
     try {
@@ -25,7 +26,6 @@ const Blog = ({ blog }) => {
           isError: false,
         })
       )
-      setIsVisible(false)
     } catch (error) {
       dispatch(
         setSnackbar({
@@ -52,7 +52,7 @@ const Blog = ({ blog }) => {
           isError: false,
         })
       )
-      setIsVisible(false)
+      navigate('/')
     } catch (error) {
       dispatch(
         setSnackbar({
@@ -67,40 +67,32 @@ const Blog = ({ blog }) => {
 
   return (
     <article data-testid="blogArticle">
-      <h4 data-testid="blogHeading">
+      <h2 data-testid="blogHeading">
         {blog.title} {blog.author}
-        <button
-          onClick={() => setIsVisible((prev) => !prev)}
-          data-testid="toggleDetailsButton"
-        >
-          {isVisible ? 'hide' : 'view'}
-        </button>
-      </h4>
-      {isVisible && (
-        <>
-          <ul style={{ listStyle: 'none' }}>
-            <li data-testid="blogUrl">{blog.url}</li>
-            <li data-testid="blogLikes">
-              {blog.likes}
-              <button
-                onClick={handleLike}
-                disabled={isUpdatingLikes}
-                data-testid="likeButton"
-              >
-                like
-              </button>
-            </li>
-            <li data-testid="blogUserName">{blog.user.name}</li>
-          </ul>
+      </h2>
+      <ul style={{ listStyle: 'none' }}>
+        <li data-testid="blogUrl">
+          <a href={blog.url}>{blog.url}</a>
+        </li>
+        <li data-testid="blogLikes">
+          {blog.likes} likes
           <button
-            onClick={handleRemove}
-            disabled={isRemovingBlog}
-            data-testid="deleteButton"
+            onClick={handleLike}
+            disabled={isUpdatingLikes}
+            data-testid="likeButton"
           >
-            remove
+            like
           </button>
-        </>
-      )}
+        </li>
+        <li data-testid="blogUserName">added by {blog.user.name}</li>
+      </ul>
+      <button
+        onClick={handleRemove}
+        disabled={isRemovingBlog}
+        data-testid="deleteButton"
+      >
+        remove
+      </button>
     </article>
   )
 }

@@ -2,17 +2,21 @@ import { useEffect } from 'react'
 import Snackbar from './components/atoms/Snackbar/Snackbar'
 import { useDispatch } from 'react-redux'
 import { initializeBlogs } from './features/blogsSlice'
+import { initializeUsers } from './features/usersSlice'
 import { setUser } from './features/userSlice'
-import { Routes, Route, NavLink } from 'react-router-dom'
+import { Routes, Route } from 'react-router-dom'
 import Users from './pages/Users'
-import Index from './pages/Index'
+import Blogs from './pages/Blogs'
 import User from './pages/User'
+import Blog from './pages/Blog'
+import Navigation from './components/molecules/Navigation/Navigation'
 
 const App = () => {
   const dispatch = useDispatch()
 
   useEffect(() => {
     dispatch(initializeBlogs())
+    dispatch(initializeUsers())
   }, [dispatch])
 
   useEffect(() => {
@@ -26,23 +30,15 @@ const App = () => {
   return (
     <>
       <header>
-        <nav>
-          <ul>
-            <li>
-              <NavLink to="/">index</NavLink>
-            </li>
-            <li>
-              <NavLink to="/users">users</NavLink>
-            </li>
-          </ul>
-        </nav>
+        <Navigation />
       </header>
       <main>
         <Snackbar />
         <Routes>
-          <Route path="/" element={<Index />} />
+          <Route path="/" element={<Blogs />} />
           <Route path="/users" element={<Users />} />
           <Route path="/users/:userId" element={<User />} />
+          <Route path="/blogs/:blogId" element={<Blog />} />
         </Routes>
       </main>
     </>
