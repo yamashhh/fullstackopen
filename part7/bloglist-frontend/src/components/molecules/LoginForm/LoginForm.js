@@ -11,6 +11,7 @@ const LoginForm = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault()
+
     try {
       await dispatch(login({ username, password })).unwrap()
       dispatch(

@@ -14,6 +14,7 @@ const BlogForm = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault()
+
     try {
       await dispatch(createNewBlog({ title, author, url })).unwrap()
       dispatch(

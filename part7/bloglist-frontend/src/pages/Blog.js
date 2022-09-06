@@ -1,7 +1,7 @@
 import { createSelector } from '@reduxjs/toolkit'
 import { useParams } from 'react-router-dom'
 import { useSelector } from 'react-redux'
-import MoleculesBlog from '../components/molecules/Blog/Blog'
+import OrganismsBlog from '../components/organisms/Blog/Blog'
 
 const Blog = () => {
   const { blogId } = useParams()
@@ -12,7 +12,7 @@ const Blog = () => {
     )
   )
 
-  return blog ? <MoleculesBlog blog={blog} /> : <h2>NOT FOUND</h2>
+  return blog ? <OrganismsBlog blog={blog} /> : <h2>NOT FOUND</h2>
 }
 
 export default Blog

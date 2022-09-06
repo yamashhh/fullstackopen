@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux'
 import { deleteBlog, updateBlog } from '../../../features/blogsSlice'
 import { setSnackbar } from '../../../features/snackbarSlice'
 import { useNavigate } from 'react-router-dom'
+import Comments from '../../molecules/Comments/Comments'
 
 const Blog = ({ blog }) => {
   const [isUpdatingLikes, setIsUpdatingLikes] = useState(false)
@@ -93,12 +94,7 @@ const Blog = ({ blog }) => {
       >
         remove
       </button>
-      <h3>comments</h3>
-      <ul>
-        {blog.comments.map((comment) => (
-          <li key={comment._id}>{comment.comment}</li>
-        ))}
-      </ul>
+      <Comments blog={blog} />
     </article>
   )
 }
