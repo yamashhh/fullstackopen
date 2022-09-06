@@ -93,6 +93,12 @@ const Blog = ({ blog }) => {
       >
         remove
       </button>
+      <h3>comments</h3>
+      <ul>
+        {blog.comments.map((comment) => (
+          <li key={comment._id}>{comment.comment}</li>
+        ))}
+      </ul>
     </article>
   )
 }
@@ -106,6 +112,10 @@ Blog.propTypes = {
     user: PropTypes.shape({
       name: PropTypes.string.isRequired,
     }).isRequired,
+    comment: PropTypes.shape({
+      _id: PropTypes.string.isRequired,
+      comment: PropTypes.string.isRequired,
+    }),
   }).isRequired,
 }
 export default Blog
