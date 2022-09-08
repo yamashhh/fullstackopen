@@ -1,14 +1,16 @@
+import { Label, StyledInput } from './Input.styles'
+
 const Input = ({ label, type = 'text', value, setValue, testId = '' }) => {
   return (
-    <label>
+    <Label>
       {label}
-      <input
+      <StyledInput
         type={type}
         value={value}
         onChange={(event) => setValue(event.target.value)}
         data-testid={testId}
       />
-    </label>
+    </Label>
   )
 }
 

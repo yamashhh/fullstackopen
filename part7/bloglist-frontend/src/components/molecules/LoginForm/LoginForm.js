@@ -3,6 +3,8 @@ import Input from '../../atoms/Input/Input'
 import { useDispatch } from 'react-redux'
 import { login } from '../../../features/userSlice'
 import { setSnackbar } from '../../../features/snackbarSlice'
+import { Form } from './LoginForm.styles'
+import { Button } from '../../atoms/Button/Button.styles'
 
 const LoginForm = () => {
   const [username, setUsername] = useState('')
@@ -30,14 +32,7 @@ const LoginForm = () => {
   }
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'flex-start',
-      }}
-    >
+    <Form onSubmit={handleSubmit}>
       <Input
         label="username"
         value={username}
@@ -51,10 +46,10 @@ const LoginForm = () => {
         setValue={setPassword}
         testId="passwordInput"
       />
-      <button type="submit" data-testid="loginButton">
+      <Button type="submit" data-testid="loginButton">
         login
-      </button>
-    </form>
+      </Button>
+    </Form>
   )
 }
 

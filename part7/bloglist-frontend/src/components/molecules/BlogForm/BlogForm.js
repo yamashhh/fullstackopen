@@ -4,6 +4,8 @@ import Togglable from '../../atoms/Togglable/Togglable'
 import { useDispatch } from 'react-redux'
 import { createNewBlog } from '../../../features/blogsSlice'
 import { setSnackbar } from '../../../features/snackbarSlice'
+import { Button } from '../../atoms/Button/Button.styles'
+import { Form, H3 } from './BlogForm.styles'
 
 const BlogForm = () => {
   const togglable = useRef()
@@ -39,15 +41,8 @@ const BlogForm = () => {
 
   return (
     <Togglable buttonLabel="create new" ref={togglable}>
-      <form
-        onSubmit={handleSubmit}
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'flex-start',
-        }}
-      >
-        <h3>create new</h3>
+      <Form onSubmit={handleSubmit}>
+        <H3>create new</H3>
         <Input
           label="title:"
           value={title}
@@ -61,10 +56,10 @@ const BlogForm = () => {
           testId="authorInput"
         />
         <Input label="url:" value={url} setValue={setUrl} testId="urlInput" />
-        <button type="submit" data-testid="createButton">
+        <Button type="submit" data-testid="createButton">
           create
-        </button>
-      </form>
+        </Button>
+      </Form>
     </Togglable>
   )
 }

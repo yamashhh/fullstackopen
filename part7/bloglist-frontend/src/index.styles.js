@@ -17,6 +17,16 @@ const Global = createGlobalStyle`
 
     /* base font-family */
     font-family: system-ui;
+
+    /* normalize font-size */
+    font-size: 62.5%;
+
+    /* normalize box-sizing */
+    box-sizing: border-box;
+  }
+
+  *, *:before, *:after {
+    box-sizing: inherit;
   }
 
   /* Sections
@@ -28,6 +38,9 @@ const Global = createGlobalStyle`
 
   body {
     margin: 0;
+
+    /* normalize font-size */
+    font-size: 1.6rem;
   }
 
   /**

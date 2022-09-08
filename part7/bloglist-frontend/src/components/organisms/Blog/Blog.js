@@ -5,6 +5,7 @@ import { deleteBlog, updateBlog } from '../../../features/blogsSlice'
 import { setSnackbar } from '../../../features/snackbarSlice'
 import { useNavigate } from 'react-router-dom'
 import Comments from '../../molecules/Comments/Comments'
+import { Button } from '../../atoms/Button/Button.styles'
 
 const Blog = ({ blog }) => {
   const [isUpdatingLikes, setIsUpdatingLikes] = useState(false)
@@ -77,23 +78,23 @@ const Blog = ({ blog }) => {
         </li>
         <li data-testid="blogLikes">
           {blog.likes} likes
-          <button
+          <Button
             onClick={handleLike}
             disabled={isUpdatingLikes}
             data-testid="likeButton"
           >
             like
-          </button>
+          </Button>
         </li>
         <li data-testid="blogUserName">added by {blog.user.name}</li>
       </ul>
-      <button
+      <Button
         onClick={handleRemove}
         disabled={isRemovingBlog}
         data-testid="deleteButton"
       >
         remove
-      </button>
+      </Button>
       <Comments blog={blog} />
     </article>
   )

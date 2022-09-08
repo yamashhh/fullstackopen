@@ -1,17 +1,14 @@
-import './Snackbar.css'
 import { useSelector } from 'react-redux'
+import { Wrapper } from './Snackbar.styles'
 
 const Snackbar = () => {
   const { message, isError } = useSelector((state) => state.snackbar)
 
   return (
     message && (
-      <div
-        className={`snackbar${isError ? ' -error' : ''}`}
-        data-testid="snackbar"
-      >
+      <Wrapper isError={isError} data-testid="snackbar">
         {message}
-      </div>
+      </Wrapper>
     )
   )
 }

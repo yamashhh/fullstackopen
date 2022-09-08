@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { commentBlog } from '../../../features/blogsSlice'
 import { setSnackbar } from '../../../features/snackbarSlice'
+import { Button } from '../../atoms/Button/Button.styles'
 
 const Comments = ({ blog }) => {
   const [comment, setComment] = useState('')
@@ -42,9 +43,9 @@ const Comments = ({ blog }) => {
           value={comment}
           onChange={(event) => setComment(event.target.value)}
         />
-        <button type="submit" disabled={isCommenting}>
+        <Button type="submit" disabled={isCommenting}>
           add comment
-        </button>
+        </Button>
       </form>
       <ul>
         {blog.comments.map((comment) => (

@@ -1,6 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, NavLink } from 'react-router-dom'
 import { logout } from '../../../features/userSlice'
+import { Button } from '../../atoms/Button/Button.styles'
 import { Nav, UL } from './Navigation.styles'
 
 const Navigation = () => {
@@ -10,7 +11,7 @@ const Navigation = () => {
 
   const handleLogout = () => {
     dispatch(logout())
-    navigate('/')
+    navigate('/login')
   }
 
   return (
@@ -26,7 +27,7 @@ const Navigation = () => {
       {user && (
         <>
           <p>{user?.name} logged in</p>
-          <button onClick={handleLogout}>logout</button>
+          <Button onClick={handleLogout}>logout</Button>
         </>
       )}
     </Nav>

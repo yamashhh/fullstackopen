@@ -6,10 +6,12 @@ import { initializeUsers } from './features/usersSlice'
 import { setUser } from './features/userSlice'
 import { Routes, Route } from 'react-router-dom'
 import Users from './pages/Users'
-import Blogs from './pages/Blogs'
+import Blogs from './pages/Blogs/Blogs'
 import User from './pages/User'
 import Blog from './pages/Blog'
 import Navigation from './components/molecules/Navigation/Navigation'
+import { Layout, Main } from './App.styles'
+import Login from './pages/Login'
 
 const App = () => {
   const dispatch = useDispatch()
@@ -28,20 +30,21 @@ const App = () => {
   }, [dispatch])
 
   return (
-    <>
+    <Layout>
       <header>
         <Navigation />
       </header>
-      <main>
+      <Main>
         <Snackbar />
         <Routes>
           <Route path="/" element={<Blogs />} />
+          <Route path="/login" element={<Login />} />
           <Route path="/users" element={<Users />} />
           <Route path="/users/:userId" element={<User />} />
           <Route path="/blogs/:blogId" element={<Blog />} />
         </Routes>
-      </main>
-    </>
+      </Main>
+    </Layout>
   )
 }
 

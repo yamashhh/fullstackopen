@@ -4,8 +4,8 @@ export const Nav = styled.nav`
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  column-gap: 8px;
-  padding: 8px;
+  column-gap: 16px;
+  padding: 24px;
   background-color: silver;
 `
 
@@ -15,5 +15,5 @@ export const UL = styled.nav`
   align-items: center;
   justify-content: flex-start;
   padding: 0;
-  column-gap: 8px;
+  column-gap: 16px;
 `
