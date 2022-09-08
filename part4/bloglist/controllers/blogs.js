@@ -34,7 +34,11 @@ blogsRouter.post(
       likes: likes ?? 0,
       user: user._id,
     })
-    const result = await blog.save()
+    await blog.save()
+    const result = await blog.populate('user', {
+      passwordHash: 0,
+      blogs: 0,
+    })
 
     user.blogs = [...user.blogs, result._id]
     await user.save()
@@ -74,9 +78,33 @@ blogsRouter.patch('/:id', async (request, response) => {
     request.params.id,
     { likes: likes ?? 0 },
     { new: true }
-  )
+  ).populate('user', {
+    passwordHash: 0,
+    blogs: 0,
+  })
 
   updatedBlog ? response.json(updatedBlog) : response.status(404).end()
+})
+
+blogsRouter.post('/:id/comments', async (request, response) => {
+  const { comment } = request.body
+
+  const blog = await Blog.findById(request.params.id).populate('user', {
+    passwordHash: 0,
+    blogs: 0,
+  })
+  if (!blog) {
+    return response.status(404).end()
+  }
+
+  blog.comments.push({ comment })
+  await blog.save()
+  const result = await blog.populate('user', {
+    passwordHash: 0,
+    blogs: 0,
+  })
+
+  response.status(201).json(result)
 })
 
 export default blogsRouter
