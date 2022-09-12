@@ -2,11 +2,16 @@ import { FormEventHandler, useState } from "react";
 import {
   AllAuthorsDocument,
   useEditAuthorMutation,
+  Author,
 } from "../generated/graphql";
 
-const UpdateAuthor = () => {
-  const [name, setName] = useState("");
-  const [born, setBorn] = useState<number | undefined>();
+interface Props {
+  authors: Author[];
+}
+
+const UpdateAuthor = ({ authors }: Props) => {
+  const [name, setName] = useState<string>("");
+  const [born, setBorn] = useState<number | undefined>(undefined);
   const [editAuthor] = useEditAuthorMutation({
     refetchQueries: [{ query: AllAuthorsDocument }],
   });
@@ -16,7 +21,6 @@ const UpdateAuthor = () => {
     if (!(name && born)) {
       return;
     }
-
     await editAuthor({ variables: { name, setBornTo: born } });
     setName("");
     setBorn(undefined);
@@ -35,11 +39,19 @@ const UpdateAuthor = () => {
       >
         <label>
           name
-          <input
-            type="text"
+          <select
             value={name}
             onChange={(event) => setName(event.target.value)}
-          />
+          >
+            <option value="" disabled>
+              --Please choose an option--
+            </option>
+            {authors.map((author) => (
+              <option key={author.id} value={author.name}>
+                {author.name}
+              </option>
+            ))}
+          </select>
         </label>
         <label>
           born
