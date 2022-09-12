@@ -1,5 +1,8 @@
-import { UserInputError, ApolloServer, gql } from 'apollo-server';
+import { UserInputError, ApolloServer } from 'apollo-server';
 import { randomUUID } from 'crypto';
+import { readFileSync } from 'fs';
+import path from 'path';
+import type { Resolvers } from './generated/graphql';
 
 const authors = [
   {
@@ -93,41 +96,12 @@ const books = [
   },
 ];
 
-const typeDefs = gql`
-  type Book {
-    id: ID!
-    title: String!
-    author: String!
-    published: Int!
-    genres: [String!]!
-  }
+const typeDefs = readFileSync(
+  path.resolve(__dirname, 'schema.graphql'),
+  'utf8'
+);
 
-  type Author {
-    id: ID!
-    name: String!
-    born: Int
-    bookCount: Int!
-  }
-
-  type Query {
-    bookCount: Int!
-    authorCount: Int!
-    allBooks(author: String, genre: String): [Book!]
-    allAuthors: [Author!]!
-  }
-
-  type Mutation {
-    addBook(
-      title: String!
-      author: String!
-      published: Int!
-      genres: [String!]!
-    ): Book
-    editAuthor(name: String!, setBornTo: Int!): Author
-  }
-`;
-
-const resolvers = {
+const resolvers: Resolvers = {
   Query: {
     bookCount() {
       return books.length;
@@ -143,7 +117,7 @@ const resolvers = {
 
       const result = books.filter((book) => {
         const isMatchingAuthor = book.author === author;
-        const isMatchingGenre = book.genres.includes(genre);
+        const isMatchingGenre = book.genres.includes(genre ?? '');
 
         if (author && genre) {
           return isMatchingAuthor && isMatchingGenre;
@@ -182,7 +156,7 @@ const resolvers = {
         });
       }
 
-      authors[index].born = setBornTo;
+      authors[index]!.born = setBornTo;
       return authors[index];
     },
   },

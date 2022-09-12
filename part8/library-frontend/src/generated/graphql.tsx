@@ -76,6 +76,14 @@ export type AddBookMutationVariables = Exact<{
 
 export type AddBookMutation = { __typename?: 'Mutation', addBook?: { __typename?: 'Book', id: string, title: string, author: string, published: number, genres: Array<string> } | null };
 
+export type EditAuthorMutationVariables = Exact<{
+  name: Scalars['String'];
+  setBornTo: Scalars['Int'];
+}>;
+
+
+export type EditAuthorMutation = { __typename?: 'Mutation', editAuthor?: { __typename?: 'Author', name: string, born?: number | null } | null };
+
 export type AllAuthorsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -127,6 +135,41 @@ export function useAddBookMutation(baseOptions?: Apollo.MutationHookOptions<AddB
 export type AddBookMutationHookResult = ReturnType<typeof useAddBookMutation>;
 export type AddBookMutationResult = Apollo.MutationResult<AddBookMutation>;
 export type AddBookMutationOptions = Apollo.BaseMutationOptions<AddBookMutation, AddBookMutationVariables>;
+export const EditAuthorDocument = gql`
+    mutation EditAuthor($name: String!, $setBornTo: Int!) {
+  editAuthor(name: $name, setBornTo: $setBornTo) {
+    name
+    born
+  }
+}
+    `;
+export type EditAuthorMutationFn = Apollo.MutationFunction<EditAuthorMutation, EditAuthorMutationVariables>;
+
+/**
+ * __useEditAuthorMutation__
+ *
+ * To run a mutation, you first call `useEditAuthorMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useEditAuthorMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [editAuthorMutation, { data, loading, error }] = useEditAuthorMutation({
+ *   variables: {
+ *      name: // value for 'name'
+ *      setBornTo: // value for 'setBornTo'
+ *   },
+ * });
+ */
+export function useEditAuthorMutation(baseOptions?: Apollo.MutationHookOptions<EditAuthorMutation, EditAuthorMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<EditAuthorMutation, EditAuthorMutationVariables>(EditAuthorDocument, options);
+      }
+export type EditAuthorMutationHookResult = ReturnType<typeof useEditAuthorMutation>;
+export type EditAuthorMutationResult = Apollo.MutationResult<EditAuthorMutation>;
+export type EditAuthorMutationOptions = Apollo.BaseMutationOptions<EditAuthorMutation, EditAuthorMutationVariables>;
 export const AllAuthorsDocument = gql`
     query AllAuthors {
   allAuthors {

@@ -1,4 +1,5 @@
 import { useAllAuthorsQuery } from "../generated/graphql";
+import UpdateAuthor from "./UpdateAuthor";
 
 type Props = {
   show: boolean;
@@ -38,6 +39,7 @@ const Authors = (props: Props) => {
           ))}
         </tbody>
       </table>
+      <UpdateAuthor />
     </div>
   );
 };
