@@ -12,12 +12,12 @@ const PhoneForm = ({ setError }: Props): JSX.Element => {
 
   const submit: FormEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault();
-    const { data } = await changeNumber({ variables: { name, phone } });
-    if (data?.editNumber == null) {
-      setError("person not found");
-      return;
-    }
-
+    await changeNumber({
+      variables: { name, phone },
+      onError(error) {
+        setError(error.graphQLErrors[0].message);
+      },
+    });
     setName("");
     setPhone("");
   };

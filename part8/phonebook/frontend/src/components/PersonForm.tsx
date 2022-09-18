@@ -23,7 +23,12 @@ const PersonForm = ({ setError }: Props): JSX.Element => {
   const submit: FormEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault();
     await createPerson({
-      variables: { name, phone, street, city },
+      variables: {
+        name,
+        phone: phone !== "" ? phone : undefined,
+        street,
+        city,
+      },
     });
     setName("");
     setPhone("");
