@@ -9,7 +9,7 @@ import { Resolvers, YesNo } from "./generated/graphql";
 import mongoose, { Error, Types } from "mongoose";
 import Person, { PersonType } from "./models/person";
 import jwt from "jsonwebtoken";
-import User, { UserType } from "./models/user";
+import User from "./models/user";
 
 import * as dotenv from "dotenv"; // see https://github.com/motdotla/dotenv#how-do-i-use-dotenv-with-import
 dotenv.config();
@@ -126,31 +126,24 @@ const resolvers: Resolvers = {
 
       return { value: jwt.sign(userForToken, JWT_SECRET ?? "") };
     },
-    // @ts-ignore
-    async addAsFriend(
-      _,
-      args,
-      { currentUser }: { currentUser: UserType | undefined }
-    ) {
-      const isFriend = (person: PersonType | null) =>
-        !!currentUser?.friends
-          .map((friend: any) => friend?._id?.toString() ?? "")
-          .includes(person?._id.toString() ?? "");
-
-      if (!currentUser) {
+    async addAsFriend(_, args, context) {
+      if (!context.currentUser) {
         throw new AuthenticationError("not authenticated");
       }
 
+      const isFriend = (person: PersonType | null): boolean =>
+        !!context.currentUser?.friends
+          ?.map((friend: any) => friend?._id?.toString() ?? "")
+          .includes(person?._id.toString() ?? "");
+
       const person = await Person.findOne({ name: args.name });
-      if (!isFriend(person)) {
-        // @ts-ignore
-        currentUser.friends = currentUser.friends.concat(person);
+      if (person && context.currentUser?.friends && !isFriend(person)) {
+        context.currentUser.friends =
+          context.currentUser?.friends?.concat(person);
       }
 
-      // @ts-ignore
-      await currentUser.save();
-
-      return currentUser;
+      await context.currentUser.save();
+      return context.currentUser;
     },
   },
 };
