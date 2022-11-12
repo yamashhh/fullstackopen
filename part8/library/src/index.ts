@@ -22,25 +22,56 @@ const resolvers: Resolvers = {
     authorCount() {
       return Author.collection.countDocuments();
     },
-    async allBooks(
-      _
-      // args
-    ) {
-      return Book.find({});
+    async allBooks(_, args) {
+      const { author: name, genre } = args;
+      console.log(name, genre);
+
+      if (!name && !genre) {
+        return Book.find({});
+      }
+
+      const author = await Author.findOne({ name }).exec();
+      console.log('author', author);
+
+      if (name && !author) {
+        return null;
+      }
+
+      if (author && genre) {
+        return Book.find({
+          author,
+          genres: { $in: [genre] },
+        });
+      }
+
+      if (author) {
+        return Book.find({ author });
+      }
+
+      if (genre) {
+        console.log('bobobo');
+        const book = await Book.find({ genres: { $in: [genre] } }).exec();
+        console.log(book);
+
+        return book;
+      }
+
+      // NOTE:
+      // 何にも引っかからない場合
+      return null;
     },
     async allAuthors() {
       // HACK:
-      // return await しないとクエリ実行時にエラー
+      // return await しないとクエリ実行時にエラー...
       return await Author.find({});
     },
   },
   Mutation: {
-    // @ts-ignore
     async addBook(_, args) {
       const { title, published, author: authorName, genres } = args;
       const author =
         (await Author.findOne({ author: authorName }).clone()) ??
-        new Author({ name: args.author });
+        new Author({ name: authorName });
       const book = new Book({ title, published, genres, author });
       await author.save();
       return book.save();

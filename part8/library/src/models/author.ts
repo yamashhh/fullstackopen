@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose, { InferSchemaType, Types } from 'mongoose';
 
 const schema = new mongoose.Schema({
   name: {
@@ -12,6 +12,10 @@ const schema = new mongoose.Schema({
   },
 });
 
-const Author = mongoose.model('Author', schema);
+export type AuthorType = InferSchemaType<typeof schema> & {
+  _id: Types.ObjectId;
+};
+
+const Author = mongoose.model<AuthorType>('Author', schema);
 
 export default Author;

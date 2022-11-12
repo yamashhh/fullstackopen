@@ -1,5 +1,7 @@
+// @ts-nocheck
 import { GraphQLResolveInfo } from 'graphql';
-import { AuthorModel } from './src/models';
+import { AuthorModel } from './src/models/author';
+import { BookModel } from './src/models/book';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
@@ -25,7 +27,7 @@ export type Author = {
 
 export type Book = {
   __typename?: 'Book';
-  author: Scalars['String'];
+  author: Author;
   genres: Array<Scalars['String']>;
   id: Scalars['ID'];
   published: Scalars['Int'];
@@ -137,7 +139,7 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = ResolversObject<{
   Author: ResolverTypeWrapper<AuthorModel>;
-  Book: ResolverTypeWrapper<Book>;
+  Book: ResolverTypeWrapper<BookModel>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   ID: ResolverTypeWrapper<Scalars['ID']>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
@@ -149,7 +151,7 @@ export type ResolversTypes = ResolversObject<{
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = ResolversObject<{
   Author: AuthorModel;
-  Book: Book;
+  Book: BookModel;
   Boolean: Scalars['Boolean'];
   ID: Scalars['ID'];
   Int: Scalars['Int'];
@@ -167,7 +169,7 @@ export type AuthorResolvers<ContextType = any, ParentType extends ResolversParen
 }>;
 
 export type BookResolvers<ContextType = any, ParentType extends ResolversParentTypes['Book'] = ResolversParentTypes['Book']> = ResolversObject<{
-  author?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  author?: Resolver<ResolversTypes['Author'], ParentType, ContextType>;
   genres?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   published?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
