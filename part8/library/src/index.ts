@@ -56,18 +56,14 @@ const resolvers: Resolvers = {
       const book = new Book({ title, published, genres, author });
       return book.save();
     },
-    // editAuthor(_, args) {
-    //   const { name, setBornTo } = args;
-    //   const index = authors.findIndex((author) => author.name === name);
-    //   if (index === -1) {
-    //     throw new UserInputError('Author not found', {
-    //       invalidArgs: name,
-    //     });
-    //   }
-
-    //   authors[index]!.born = setBornTo;
-    //   return authors[index];
-    // },
+    async editAuthor(_, args) {
+      const { name, setBornTo } = args;
+      return Author.findOneAndUpdate(
+        { name },
+        { born: setBornTo },
+        { new: true, runValidators: true }
+      );
+    },
   },
 };
 
