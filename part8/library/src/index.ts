@@ -3,10 +3,11 @@ import {
   ApolloServer,
 } from 'apollo-server';
 import { readFileSync } from 'fs';
+import type { FilterQuery } from 'mongoose';
 import path from 'path';
 import type { Resolvers } from './generated/graphql';
-import Author from './models/author';
-import Book from './models/book';
+import Author, { AuthorType } from './models/author';
+import Book, { BookType } from './models/book';
 import './server';
 
 const typeDefs = readFileSync(
@@ -15,68 +16,46 @@ const typeDefs = readFileSync(
 );
 
 const resolvers: Resolvers = {
-  Query: {
-    bookCount() {
-      return Book.collection.countDocuments();
+  Author: {
+    async bookCount(root: AuthorType) {
+      return Book.countDocuments({ author: root });
     },
-    authorCount() {
-      return Author.collection.countDocuments();
+  },
+  Query: {
+    async bookCount() {
+      return Book.countDocuments();
+    },
+    async authorCount() {
+      return Author.countDocuments();
     },
     async allBooks(_, args) {
       const { author: name, genre } = args;
-      console.log(name, genre);
-
-      if (!name && !genre) {
-        return Book.find({});
-      }
-
       const author = await Author.findOne({ name }).exec();
-      console.log('author', author);
 
-      if (name && !author) {
-        return null;
-      }
-
-      if (author && genre) {
-        return Book.find({
-          author,
-          genres: { $in: [genre] },
-        });
-      }
-
+      const filter: FilterQuery<BookType> = {};
       if (author) {
-        return Book.find({ author });
+        filter.author = author;
       }
-
       if (genre) {
-        console.log('bobobo');
-        const book = await Book.find({ genres: { $in: [genre] } }).exec();
-        console.log(book);
-
-        return book;
+        filter.genres = { $in: [genre] };
       }
 
-      // NOTE:
-      // 何にも引っかからない場合
-      return null;
+      return Book.find(filter).populate('author');
     },
     async allAuthors() {
-      // HACK:
-      // return await しないとクエリ実行時にエラー...
-      return await Author.find({});
+      return Author.find({});
     },
   },
   Mutation: {
     async addBook(_, args) {
       const { title, published, author: authorName, genres } = args;
-      const author =
-        (await Author.findOne({ author: authorName }).clone()) ??
-        new Author({ name: authorName });
+
+      let author = await Author.findOne({ name: authorName }).exec();
+      author ??= await new Author({ name: authorName }).save();
+
       const book = new Book({ title, published, genres, author });
-      await author.save();
       return book.save();
     },
-    // TODO:
     // editAuthor(_, args) {
     //   const { name, setBornTo } = args;
     //   const index = authors.findIndex((author) => author.name === name);
