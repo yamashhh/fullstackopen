@@ -1,7 +1,4 @@
-import {
-  // UserInputError,
-  ApolloServer,
-} from 'apollo-server';
+import { ApolloServer, UserInputError } from 'apollo-server';
 import { readFileSync } from 'fs';
 import type { FilterQuery } from 'mongoose';
 import path from 'path';
@@ -49,12 +46,24 @@ const resolvers: Resolvers = {
   Mutation: {
     async addBook(_, args) {
       const { title, published, author: authorName, genres } = args;
-
       let author = await Author.findOne({ name: authorName }).exec();
-      author ??= await new Author({ name: authorName }).save();
-
-      const book = new Book({ title, published, genres, author });
-      return book.save();
+      try {
+        author ??= await new Author({ name: authorName }).save();
+        const newBook = await new Book({
+          title,
+          published,
+          genres,
+          author,
+        }).save();
+        return newBook;
+      } catch (error) {
+        if (error instanceof Error) {
+          throw new UserInputError(error.message, {
+            invalidArgs: args,
+          });
+        }
+        throw error;
+      }
     },
     async editAuthor(_, args) {
       const { name, setBornTo } = args;
