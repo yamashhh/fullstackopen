@@ -1,6 +1,5 @@
 overwrite: true
-schema: 'http://localhost:4000'
-documents: null
+schema: './src/schema.graphql'
 generates:
   src/generated/graphql.ts:
     config:
@@ -8,6 +7,7 @@ generates:
       mappers:
         Author: ./src/models/author#AuthorModel
         Book: ./src/models/book#BookModel
+        User: ./src/models/user#UserModel
     plugins:
       - 'typescript'
       - 'typescript-resolvers'
