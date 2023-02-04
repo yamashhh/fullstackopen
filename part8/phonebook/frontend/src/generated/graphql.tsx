@@ -23,8 +23,16 @@ export type Address = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  addAsFriend?: Maybe<User>;
   addPerson?: Maybe<Person>;
+  createUser?: Maybe<User>;
   editNumber?: Maybe<Person>;
+  login?: Maybe<Token>;
+};
+
+
+export type MutationAddAsFriendArgs = {
+  name: Scalars['String'];
 };
 
 
@@ -36,9 +44,20 @@ export type MutationAddPersonArgs = {
 };
 
 
+export type MutationCreateUserArgs = {
+  username: Scalars['String'];
+};
+
+
 export type MutationEditNumberArgs = {
   name: Scalars['String'];
   phone: Scalars['String'];
+};
+
+
+export type MutationLoginArgs = {
+  password: Scalars['String'];
+  username: Scalars['String'];
 };
 
 export type Person = {
@@ -53,6 +72,7 @@ export type Query = {
   __typename?: 'Query';
   allPersons: Array<Person>;
   findPerson?: Maybe<Person>;
+  me?: Maybe<User>;
   personCount: Scalars['Int'];
 };
 
@@ -64,6 +84,18 @@ export type QueryAllPersonsArgs = {
 
 export type QueryFindPersonArgs = {
   name: Scalars['String'];
+};
+
+export type Token = {
+  __typename?: 'Token';
+  value: Scalars['String'];
+};
+
+export type User = {
+  __typename?: 'User';
+  friends?: Maybe<Array<Person>>;
+  id: Scalars['ID'];
+  username: Scalars['String'];
 };
 
 export enum YesNo {
@@ -100,6 +132,14 @@ export type FindPersonByNameQueryVariables = Exact<{
 
 
 export type FindPersonByNameQuery = { __typename?: 'Query', findPerson?: { __typename?: 'Person', name: string, phone?: string | null, address: { __typename?: 'Address', street: string, city: string } } | null };
+
+export type LoginMutationVariables = Exact<{
+  username: Scalars['String'];
+  password: Scalars['String'];
+}>;
+
+
+export type LoginMutation = { __typename?: 'Mutation', login?: { __typename?: 'Token', value: string } | null };
 
 
 export const AllPersonsDocument = gql`
@@ -264,6 +304,40 @@ export function useFindPersonByNameLazyQuery(baseOptions?: Apollo.LazyQueryHookO
 export type FindPersonByNameQueryHookResult = ReturnType<typeof useFindPersonByNameQuery>;
 export type FindPersonByNameLazyQueryHookResult = ReturnType<typeof useFindPersonByNameLazyQuery>;
 export type FindPersonByNameQueryResult = Apollo.QueryResult<FindPersonByNameQuery, FindPersonByNameQueryVariables>;
+export const LoginDocument = gql`
+    mutation login($username: String!, $password: String!) {
+  login(username: $username, password: $password) {
+    value
+  }
+}
+    `;
+export type LoginMutationFn = Apollo.MutationFunction<LoginMutation, LoginMutationVariables>;
+
+/**
+ * __useLoginMutation__
+ *
+ * To run a mutation, you first call `useLoginMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useLoginMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [loginMutation, { data, loading, error }] = useLoginMutation({
+ *   variables: {
+ *      username: // value for 'username'
+ *      password: // value for 'password'
+ *   },
+ * });
+ */
+export function useLoginMutation(baseOptions?: Apollo.MutationHookOptions<LoginMutation, LoginMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<LoginMutation, LoginMutationVariables>(LoginDocument, options);
+      }
+export type LoginMutationHookResult = ReturnType<typeof useLoginMutation>;
+export type LoginMutationResult = Apollo.MutationResult<LoginMutation>;
+export type LoginMutationOptions = Apollo.BaseMutationOptions<LoginMutation, LoginMutationVariables>;
 
       export interface PossibleTypesResultData {
         possibleTypes: {
@@ -274,3 +348,4 @@ export type FindPersonByNameQueryResult = Apollo.QueryResult<FindPersonByNameQue
   "possibleTypes": {}
 };
       export default result;
+    
