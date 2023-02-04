@@ -21,7 +21,7 @@ const App = (): JSX.Element => {
   }, []);
 
   if (loading) {
-    return <div>loading...</div>;
+    return <h2>loading...</h2>;
   }
 
   const notify = (message: string): void => {

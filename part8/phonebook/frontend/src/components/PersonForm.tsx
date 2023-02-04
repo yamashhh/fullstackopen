@@ -1,6 +1,8 @@
+import { ApolloCache } from "@apollo/client";
 import { FormEventHandler, useState } from "react";
 import {
   AllPersonsDocument,
+  Query,
   useCreatePersonMutation,
 } from "../generated/graphql";
 
@@ -14,9 +16,16 @@ const PersonForm = ({ setError }: Props): JSX.Element => {
   const [street, setStreet] = useState("");
   const [city, setCity] = useState("");
   const [createPerson] = useCreatePersonMutation({
-    refetchQueries: [{ query: AllPersonsDocument }],
+    // refetchQueries: [{ query: AllPersonsDocument }],
     onError(error) {
       setError(error.graphQLErrors[0].message);
+    },
+    update(cache, response) {
+      cache.updateQuery({ query: AllPersonsDocument }, ({ allPersons }) => {
+        return {
+          allPersons: allPersons.concat(response.data?.addPerson),
+        };
+      });
     },
   });
 
