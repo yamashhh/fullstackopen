@@ -25,7 +25,7 @@ export type Author = {
 
 export type Book = {
   __typename?: 'Book';
-  author: Scalars['String'];
+  author: Author;
   genres: Array<Scalars['String']>;
   id: Scalars['ID'];
   published: Scalars['Int'];
@@ -35,7 +35,9 @@ export type Book = {
 export type Mutation = {
   __typename?: 'Mutation';
   addBook?: Maybe<Book>;
+  createUser?: Maybe<User>;
   editAuthor?: Maybe<Author>;
+  login?: Maybe<Token>;
 };
 
 
@@ -47,9 +49,21 @@ export type MutationAddBookArgs = {
 };
 
 
+export type MutationCreateUserArgs = {
+  favouriteGenre: Scalars['String'];
+  username: Scalars['String'];
+};
+
+
 export type MutationEditAuthorArgs = {
   name: Scalars['String'];
   setBornTo: Scalars['Int'];
+};
+
+
+export type MutationLoginArgs = {
+  password: Scalars['String'];
+  username: Scalars['String'];
 };
 
 export type Query = {
@@ -58,12 +72,25 @@ export type Query = {
   allBooks?: Maybe<Array<Book>>;
   authorCount: Scalars['Int'];
   bookCount: Scalars['Int'];
+  me?: Maybe<User>;
 };
 
 
 export type QueryAllBooksArgs = {
   author?: InputMaybe<Scalars['String']>;
   genre?: InputMaybe<Scalars['String']>;
+};
+
+export type Token = {
+  __typename?: 'Token';
+  value: Scalars['String'];
+};
+
+export type User = {
+  __typename?: 'User';
+  favouriteGenre: Scalars['String'];
+  id: Scalars['ID'];
+  username: Scalars['String'];
 };
 
 export type AddBookMutationVariables = Exact<{
@@ -74,7 +101,7 @@ export type AddBookMutationVariables = Exact<{
 }>;
 
 
-export type AddBookMutation = { __typename?: 'Mutation', addBook?: { __typename?: 'Book', id: string, title: string, author: string, published: number, genres: Array<string> } | null };
+export type AddBookMutation = { __typename?: 'Mutation', addBook?: { __typename?: 'Book', id: string, title: string, published: number, genres: Array<string>, author: { __typename?: 'Author', id: string, name: string, born?: number | null, bookCount: number } } | null };
 
 export type EditAuthorMutationVariables = Exact<{
   name: Scalars['String'];
@@ -84,15 +111,26 @@ export type EditAuthorMutationVariables = Exact<{
 
 export type EditAuthorMutation = { __typename?: 'Mutation', editAuthor?: { __typename?: 'Author', name: string, born?: number | null } | null };
 
+export type LoginMutationVariables = Exact<{
+  username: Scalars['String'];
+  password: Scalars['String'];
+}>;
+
+
+export type LoginMutation = { __typename?: 'Mutation', login?: { __typename?: 'Token', value: string } | null };
+
 export type AllAuthorsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type AllAuthorsQuery = { __typename?: 'Query', allAuthors: Array<{ __typename?: 'Author', id: string, name: string, born?: number | null, bookCount: number }> };
 
-export type AllBooksQueryVariables = Exact<{ [key: string]: never; }>;
+export type AllBooksQueryVariables = Exact<{
+  author?: InputMaybe<Scalars['String']>;
+  genre?: InputMaybe<Scalars['String']>;
+}>;
 
 
-export type AllBooksQuery = { __typename?: 'Query', allBooks?: Array<{ __typename?: 'Book', id: string, title: string, author: string, published: number }> | null };
+export type AllBooksQuery = { __typename?: 'Query', allBooks?: Array<{ __typename?: 'Book', id: string, title: string, published: number, genres: Array<string>, author: { __typename?: 'Author', id: string, name: string, born?: number | null, bookCount: number } }> | null };
 
 
 export const AddBookDocument = gql`
@@ -100,7 +138,12 @@ export const AddBookDocument = gql`
   addBook(title: $title, author: $author, published: $published, genres: $genres) {
     id
     title
-    author
+    author {
+      id
+      name
+      born
+      bookCount
+    }
     published
     genres
   }
@@ -170,6 +213,40 @@ export function useEditAuthorMutation(baseOptions?: Apollo.MutationHookOptions<E
 export type EditAuthorMutationHookResult = ReturnType<typeof useEditAuthorMutation>;
 export type EditAuthorMutationResult = Apollo.MutationResult<EditAuthorMutation>;
 export type EditAuthorMutationOptions = Apollo.BaseMutationOptions<EditAuthorMutation, EditAuthorMutationVariables>;
+export const LoginDocument = gql`
+    mutation Login($username: String!, $password: String!) {
+  login(username: $username, password: $password) {
+    value
+  }
+}
+    `;
+export type LoginMutationFn = Apollo.MutationFunction<LoginMutation, LoginMutationVariables>;
+
+/**
+ * __useLoginMutation__
+ *
+ * To run a mutation, you first call `useLoginMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useLoginMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [loginMutation, { data, loading, error }] = useLoginMutation({
+ *   variables: {
+ *      username: // value for 'username'
+ *      password: // value for 'password'
+ *   },
+ * });
+ */
+export function useLoginMutation(baseOptions?: Apollo.MutationHookOptions<LoginMutation, LoginMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<LoginMutation, LoginMutationVariables>(LoginDocument, options);
+      }
+export type LoginMutationHookResult = ReturnType<typeof useLoginMutation>;
+export type LoginMutationResult = Apollo.MutationResult<LoginMutation>;
+export type LoginMutationOptions = Apollo.BaseMutationOptions<LoginMutation, LoginMutationVariables>;
 export const AllAuthorsDocument = gql`
     query AllAuthors {
   allAuthors {
@@ -208,12 +285,18 @@ export type AllAuthorsQueryHookResult = ReturnType<typeof useAllAuthorsQuery>;
 export type AllAuthorsLazyQueryHookResult = ReturnType<typeof useAllAuthorsLazyQuery>;
 export type AllAuthorsQueryResult = Apollo.QueryResult<AllAuthorsQuery, AllAuthorsQueryVariables>;
 export const AllBooksDocument = gql`
-    query AllBooks {
-  allBooks {
+    query AllBooks($author: String, $genre: String) {
+  allBooks(author: $author, genre: $genre) {
     id
     title
-    author
+    author {
+      id
+      name
+      born
+      bookCount
+    }
     published
+    genres
   }
 }
     `;
@@ -230,6 +313,8 @@ export const AllBooksDocument = gql`
  * @example
  * const { data, loading, error } = useAllBooksQuery({
  *   variables: {
+ *      author: // value for 'author'
+ *      genre: // value for 'genre'
  *   },
  * });
  */

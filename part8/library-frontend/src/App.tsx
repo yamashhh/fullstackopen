@@ -1,29 +1,90 @@
-import { useState } from "react";
+import { useApolloClient } from "@apollo/client";
+import { useEffect, useState } from "react";
 import Authors from "./components/Authors";
 import Books from "./components/Books";
+import Login from "./components/Login";
 import NewBook from "./components/NewBook";
-
-export const PAGE_TYPE = {
-  AUTHORS: "authors",
-  BOOKS: "books",
-  ADD: "add",
-} as const;
+import { PAGE_TYPE, LOCAL_STORAGE_KEY } from "./constants";
 
 const App = () => {
-  const [page, setPage] =
-    useState<typeof PAGE_TYPE[keyof typeof PAGE_TYPE]>("authors");
+  const [page, setPage] = useState<typeof PAGE_TYPE[keyof typeof PAGE_TYPE]>(
+    PAGE_TYPE.AUTHORS
+  );
+  const [token, setToken] = useState<string | null>(null);
+  const client = useApolloClient();
+
+  useEffect(() => {
+    const token = localStorage.getItem(LOCAL_STORAGE_KEY);
+    if (token) {
+      setToken(token);
+    }
+  }, []);
+
+  const logout = async () => {
+    setToken(null);
+    localStorage.clear();
+    await client.resetStore();
+    setPage("authors");
+  };
 
   return (
-    <div>
-      <div>
-        <button onClick={() => setPage("authors")}>authors</button>
-        <button onClick={() => setPage("books")}>books</button>
-        <button onClick={() => setPage("add")}>add book</button>
-      </div>
-      <Authors show={page === "authors"} />
-      <Books show={page === "books"} />
-      <NewBook show={page === "add"} />
-    </div>
+    <>
+      <header>
+        <nav>
+          <ul style={{ listStyle: "none", display: "flex", columnGap: "16px" }}>
+            <li>
+              <button onClick={() => setPage(PAGE_TYPE.AUTHORS)}>
+                {PAGE_TYPE.AUTHORS}
+              </button>
+            </li>
+            <li>
+              <button onClick={() => setPage(PAGE_TYPE.BOOKS)}>
+                {PAGE_TYPE.BOOKS}
+              </button>
+            </li>
+            {token ? (
+              <>
+                <li>
+                  <button onClick={() => setPage(PAGE_TYPE.ADD)}>
+                    {PAGE_TYPE.ADD}
+                  </button>
+                </li>
+                <li>
+                  <button onClick={logout}>logout</button>
+                </li>
+              </>
+            ) : (
+              <li>
+                <button onClick={() => setPage(PAGE_TYPE.LOGIN)}>
+                  {PAGE_TYPE.LOGIN}
+                </button>
+              </li>
+            )}
+          </ul>
+        </nav>
+      </header>
+      <main>
+        {(() => {
+          switch (page) {
+            case PAGE_TYPE.AUTHORS: {
+              return <Authors />;
+            }
+            case PAGE_TYPE.BOOKS: {
+              return <Books />;
+            }
+            case PAGE_TYPE.ADD: {
+              return <NewBook />;
+            }
+            case PAGE_TYPE.LOGIN: {
+              return <Login setToken={setToken} setPage={setPage} />;
+            }
+            default: {
+              return null;
+            }
+          }
+        })()}
+      </main>
+    </>
   );
 };
 

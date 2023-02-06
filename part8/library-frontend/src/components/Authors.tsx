@@ -1,16 +1,8 @@
 import { useAllAuthorsQuery } from "../generated/graphql";
 import UpdateAuthor from "./UpdateAuthor";
 
-type Props = {
-  show: boolean;
-};
-
-const Authors = (props: Props) => {
+const Authors = () => {
   const { data, loading, error } = useAllAuthorsQuery();
-
-  if (!props.show) {
-    return null;
-  }
 
   if (loading) {
     return <div>LOADING</div>;
@@ -21,7 +13,7 @@ const Authors = (props: Props) => {
   }
 
   return (
-    <div>
+    <>
       <h2>authors</h2>
       <table>
         <tbody>
@@ -40,7 +32,7 @@ const Authors = (props: Props) => {
         </tbody>
       </table>
       {data?.allAuthors && <UpdateAuthor authors={data.allAuthors} />}
-    </div>
+    </>
   );
 };
 

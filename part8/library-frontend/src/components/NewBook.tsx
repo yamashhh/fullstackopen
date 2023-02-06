@@ -5,11 +5,7 @@ import {
   AllBooksDocument,
 } from "../generated/graphql";
 
-type Props = {
-  show: boolean;
-};
-
-const NewBook = (props: Props) => {
+const NewBook = () => {
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [published, setPublished] = useState<number | undefined>();
@@ -21,10 +17,6 @@ const NewBook = (props: Props) => {
       { query: AllBooksDocument },
     ],
   });
-
-  if (!props.show) {
-    return null;
-  }
 
   const submit: FormEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault();
@@ -53,7 +45,7 @@ const NewBook = (props: Props) => {
   };
 
   return (
-    <div>
+    <>
       <form onSubmit={submit}>
         <div>
           title
@@ -89,7 +81,7 @@ const NewBook = (props: Props) => {
         <div>genres: {genres.join(" ")}</div>
         <button type="submit">create book</button>
       </form>
-    </div>
+    </>
   );
 };
 

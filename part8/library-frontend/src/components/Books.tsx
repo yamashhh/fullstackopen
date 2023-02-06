@@ -1,15 +1,7 @@
 import { useAllBooksQuery } from "../generated/graphql";
 
-type Props = {
-  show: boolean;
-};
-
-const Books = (props: Props) => {
+const Books = () => {
   const { data, loading, error } = useAllBooksQuery();
-
-  if (!props.show) {
-    return null;
-  }
 
   if (loading) {
     return <div>LOADING</div>;
@@ -20,7 +12,7 @@ const Books = (props: Props) => {
   }
 
   return (
-    <div>
+    <>
       <h2>books</h2>
       <table>
         <tbody>
@@ -33,13 +25,13 @@ const Books = (props: Props) => {
             data.allBooks.map((a) => (
               <tr key={a.id}>
                 <td>{a.title}</td>
-                <td>{a.author}</td>
+                <td>{JSON.stringify(a.author)}</td>
                 <td>{a.published}</td>
               </tr>
             ))}
         </tbody>
       </table>
-    </div>
+    </>
   );
 };
 

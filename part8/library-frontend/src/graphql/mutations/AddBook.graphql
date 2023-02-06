@@ -12,7 +12,12 @@ mutation AddBook(
   ) {
     id
     title
-    author
+    author {
+      id
+      name
+      born
+      bookCount
+    }
     published
     genres
   }

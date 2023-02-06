@@ -7,7 +7,7 @@ specifiers:
   '@graphql-codegen/typescript': 2.7.3
   '@graphql-codegen/typescript-resolvers': 2.7.3
   '@graphql-eslint/eslint-plugin': ^3.10.7
-  '@tsconfig/node16-strictest-esm': ^1.0.3
+  '@tsconfig/node18-strictest-esm': ^1.0.1
   '@types/jsonwebtoken': ^9.0.1
   '@types/node': ^18.7.16
   '@typescript-eslint/eslint-plugin': ^5.0.0
@@ -42,7 +42,7 @@ devDependencies:
   '@graphql-codegen/typescript': 2.7.3_graphql@16.6.0
   '@graphql-codegen/typescript-resolvers': 2.7.3_graphql@16.6.0
   '@graphql-eslint/eslint-plugin': 3.10.7_k3fejhqvbyfqqhnavuftnqxxpu
-  '@tsconfig/node16-strictest-esm': 1.0.3
+  '@tsconfig/node18-strictest-esm': 1.0.1
   '@types/jsonwebtoken': 9.0.1
   '@types/node': 18.7.16
   '@typescript-eslint/eslint-plugin': 5.36.2_itqs5654cmlnjraw6gjzqacppi
@@ -1495,12 +1495,12 @@ packages:
     resolution: {integrity: sha512-ysT8mhdixWK6Hw3i1V2AeRqZ5WfXg1G43mqoYlM2nc6388Fq5jcXyr5mRsqViLx/GJYdoL0bfXD8nmF+Zn/Iow==}
     dev: true
 
-  /@tsconfig/node16-strictest-esm/1.0.3:
-    resolution: {integrity: sha512-0/QTPDkKmE2dy0dMRstPCv4VJ+gUGgvMKzaWd5P3hgdlmPqYqe1pJxDGUlNYbSgUBlncIvvX+mIeZarokysNgg==}
-    dev: true
-
   /@tsconfig/node16/1.0.3:
     resolution: {integrity: sha512-yOlFc+7UtL/89t2ZhjPvvB/DeAr3r+Dq58IgzsFkOAvVC6NMJXmCGjbptdXdR9qsX7pKcTL+s87FtYREi2dEEQ==}
+    dev: true
+
+  /@tsconfig/node18-strictest-esm/1.0.1:
+    resolution: {integrity: sha512-cHzmAqw7CMbyqROWeBgVhard3F2V6zxOSJnQ4E6SJWruXD5ypuP9/QKekwBdfXQ4oUTaizIICKIwb+v3v33t0w==}
     dev: true
 
   /@types/accepts/1.3.5:
