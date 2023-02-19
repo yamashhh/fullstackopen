@@ -53,6 +53,10 @@ const resolvers: Resolvers = {
     async allAuthors() {
       return Author.find({});
     },
+    async allGenres() {
+      const allBooks = await Book.find();
+      return Array.from(new Set(allBooks.flatMap((book) => book.genres)));
+    },
     me(_, __, context) {
       return context.currentUser;
     },

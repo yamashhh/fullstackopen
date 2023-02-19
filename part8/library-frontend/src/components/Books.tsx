@@ -1,33 +1,39 @@
-import { useMemo, useState } from "react";
-import { useAllBooksQuery } from "../generated/graphql";
+import { useState } from "react";
+import { useAllBooksQuery, useAllGenresQuery } from "../generated/graphql";
 
 const Books = (): JSX.Element => {
-  const { data, loading, error } = useAllBooksQuery();
-  const genres = useMemo(() => {
-    const genreSet = new Set(data?.allBooks?.flatMap((book) => book.genres));
-    return Array.from(genreSet);
-  }, [data?.allBooks]);
+  const allBooks = useAllBooksQuery();
+  const allGenres = useAllGenresQuery();
   const [selectedGenre, setSelectedGenre] = useState<string | null>(null);
-  const selectedData = useMemo(() => {
-    if (selectedGenre === null) {
-      return data?.allBooks;
-    }
-    return data?.allBooks?.filter((book) =>
-      book.genres.includes(selectedGenre ?? "")
-    );
-  }, [data?.allBooks, selectedGenre]);
 
-  if (loading) {
+  if (allBooks.loading || allGenres.loading) {
     return <div>LOADING</div>;
   }
 
-  if (error != null) {
-    return <div>{error.message}</div>;
+  if (allBooks.error != null) {
+    return (
+      <p>
+        all books error
+        <br />
+        {JSON.stringify(allBooks.error.message)}
+      </p>
+    );
+  }
+
+  if (allGenres.error != null) {
+    return (
+      <p>
+        all genres error
+        <br />
+        {JSON.stringify(allGenres.error.message)}
+      </p>
+    );
   }
 
   return (
     <>
       <h2>books</h2>
+      <h3>in genre {selectedGenre != null ? selectedGenre : "all genres"}</h3>
       <table>
         <tbody>
           <tr>
@@ -35,7 +41,7 @@ const Books = (): JSX.Element => {
             <th>author</th>
             <th>published</th>
           </tr>
-          {selectedData?.map((book) => (
+          {allBooks.data?.allBooks?.map((book) => (
             <tr key={book.id}>
               <td>{book.title}</td>
               <td>{book.author.name}</td>
@@ -45,12 +51,25 @@ const Books = (): JSX.Element => {
         </tbody>
       </table>
       <div>
-        {genres.map((genre) => (
-          <button key={genre} onClick={() => setSelectedGenre(genre)}>
+        {allGenres.data?.allGenres?.map((genre) => (
+          <button
+            key={genre}
+            onClick={async () => {
+              setSelectedGenre(genre);
+              await allBooks.refetch({ genre });
+            }}
+          >
             {genre}
           </button>
         ))}
-        <button onClick={() => setSelectedGenre(null)}>all genres</button>
+        <button
+          onClick={async () => {
+            setSelectedGenre(null);
+            await allBooks.refetch({ genre: null });
+          }}
+        >
+          all genres
+        </button>
       </div>
     </>
   );

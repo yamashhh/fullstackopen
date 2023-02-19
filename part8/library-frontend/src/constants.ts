@@ -4,4 +4,5 @@ export const PAGE_TYPE = {
   BOOKS: "books",
   ADD: "add",
   LOGIN: "login",
+  RECOMMEND: "recommend",
 } as const;

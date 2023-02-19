@@ -4,6 +4,7 @@ import Authors from "./components/Authors";
 import Books from "./components/Books";
 import Login from "./components/Login";
 import NewBook from "./components/NewBook";
+import Recommend from "./components/Recommend";
 import { PAGE_TYPE, LOCAL_STORAGE_KEY } from "./constants";
 
 const App = (): JSX.Element => {
@@ -57,6 +58,11 @@ const App = (): JSX.Element => {
                   </button>
                 </li>
                 <li>
+                  <button onClick={() => setPage(PAGE_TYPE.RECOMMEND)}>
+                    {PAGE_TYPE.RECOMMEND}
+                  </button>
+                </li>
+                <li>
                   <button onClick={logout}>logout</button>
                 </li>
               </>
@@ -81,6 +87,9 @@ const App = (): JSX.Element => {
             }
             case PAGE_TYPE.ADD: {
               return <NewBook />;
+            }
+            case PAGE_TYPE.RECOMMEND: {
+              return <Recommend />;
             }
             case PAGE_TYPE.LOGIN: {
               return <Login setToken={setToken} setPage={setPage} />;

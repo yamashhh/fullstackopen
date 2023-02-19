@@ -3,6 +3,7 @@ import {
   useAddBookMutation,
   AllAuthorsDocument,
   AllBooksDocument,
+  AllGenresDocument,
 } from "../generated/graphql";
 
 const NewBook = (): JSX.Element => {
@@ -15,6 +16,7 @@ const NewBook = (): JSX.Element => {
     refetchQueries: [
       { query: AllAuthorsDocument },
       { query: AllBooksDocument },
+      { query: AllGenresDocument },
     ],
   });
 

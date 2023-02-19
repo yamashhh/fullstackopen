@@ -70,6 +70,7 @@ export type Query = {
   __typename?: 'Query';
   allAuthors: Array<Author>;
   allBooks?: Maybe<Array<Book>>;
+  allGenres?: Maybe<Array<Scalars['String']>>;
   authorCount: Scalars['Int'];
   bookCount: Scalars['Int'];
   me?: Maybe<User>;
@@ -131,6 +132,16 @@ export type AllBooksQueryVariables = Exact<{
 
 
 export type AllBooksQuery = { __typename?: 'Query', allBooks?: Array<{ __typename?: 'Book', id: string, title: string, published: number, genres: Array<string>, author: { __typename?: 'Author', id: string, name: string, born?: number | null, bookCount: number } }> | null };
+
+export type AllGenresQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type AllGenresQuery = { __typename?: 'Query', allGenres?: Array<string> | null };
+
+export type MeQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type MeQuery = { __typename?: 'Query', me?: { __typename?: 'User', id: string, username: string, favouriteGenre: string } | null };
 
 
 export const AddBookDocument = gql`
@@ -329,6 +340,74 @@ export function useAllBooksLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<A
 export type AllBooksQueryHookResult = ReturnType<typeof useAllBooksQuery>;
 export type AllBooksLazyQueryHookResult = ReturnType<typeof useAllBooksLazyQuery>;
 export type AllBooksQueryResult = Apollo.QueryResult<AllBooksQuery, AllBooksQueryVariables>;
+export const AllGenresDocument = gql`
+    query AllGenres {
+  allGenres
+}
+    `;
+
+/**
+ * __useAllGenresQuery__
+ *
+ * To run a query within a React component, call `useAllGenresQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAllGenresQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useAllGenresQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useAllGenresQuery(baseOptions?: Apollo.QueryHookOptions<AllGenresQuery, AllGenresQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<AllGenresQuery, AllGenresQueryVariables>(AllGenresDocument, options);
+      }
+export function useAllGenresLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AllGenresQuery, AllGenresQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<AllGenresQuery, AllGenresQueryVariables>(AllGenresDocument, options);
+        }
+export type AllGenresQueryHookResult = ReturnType<typeof useAllGenresQuery>;
+export type AllGenresLazyQueryHookResult = ReturnType<typeof useAllGenresLazyQuery>;
+export type AllGenresQueryResult = Apollo.QueryResult<AllGenresQuery, AllGenresQueryVariables>;
+export const MeDocument = gql`
+    query Me {
+  me {
+    id
+    username
+    favouriteGenre
+  }
+}
+    `;
+
+/**
+ * __useMeQuery__
+ *
+ * To run a query within a React component, call `useMeQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMeQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMeQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useMeQuery(baseOptions?: Apollo.QueryHookOptions<MeQuery, MeQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<MeQuery, MeQueryVariables>(MeDocument, options);
+      }
+export function useMeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MeQuery, MeQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<MeQuery, MeQueryVariables>(MeDocument, options);
+        }
+export type MeQueryHookResult = ReturnType<typeof useMeQuery>;
+export type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>;
+export type MeQueryResult = Apollo.QueryResult<MeQuery, MeQueryVariables>;
 
       export interface PossibleTypesResultData {
         possibleTypes: {
