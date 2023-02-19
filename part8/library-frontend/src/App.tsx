@@ -6,7 +6,7 @@ import Login from "./components/Login";
 import NewBook from "./components/NewBook";
 import { PAGE_TYPE, LOCAL_STORAGE_KEY } from "./constants";
 
-const App = () => {
+const App = (): JSX.Element => {
   const [page, setPage] = useState<typeof PAGE_TYPE[keyof typeof PAGE_TYPE]>(
     PAGE_TYPE.AUTHORS
   );
@@ -15,12 +15,12 @@ const App = () => {
 
   useEffect(() => {
     const token = localStorage.getItem(LOCAL_STORAGE_KEY);
-    if (token) {
+    if (token != null) {
       setToken(token);
     }
   }, []);
 
-  const logout = async () => {
+  const logout = async (): Promise<void> => {
     setToken(null);
     localStorage.clear();
     await client.resetStore();
@@ -31,7 +31,14 @@ const App = () => {
     <>
       <header>
         <nav>
-          <ul style={{ listStyle: "none", display: "flex", columnGap: "16px" }}>
+          <ul
+            style={{
+              listStyle: "none",
+              display: "flex",
+              columnGap: "16px",
+              paddingInline: "unset",
+            }}
+          >
             <li>
               <button onClick={() => setPage(PAGE_TYPE.AUTHORS)}>
                 {PAGE_TYPE.AUTHORS}
@@ -42,7 +49,7 @@ const App = () => {
                 {PAGE_TYPE.BOOKS}
               </button>
             </li>
-            {token ? (
+            {token != null ? (
               <>
                 <li>
                   <button onClick={() => setPage(PAGE_TYPE.ADD)}>
@@ -67,7 +74,7 @@ const App = () => {
         {(() => {
           switch (page) {
             case PAGE_TYPE.AUTHORS: {
-              return <Authors />;
+              return <Authors token={token} />;
             }
             case PAGE_TYPE.BOOKS: {
               return <Books />;

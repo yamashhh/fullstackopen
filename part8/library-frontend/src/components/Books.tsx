@@ -1,13 +1,27 @@
+import { useMemo, useState } from "react";
 import { useAllBooksQuery } from "../generated/graphql";
 
-const Books = () => {
+const Books = (): JSX.Element => {
   const { data, loading, error } = useAllBooksQuery();
+  const genres = useMemo(() => {
+    const genreSet = new Set(data?.allBooks?.flatMap((book) => book.genres));
+    return Array.from(genreSet);
+  }, [data?.allBooks]);
+  const [selectedGenre, setSelectedGenre] = useState<string | null>(null);
+  const selectedData = useMemo(() => {
+    if (selectedGenre === null) {
+      return data?.allBooks;
+    }
+    return data?.allBooks?.filter((book) =>
+      book.genres.includes(selectedGenre ?? "")
+    );
+  }, [data?.allBooks, selectedGenre]);
 
   if (loading) {
     return <div>LOADING</div>;
   }
 
-  if (error) {
+  if (error != null) {
     return <div>{error.message}</div>;
   }
 
@@ -21,16 +35,23 @@ const Books = () => {
             <th>author</th>
             <th>published</th>
           </tr>
-          {data?.allBooks?.length &&
-            data.allBooks.map((a) => (
-              <tr key={a.id}>
-                <td>{a.title}</td>
-                <td>{JSON.stringify(a.author)}</td>
-                <td>{a.published}</td>
-              </tr>
-            ))}
+          {selectedData?.map((book) => (
+            <tr key={book.id}>
+              <td>{book.title}</td>
+              <td>{book.author.name}</td>
+              <td>{book.published}</td>
+            </tr>
+          ))}
         </tbody>
       </table>
+      <div>
+        {genres.map((genre) => (
+          <button key={genre} onClick={() => setSelectedGenre(genre)}>
+            {genre}
+          </button>
+        ))}
+        <button onClick={() => setSelectedGenre(null)}>all genres</button>
+      </div>
     </>
   );
 };

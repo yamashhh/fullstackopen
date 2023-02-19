@@ -1,11 +1,11 @@
-import { FormEventHandler, useState } from "react";
+import { FormEvent, useState } from "react";
 import {
   useAddBookMutation,
   AllAuthorsDocument,
   AllBooksDocument,
 } from "../generated/graphql";
 
-const NewBook = () => {
+const NewBook = (): JSX.Element => {
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [published, setPublished] = useState<number | undefined>();
@@ -18,12 +18,18 @@ const NewBook = () => {
     ],
   });
 
-  const submit: FormEventHandler<HTMLFormElement> = async (event) => {
+  const submit = async (event: FormEvent<HTMLFormElement>): Promise<void> => {
     event.preventDefault();
-    if (!(title && author && published && genres.length)) {
+    if (
+      !(
+        title.length > 0 &&
+        author.length > 0 &&
+        published != null &&
+        genres.length > 0
+      )
+    ) {
       return;
     }
-
     await addBook({
       variables: {
         title,
@@ -39,7 +45,7 @@ const NewBook = () => {
     setGenre("");
   };
 
-  const addGenre = () => {
+  const addGenre = (): void => {
     setGenres(genres.concat(genre));
     setGenre("");
   };

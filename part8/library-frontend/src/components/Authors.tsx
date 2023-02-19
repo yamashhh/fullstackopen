@@ -1,14 +1,14 @@
 import { useAllAuthorsQuery } from "../generated/graphql";
 import UpdateAuthor from "./UpdateAuthor";
 
-const Authors = () => {
+const Authors = ({ token }: { token: string | null }): JSX.Element => {
   const { data, loading, error } = useAllAuthorsQuery();
 
   if (loading) {
     return <div>LOADING</div>;
   }
 
-  if (error) {
+  if (error != null) {
     return <div>{error.message}</div>;
   }
 
@@ -31,7 +31,9 @@ const Authors = () => {
           ))}
         </tbody>
       </table>
-      {data?.allAuthors && <UpdateAuthor authors={data.allAuthors} />}
+      {data?.allAuthors != null && token && (
+        <UpdateAuthor authors={data.allAuthors} />
+      )}
     </>
   );
 };

@@ -8,7 +8,7 @@ const Login = ({
 }: {
   setToken: Dispatch<SetStateAction<string | null>>;
   setPage: Dispatch<SetStateAction<typeof PAGE_TYPE[keyof typeof PAGE_TYPE]>>;
-}) => {
+}): JSX.Element => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [login] = useLoginMutation();
@@ -21,7 +21,7 @@ const Login = ({
           event.preventDefault();
           const { data } = await login({ variables: { username, password } });
           const token = data?.login?.value;
-          if (!token) {
+          if (token == null) {
             return;
           }
           setToken(token);

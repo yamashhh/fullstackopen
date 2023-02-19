@@ -1,4 +1,4 @@
-import { FormEventHandler, useState } from "react";
+import { FormEvent, useState } from "react";
 import {
   AllAuthorsDocument,
   useEditAuthorMutation,
@@ -9,16 +9,18 @@ interface Props {
   authors: Author[];
 }
 
-const UpdateAuthor = ({ authors }: Props) => {
+const UpdateAuthor = ({ authors }: Props): JSX.Element => {
   const [name, setName] = useState<string>("");
   const [born, setBorn] = useState<number | undefined>(undefined);
   const [editAuthor] = useEditAuthorMutation({
     refetchQueries: [{ query: AllAuthorsDocument }],
   });
 
-  const handleSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
+  const handleSubmit = async (
+    event: FormEvent<HTMLFormElement>
+  ): Promise<void> => {
     event.preventDefault();
-    if (!(name && born)) {
+    if (!(name.length > 0 && born != null)) {
       return;
     }
     await editAuthor({ variables: { name, setBornTo: born } });
