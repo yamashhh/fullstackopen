@@ -1,5 +1,6 @@
 import { ApolloCache } from "@apollo/client";
-import { FormEventHandler, useState } from "react";
+import { type FormEventHandler, useState } from "react";
+import { updateCache } from "../App";
 import {
   AllPersonsDocument,
   Query,
@@ -21,11 +22,14 @@ const PersonForm = ({ setError }: Props): JSX.Element => {
       setError(error.graphQLErrors[0].message);
     },
     update(cache, response) {
-      cache.updateQuery({ query: AllPersonsDocument }, ({ allPersons }) => {
-        return {
-          allPersons: allPersons.concat(response.data?.addPerson),
-        };
-      });
+      if (response.data?.addPerson == null) {
+        return;
+      }
+      updateCache(
+        cache,
+        { query: AllPersonsDocument },
+        response.data.addPerson
+      );
     },
   });
 
@@ -60,28 +64,36 @@ const PersonForm = ({ setError }: Props): JSX.Element => {
           name
           <input
             value={name}
-            onChange={({ target }) => setName(target.value)}
+            onChange={({ target }) => {
+              setName(target.value);
+            }}
           />
         </label>
         <label>
           phone
           <input
             value={phone}
-            onChange={({ target }) => setPhone(target.value)}
+            onChange={({ target }) => {
+              setPhone(target.value);
+            }}
           />
         </label>
         <label>
           street
           <input
             value={street}
-            onChange={({ target }) => setStreet(target.value)}
+            onChange={({ target }) => {
+              setStreet(target.value);
+            }}
           />
         </label>
         <label>
           city
           <input
             value={city}
-            onChange={({ target }) => setCity(target.value)}
+            onChange={({ target }) => {
+              setCity(target.value);
+            }}
           />
         </label>
         <button type="submit">add!</button>

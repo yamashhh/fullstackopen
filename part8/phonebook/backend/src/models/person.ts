@@ -20,6 +20,7 @@ const schema = new Schema({
     required: true,
     minlength: 5,
   },
+  friendOf: [{ type: Types.ObjectId, ref: "User" }],
 });
 
 export type PersonType = InferSchemaType<typeof schema> & {

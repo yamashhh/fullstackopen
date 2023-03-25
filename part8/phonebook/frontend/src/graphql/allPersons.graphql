@@ -1,11 +1,15 @@
+fragment PersonDetails on Person {
+  name
+  phone
+  address {
+    street
+    city
+  }
+  id
+}
+
 query allPersons {
   allPersons {
-    name
-    phone
-    address {
-      street
-      city
-    }
-    id
+    ...PersonDetails
   }
 }

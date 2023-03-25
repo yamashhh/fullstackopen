@@ -25,6 +25,7 @@ export const JWT_SECRET = process.env["JWT_SECRET"];
   try {
     console.log("connecting to", MONGODB_URI);
     await mongoose.connect(MONGODB_URI);
+    mongoose.set("debug", true);
     console.log("connected to MongoDB");
   } catch (error) {
     console.error("failed to connect MongoDB");

@@ -65,6 +65,7 @@ export type MutationLoginArgs = {
 export type Person = {
   __typename?: 'Person';
   address: Address;
+  friendOf: Array<User>;
   id: Scalars['ID'];
   name: Scalars['String'];
   phone?: Maybe<Scalars['String']>;
@@ -86,6 +87,11 @@ export type QueryAllPersonsArgs = {
 
 export type QueryFindPersonArgs = {
   name: Scalars['String'];
+};
+
+export type Subscription = {
+  __typename?: 'Subscription';
+  personAdded: Person;
 };
 
 export type Token = {
@@ -186,6 +192,7 @@ export type ResolversTypes = {
   ID: ResolverTypeWrapper<Scalars['ID']>;
   Query: ResolverTypeWrapper<{}>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
+  Subscription: ResolverTypeWrapper<{}>;
   Token: ResolverTypeWrapper<Token>;
   User: ResolverTypeWrapper<Omit<User, 'friends'> & { friends?: Maybe<Array<ResolversTypes['Person']>> }>;
   YesNo: YesNo;
@@ -202,6 +209,7 @@ export type ResolversParentTypes = {
   ID: Scalars['ID'];
   Query: {};
   Int: Scalars['Int'];
+  Subscription: {};
   Token: Token;
   User: Omit<User, 'friends'> & { friends?: Maybe<Array<ResolversParentTypes['Person']>> };
   AdditionalEntityFields: AdditionalEntityFields;
@@ -271,6 +279,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
 
 export type PersonResolvers<ContextType = any, ParentType extends ResolversParentTypes['Person'] = ResolversParentTypes['Person']> = {
   address?: Resolver<ResolversTypes['Address'], ParentType, ContextType>;
+  friendOf?: Resolver<Array<ResolversTypes['User']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   phone?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -282,6 +291,10 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   findPerson?: Resolver<Maybe<ResolversTypes['Person']>, ParentType, ContextType, RequireFields<QueryFindPersonArgs, 'name'>>;
   me?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
   personCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+};
+
+export type SubscriptionResolvers<ContextType = any, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = {
+  personAdded?: SubscriptionResolver<ResolversTypes['Person'], "personAdded", ParentType, ContextType>;
 };
 
 export type TokenResolvers<ContextType = any, ParentType extends ResolversParentTypes['Token'] = ResolversParentTypes['Token']> = {
@@ -301,6 +314,7 @@ export type Resolvers<ContextType = any> = {
   Mutation?: MutationResolvers<ContextType>;
   Person?: PersonResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
+  Subscription?: SubscriptionResolvers<ContextType>;
   Token?: TokenResolvers<ContextType>;
   User?: UserResolvers<ContextType>;
 };

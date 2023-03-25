@@ -1,11 +1,42 @@
-import { useApolloClient } from "@apollo/client";
-import { MouseEventHandler, useEffect, useState } from "react";
+import {
+  useApolloClient,
+  type ApolloCache,
+  type DocumentNode,
+} from "@apollo/client";
+import { type MouseEventHandler, useEffect, useState } from "react";
 import LoginForm from "./components/LoginForm";
 import Notify from "./components/Notify";
 import PersonForm from "./components/PersonForm";
 import Persons from "./components/Persons";
 import PhoneForm from "./components/PhoneForm";
-import { useAllPersonsQuery } from "./generated/graphql";
+import {
+  useAllPersonsQuery,
+  usePersonAddedSubscription,
+  AllPersonsDocument,
+  type PersonAddedSubscription,
+} from "./generated/graphql";
+
+export const updateCache = (
+  cache: ApolloCache<object>,
+  query: {
+    query: DocumentNode;
+  },
+  addedPerson: PersonAddedSubscription["personAdded"]
+): void => {
+  const uniqByName = (a: any): any => {
+    const seen = new Set();
+    return a.filter((item: any) => {
+      const k = item.name;
+      return seen.has(k) ? false : seen.add(k);
+    });
+  };
+
+  cache.updateQuery(query, ({ allPersons }) => {
+    return {
+      allPersons: uniqByName(allPersons.concat(addedPerson)),
+    };
+  });
+};
 
 const App = (): JSX.Element => {
   const [token, setToken] = useState<string | null>(null);
@@ -19,6 +50,17 @@ const App = (): JSX.Element => {
       setToken(token);
     }
   }, []);
+
+  usePersonAddedSubscription({
+    onData({ data }) {
+      const addedPerson = data.data?.personAdded;
+      if (addedPerson == null) {
+        return;
+      }
+      notify(`${String(addedPerson?.name)} added`);
+      updateCache(client.cache, { query: AllPersonsDocument }, addedPerson);
+    },
+  });
 
   if (loading) {
     return <h2>loading...</h2>;

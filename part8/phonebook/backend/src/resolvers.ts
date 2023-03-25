@@ -16,9 +16,11 @@ const resolvers: Resolvers = {
     },
     async allPersons(_, args) {
       if (!args.phone) {
-        return Person.find({});
+        return Person.find({}).populate("friendOf");
       }
-      return Person.find({ phone: { $exists: args.phone === YesNo.Yes } });
+      return Person.find({
+        phone: { $exists: args.phone === YesNo.Yes },
+      }).populate("friendOf");
     },
     async findPerson(_, args) {
       return Person.findOne({ name: args.name });
@@ -140,8 +142,9 @@ const resolvers: Resolvers = {
   },
   Subscription: {
     personAdded: {
+      // @ts-ignore
       subscribe() {
-        return pubsub.asyncIterator(PERSON_ADDED_LABEL);
+        return pubsub.asyncIterator([PERSON_ADDED_LABEL]);
       },
     },
   },

@@ -86,6 +86,11 @@ export type QueryFindPersonArgs = {
   name: Scalars['String'];
 };
 
+export type Subscription = {
+  __typename?: 'Subscription';
+  personAdded: Person;
+};
+
 export type Token = {
   __typename?: 'Token';
   value: Scalars['String'];
@@ -102,6 +107,8 @@ export enum YesNo {
   No = 'NO',
   Yes = 'YES'
 }
+
+export type PersonDetailsFragment = { __typename?: 'Person', name: string, phone?: string | null, id: string, address: { __typename?: 'Address', street: string, city: string } };
 
 export type AllPersonsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -141,20 +148,29 @@ export type LoginMutationVariables = Exact<{
 
 export type LoginMutation = { __typename?: 'Mutation', login?: { __typename?: 'Token', value: string } | null };
 
+export type PersonAddedSubscriptionVariables = Exact<{ [key: string]: never; }>;
 
+
+export type PersonAddedSubscription = { __typename?: 'Subscription', personAdded: { __typename?: 'Person', name: string, phone?: string | null, id: string, address: { __typename?: 'Address', street: string, city: string } } };
+
+export const PersonDetailsFragmentDoc = gql`
+    fragment PersonDetails on Person {
+  name
+  phone
+  address {
+    street
+    city
+  }
+  id
+}
+    `;
 export const AllPersonsDocument = gql`
     query allPersons {
   allPersons {
-    name
-    phone
-    address {
-      street
-      city
-    }
-    id
+    ...PersonDetails
   }
 }
-    `;
+    ${PersonDetailsFragmentDoc}`;
 
 /**
  * __useAllPersonsQuery__
@@ -338,6 +354,35 @@ export function useLoginMutation(baseOptions?: Apollo.MutationHookOptions<LoginM
 export type LoginMutationHookResult = ReturnType<typeof useLoginMutation>;
 export type LoginMutationResult = Apollo.MutationResult<LoginMutation>;
 export type LoginMutationOptions = Apollo.BaseMutationOptions<LoginMutation, LoginMutationVariables>;
+export const PersonAddedDocument = gql`
+    subscription personAdded {
+  personAdded {
+    ...PersonDetails
+  }
+}
+    ${PersonDetailsFragmentDoc}`;
+
+/**
+ * __usePersonAddedSubscription__
+ *
+ * To run a query within a React component, call `usePersonAddedSubscription` and pass it any options that fit your needs.
+ * When your component renders, `usePersonAddedSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = usePersonAddedSubscription({
+ *   variables: {
+ *   },
+ * });
+ */
+export function usePersonAddedSubscription(baseOptions?: Apollo.SubscriptionHookOptions<PersonAddedSubscription, PersonAddedSubscriptionVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useSubscription<PersonAddedSubscription, PersonAddedSubscriptionVariables>(PersonAddedDocument, options);
+      }
+export type PersonAddedSubscriptionHookResult = ReturnType<typeof usePersonAddedSubscription>;
+export type PersonAddedSubscriptionResult = Apollo.SubscriptionResult<PersonAddedSubscription>;
 
       export interface PossibleTypesResultData {
         possibleTypes: {
