@@ -73,6 +73,7 @@ export type Query = {
   __typename?: 'Query';
   allAuthors: Array<Author>;
   allBooks?: Maybe<Array<Book>>;
+  allGenres?: Maybe<Array<Scalars['String']>>;
   authorCount: Scalars['Int'];
   bookCount: Scalars['Int'];
   me?: Maybe<User>;
@@ -82,6 +83,11 @@ export type Query = {
 export type QueryAllBooksArgs = {
   author?: InputMaybe<Scalars['String']>;
   genre?: InputMaybe<Scalars['String']>;
+};
+
+export type Subscription = {
+  __typename?: 'Subscription';
+  bookAdded?: Maybe<Book>;
 };
 
 export type Token = {
@@ -174,6 +180,7 @@ export type ResolversTypes = ResolversObject<{
   Mutation: ResolverTypeWrapper<{}>;
   Query: ResolverTypeWrapper<{}>;
   String: ResolverTypeWrapper<Scalars['String']>;
+  Subscription: ResolverTypeWrapper<{}>;
   Token: ResolverTypeWrapper<Token>;
   User: ResolverTypeWrapper<UserModel>;
 }>;
@@ -188,6 +195,7 @@ export type ResolversParentTypes = ResolversObject<{
   Mutation: {};
   Query: {};
   String: Scalars['String'];
+  Subscription: {};
   Token: Token;
   User: UserModel;
 }>;
@@ -219,9 +227,14 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
   allAuthors?: Resolver<Array<ResolversTypes['Author']>, ParentType, ContextType>;
   allBooks?: Resolver<Maybe<Array<ResolversTypes['Book']>>, ParentType, ContextType, Partial<QueryAllBooksArgs>>;
+  allGenres?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
   authorCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   bookCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   me?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
+}>;
+
+export type SubscriptionResolvers<ContextType = any, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = ResolversObject<{
+  bookAdded?: SubscriptionResolver<Maybe<ResolversTypes['Book']>, "bookAdded", ParentType, ContextType>;
 }>;
 
 export type TokenResolvers<ContextType = any, ParentType extends ResolversParentTypes['Token'] = ResolversParentTypes['Token']> = ResolversObject<{
@@ -241,6 +254,7 @@ export type Resolvers<ContextType = any> = ResolversObject<{
   Book?: BookResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
+  Subscription?: SubscriptionResolvers<ContextType>;
   Token?: TokenResolvers<ContextType>;
   User?: UserResolvers<ContextType>;
 }>;

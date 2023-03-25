@@ -63,6 +63,7 @@ export type MutationLoginArgs = {
 export type Person = {
   __typename?: 'Person';
   address: Address;
+  friendOf: Array<User>;
   id: Scalars['ID'];
   name: Scalars['String'];
   phone?: Maybe<Scalars['String']>;

@@ -1,9 +1,7 @@
-import { ApolloCache } from "@apollo/client";
 import { type FormEventHandler, useState } from "react";
 import { updateCache } from "../App";
 import {
   AllPersonsDocument,
-  Query,
   useCreatePersonMutation,
 } from "../generated/graphql";
 
