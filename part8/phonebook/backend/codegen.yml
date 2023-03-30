@@ -1,0 +1,17 @@
+overwrite: true
+schema: "http://localhost:4000"
+documents: null
+generates:
+  src/generated/graphql.ts:
+    config:
+      mappers:
+        Person: ../models/person#IPerson
+    plugins:
+      - add:
+          content: "// @ts-nocheck"
+      - "typescript"
+      - "typescript-resolvers"
+      - "typescript-mongodb"
+watchConfig:
+  usePolling: true
+  interval: 5000
