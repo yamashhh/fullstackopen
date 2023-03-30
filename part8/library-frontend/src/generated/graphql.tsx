@@ -82,6 +82,11 @@ export type QueryAllBooksArgs = {
   genre?: InputMaybe<Scalars['String']>;
 };
 
+export type Subscription = {
+  __typename?: 'Subscription';
+  bookAdded?: Maybe<Book>;
+};
+
 export type Token = {
   __typename?: 'Token';
   value: Scalars['String'];
@@ -125,6 +130,8 @@ export type AllAuthorsQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type AllAuthorsQuery = { __typename?: 'Query', allAuthors: Array<{ __typename?: 'Author', id: string, name: string, born?: number | null, bookCount: number }> };
 
+export type BookDetailsFragment = { __typename?: 'Book', id: string, title: string, published: number, genres: Array<string>, author: { __typename?: 'Author', id: string, name: string, born?: number | null, bookCount: number } };
+
 export type AllBooksQueryVariables = Exact<{
   author?: InputMaybe<Scalars['String']>;
   genre?: InputMaybe<Scalars['String']>;
@@ -143,23 +150,32 @@ export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type MeQuery = { __typename?: 'Query', me?: { __typename?: 'User', id: string, username: string, favouriteGenre: string } | null };
 
+export type BookAddedSubscriptionVariables = Exact<{ [key: string]: never; }>;
 
+
+export type BookAddedSubscription = { __typename?: 'Subscription', bookAdded?: { __typename?: 'Book', id: string, title: string, published: number, genres: Array<string>, author: { __typename?: 'Author', id: string, name: string, born?: number | null, bookCount: number } } | null };
+
+export const BookDetailsFragmentDoc = gql`
+    fragment BookDetails on Book {
+  id
+  title
+  author {
+    id
+    name
+    born
+    bookCount
+  }
+  published
+  genres
+}
+    `;
 export const AddBookDocument = gql`
     mutation AddBook($title: String!, $author: String!, $published: Int!, $genres: [String!]!) {
   addBook(title: $title, author: $author, published: $published, genres: $genres) {
-    id
-    title
-    author {
-      id
-      name
-      born
-      bookCount
-    }
-    published
-    genres
+    ...BookDetails
   }
 }
-    `;
+    ${BookDetailsFragmentDoc}`;
 export type AddBookMutationFn = Apollo.MutationFunction<AddBookMutation, AddBookMutationVariables>;
 
 /**
@@ -298,19 +314,10 @@ export type AllAuthorsQueryResult = Apollo.QueryResult<AllAuthorsQuery, AllAutho
 export const AllBooksDocument = gql`
     query AllBooks($author: String, $genre: String) {
   allBooks(author: $author, genre: $genre) {
-    id
-    title
-    author {
-      id
-      name
-      born
-      bookCount
-    }
-    published
-    genres
+    ...BookDetails
   }
 }
-    `;
+    ${BookDetailsFragmentDoc}`;
 
 /**
  * __useAllBooksQuery__
@@ -408,6 +415,35 @@ export function useMeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MeQuery
 export type MeQueryHookResult = ReturnType<typeof useMeQuery>;
 export type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>;
 export type MeQueryResult = Apollo.QueryResult<MeQuery, MeQueryVariables>;
+export const BookAddedDocument = gql`
+    subscription BookAdded {
+  bookAdded {
+    ...BookDetails
+  }
+}
+    ${BookDetailsFragmentDoc}`;
+
+/**
+ * __useBookAddedSubscription__
+ *
+ * To run a query within a React component, call `useBookAddedSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useBookAddedSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useBookAddedSubscription({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useBookAddedSubscription(baseOptions?: Apollo.SubscriptionHookOptions<BookAddedSubscription, BookAddedSubscriptionVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useSubscription<BookAddedSubscription, BookAddedSubscriptionVariables>(BookAddedDocument, options);
+      }
+export type BookAddedSubscriptionHookResult = ReturnType<typeof useBookAddedSubscription>;
+export type BookAddedSubscriptionResult = Apollo.SubscriptionResult<BookAddedSubscription>;
 
       export interface PossibleTypesResultData {
         possibleTypes: {

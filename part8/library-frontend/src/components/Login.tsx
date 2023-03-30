@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useState } from "react";
+import { type Dispatch, type SetStateAction, useState } from "react";
 import { PAGE_TYPE, LOCAL_STORAGE_KEY } from "../constants";
 import { useLoginMutation } from "../generated/graphql";
 
@@ -7,7 +7,7 @@ const Login = ({
   setPage,
 }: {
   setToken: Dispatch<SetStateAction<string | null>>;
-  setPage: Dispatch<SetStateAction<typeof PAGE_TYPE[keyof typeof PAGE_TYPE]>>;
+  setPage: Dispatch<SetStateAction<(typeof PAGE_TYPE)[keyof typeof PAGE_TYPE]>>;
 }): JSX.Element => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -33,14 +33,18 @@ const Login = ({
           username
           <input
             type="text"
-            onChange={(event) => setUsername(event.target.value)}
+            onChange={(event) => {
+              setUsername(event.target.value);
+            }}
           />
         </label>
         <label>
           password
           <input
             type="password"
-            onChange={(event) => setPassword(event.target.value)}
+            onChange={(event) => {
+              setPassword(event.target.value);
+            }}
           />
         </label>
         <button type="submit">login</button>

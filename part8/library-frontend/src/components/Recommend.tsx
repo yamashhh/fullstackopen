@@ -1,21 +1,13 @@
-import { useEffect } from "react";
-import { useAllBooksLazyQuery, useMeQuery } from "../generated/graphql";
+import { useAllBooksQuery, useMeQuery } from "../generated/graphql";
 
 const Recommend = (): JSX.Element => {
   const me = useMeQuery();
-  const [fetchRecommendedBooks, recommendedBooks] =
-    useAllBooksLazyQuery();
-  useEffect(() => {
-    void (async () => {
-      if (me.data?.me?.favouriteGenre != null) {
-        await fetchRecommendedBooks({
-          variables: {
-            genre: me.data.me.favouriteGenre,
-          },
-        });
-      }
-    })();
-  }, [fetchRecommendedBooks, me.data?.me?.favouriteGenre]);
+  const recommendedBooks = useAllBooksQuery({
+    variables: {
+      genre: me.data?.me?.favouriteGenre,
+    },
+    skip: me.data?.me?.favouriteGenre === undefined,
+  });
 
   if (recommendedBooks.loading || me.loading) {
     return <h2>LOADING</h2>;

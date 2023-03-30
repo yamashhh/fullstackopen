@@ -1,8 +1,8 @@
-import { FormEvent, useState } from "react";
+import { type FormEvent, useState } from "react";
 import {
   AllAuthorsDocument,
   useEditAuthorMutation,
-  Author,
+  type Author,
 } from "../generated/graphql";
 
 interface Props {
@@ -43,7 +43,9 @@ const UpdateAuthor = ({ authors }: Props): JSX.Element => {
           name
           <select
             value={name}
-            onChange={(event) => setName(event.target.value)}
+            onChange={(event) => {
+              setName(event.target.value);
+            }}
           >
             <option value="" disabled>
               --Please choose an option--
@@ -60,7 +62,9 @@ const UpdateAuthor = ({ authors }: Props): JSX.Element => {
           <input
             type="number"
             value={born ?? ""}
-            onChange={(event) => setBorn(Number(event.target.value))}
+            onChange={(event) => {
+              setBorn(Number(event.target.value));
+            }}
           />
         </label>
         <button type="submit">update author</button>

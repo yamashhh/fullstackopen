@@ -10,15 +10,6 @@ mutation AddBook(
     published: $published
     genres: $genres
   ) {
-    id
-    title
-    author {
-      id
-      name
-      born
-      bookCount
-    }
-    published
-    genres
+    ...BookDetails
   }
 }

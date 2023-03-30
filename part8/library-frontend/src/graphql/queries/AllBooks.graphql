@@ -1,14 +1,18 @@
+fragment BookDetails on Book {
+  id
+  title
+  author {
+    id
+    name
+    born
+    bookCount
+  }
+  published
+  genres
+}
+
 query AllBooks($author: String, $genre: String) {
   allBooks(author: $author, genre: $genre) {
-    id
-    title
-    author {
-      id
-      name
-      born
-      bookCount
-    }
-    published
-    genres
+    ...BookDetails
   }
 }

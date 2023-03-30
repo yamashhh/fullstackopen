@@ -31,7 +31,7 @@ const Authors = ({ token }: { token: string | null }): JSX.Element => {
           ))}
         </tbody>
       </table>
-      {data?.allAuthors != null && token && (
+      {data?.allAuthors != null && token != null && (
         <UpdateAuthor authors={data.allAuthors} />
       )}
     </>

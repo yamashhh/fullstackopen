@@ -1,4 +1,5 @@
-import { FormEvent, useState } from "react";
+import { type FormEvent, useState } from "react";
+import { uniqByAuthorId } from "../App";
 import {
   useAddBookMutation,
   AllAuthorsDocument,
@@ -15,9 +16,21 @@ const NewBook = (): JSX.Element => {
   const [addBook] = useAddBookMutation({
     refetchQueries: [
       { query: AllAuthorsDocument },
-      { query: AllBooksDocument },
       { query: AllGenresDocument },
     ],
+    update(cache, response) {
+      const addedBook = response.data?.addBook;
+      if (addedBook == null) {
+        return;
+      }
+      cache.updateQuery({ query: AllBooksDocument }, (data) => {
+        if (data != null) {
+          return {
+            allBooks: uniqByAuthorId(data.allBooks.concat(addedBook)),
+          };
+        }
+      });
+    },
   });
 
   const submit = async (event: FormEvent<HTMLFormElement>): Promise<void> => {
@@ -59,14 +72,18 @@ const NewBook = (): JSX.Element => {
           title
           <input
             value={title}
-            onChange={({ target }) => setTitle(target.value)}
+            onChange={({ target }) => {
+              setTitle(target.value);
+            }}
           />
         </div>
         <div>
           author
           <input
             value={author}
-            onChange={({ target }) => setAuthor(target.value)}
+            onChange={({ target }) => {
+              setAuthor(target.value);
+            }}
           />
         </div>
         <div>
@@ -74,13 +91,17 @@ const NewBook = (): JSX.Element => {
           <input
             type="number"
             value={published ?? ""}
-            onChange={({ target }) => setPublished(Number(target.value))}
+            onChange={({ target }) => {
+              setPublished(Number(target.value));
+            }}
           />
         </div>
         <div>
           <input
             value={genre}
-            onChange={({ target }) => setGenre(target.value)}
+            onChange={({ target }) => {
+              setGenre(target.value);
+            }}
           />
           <button onClick={addGenre} type="button">
             add genre
