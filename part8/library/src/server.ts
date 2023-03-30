@@ -17,3 +17,5 @@ if (!MONGODB_URI) {
     console.dir(error);
   }
 })();
+
+mongoose.set('debug', true);

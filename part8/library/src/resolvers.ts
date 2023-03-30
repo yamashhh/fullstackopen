@@ -1,7 +1,7 @@
 import type { FilterQuery } from 'mongoose';
 import { JWT_SECRET } from '.';
 import type { Resolvers } from './generated/graphql';
-import Author, { type AuthorType } from './models/author';
+import Author from './models/author'; // { AuthorType }
 import Book, { type BookType } from './models/book';
 import User from './models/user';
 import jwt from 'jsonwebtoken';
@@ -14,11 +14,6 @@ const HARDCODED_PASSWORD = process.env['HARDCODED_PASSWORD'];
 const TRIGGER_NAME = 'BOOK_ADDED';
 
 export const resolvers: Resolvers = {
-  Author: {
-    async bookCount(root: AuthorType) {
-      return Book.countDocuments({ author: root });
-    },
-  },
   Query: {
     async bookCount() {
       return Book.countDocuments();
@@ -38,10 +33,13 @@ export const resolvers: Resolvers = {
         filter.genres = { $in: [genre] };
       }
 
-      return Book.find(filter).populate('author');
+      return Book.find(filter).populate({
+        path: 'author',
+        populate: { path: 'bookCount' },
+      });
     },
     async allAuthors() {
-      return Author.find({});
+      return Author.find({}).populate('bookCount');
     },
     async allGenres() {
       const allBooks = await Book.find();
