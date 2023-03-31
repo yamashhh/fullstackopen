@@ -1,0 +1,14 @@
+{
+  // NOTE:
+  // ts-node throws error when extends is an array
+  // still not working after installing ts-node from git repository
+  // https://github.com/TypeStrong/ts-node/issues/1953
+  // "extends": [
+  //   "@tsconfig/strictest/tsconfig",
+  //   "@tsconfig/node-lts/tsconfig.json"
+  // ],
+  "extends": "@tsconfig/node-lts/tsconfig.json",
+  "ts-node": {
+    "swc": true
+  }
+}
