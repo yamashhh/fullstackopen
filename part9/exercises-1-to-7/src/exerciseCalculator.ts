@@ -1,3 +1,5 @@
+import { getArguments, handleError } from "./utilities";
+
 const RATING = {
   HIGH: {
     VALUE: 3,
@@ -65,4 +67,17 @@ const calculateExercises = (
   };
 };
 
-console.log(calculateExercises([3, 0, 2, 4.5, 0, 3, 1], 2));
+try {
+  if (process.argv.length < 4) {
+    throw new Error("Not enough arguments.");
+  }
+  const [target, ...exerciseHours] = getArguments(process.argv);
+  console.log(
+    calculateExercises(
+      exerciseHours.map((element) => Number(element)),
+      Number(target)
+    )
+  );
+} catch (error) {
+  handleError(error);
+}

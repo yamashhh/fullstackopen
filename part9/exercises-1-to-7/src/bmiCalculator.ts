@@ -1,3 +1,11 @@
+import { getArguments, handleError } from "./utilities";
+
+/**
+ * @see https://en.wikipedia.org/wiki/Body_mass_index
+ * @param heightInCentimeters
+ * @param weightInKilograms
+ * @returns
+ */
 const calculateBmi = (
   heightInCentimeters: number,
   weightInKilograms: number
@@ -38,4 +46,17 @@ const calculateBmi = (
   throw new Error("Failed to evaluate BMI.");
 };
 
-console.log(calculateBmi(170, 112));
+try {
+  if (process.argv.length < 4) {
+    throw new Error("Not enough arguments.");
+  }
+  if (process.argv.length > 4) {
+    throw new Error("Too many arguments.");
+  }
+  const [heightInCentimeters, weightInKilograms] = getArguments(process.argv);
+  console.log(
+    calculateBmi(Number(heightInCentimeters), Number(weightInKilograms))
+  );
+} catch (error) {
+  handleError(error);
+}
