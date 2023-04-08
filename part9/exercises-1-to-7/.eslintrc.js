@@ -1,15 +1,15 @@
 module.exports = {
   env: {
     es2021: true,
-    node: true
+    node: true,
   },
-  extends: 'standard-with-typescript',
-  overrides: [
-  ],
+  extends: ["standard-with-typescript", "prettier"],
+  overrides: [],
   parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module'
+    ecmaVersion: "latest",
+    sourceType: "module",
+    project: true,
+    tsconfigRootDir: __dirname,
   },
-  rules: {
-  }
-}
+  rules: {},
+};

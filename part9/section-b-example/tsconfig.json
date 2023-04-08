@@ -4,6 +4,13 @@
     "@tsconfig/node-lts/tsconfig.json"
   ],
   "compilerOptions": {
-    "module": "NodeNext"
+    "module": "NodeNext",
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "strictPropertyInitialization": true,
+    "strictBindCallApply": true,
+    "noImplicitThis": true,
+    "alwaysStrict": true,
+    "declaration": true
   }
 }

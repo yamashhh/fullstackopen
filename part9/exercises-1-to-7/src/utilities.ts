@@ -3,8 +3,8 @@
  * @param args
  * @returns
  */
-export const getArguments = (args: typeof process.argv) => {
-  const [_, __, ...rest] = args;
+export const getArguments = (args: typeof process.argv): string[] => {
+  const [, , ...rest] = args;
   return rest;
 };
 
@@ -13,7 +13,7 @@ export const getArguments = (args: typeof process.argv) => {
  * @param error
  * @returns
  */
-export const handleError = (error: unknown) => {
+export const handleError = (error: unknown): void => {
   if (error instanceof Error) {
     console.error(error.message);
     return;
@@ -21,6 +21,6 @@ export const handleError = (error: unknown) => {
   console.error(`----------
 Unhandled error:
 
-${error}
+${String(error)}
 ----------`);
 };

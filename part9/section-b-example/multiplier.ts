@@ -20,7 +20,7 @@ const parseArguments = (args: typeof process.argv): MultiplyValues => {
   };
 };
 
-const multiplier = (a: number, b: number, printText: string) => {
+const multiplier = (a: number, b: number, printText: string): void => {
   console.log(printText, a * b);
 };
 
