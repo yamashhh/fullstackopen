@@ -8,18 +8,21 @@ app.get("/hello", (_, res) => {
 });
 
 app.get("/bmi", (req, res) => {
-  const { weight, height } = req.query;
+  const { height, weight } = req.query;
 
-  if (weight === undefined || height === undefined) {
+  if (height === undefined || weight === undefined) {
     return res.status(400).send("missing parameters");
   }
 
-  if (Number.isNaN(Number(height)) || Number.isNaN(Number(weight))) {
-    return res.status(422).send("malformatted parameters");
+  const heightInCentimeters = Number(height);
+  const weightInKilograms = Number(weight);
+
+  if (Number.isNaN(heightInCentimeters) || Number.isNaN(weightInKilograms)) {
+    return res.status(422).send("malformed parameters");
   }
 
   try {
-    const result = calculateBmi(Number(weight), Number(height));
+    const result = calculateBmi(heightInCentimeters, weightInKilograms);
     return res.status(200).json(result);
   } catch (error) {
     return res
