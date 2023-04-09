@@ -1,4 +1,4 @@
-import { getArguments, handleError } from "./utilities";
+// import { getArguments, handleError } from "./utilities";
 
 const RATING = {
   HIGH: {
@@ -25,17 +25,10 @@ interface CalculateExercisesResult {
   average: number;
 }
 
-const calculateExercises = (
+export const calculateExercises = (
   exerciseHours: number[],
   target: number
 ): CalculateExercisesResult => {
-  if (
-    exerciseHours.some((hours) => Number.isNaN(hours)) ||
-    Number.isNaN(target)
-  ) {
-    throw new Error("Invalid arguments.");
-  }
-
   const periodLength = exerciseHours.length;
   const trainingHours = exerciseHours.filter((hours) => hours > 0);
   const trainingDays = trainingHours.length;
@@ -67,17 +60,17 @@ const calculateExercises = (
   };
 };
 
-try {
-  if (process.argv.length < 4) {
-    throw new Error("Not enough arguments.");
-  }
-  const [target, ...exerciseHours] = getArguments(process.argv);
-  console.log(
-    calculateExercises(
-      exerciseHours.map((element) => Number(element)),
-      Number(target)
-    )
-  );
-} catch (error) {
-  handleError(error);
-}
+// try {
+//   if (process.argv.length < 4) {
+//     throw new Error("Not enough arguments.");
+//   }
+//   const [target, ...exerciseHours] = getArguments(process.argv);
+//   console.log(
+//     calculateExercises(
+//       exerciseHours.map((element) => Number(element)),
+//       Number(target)
+//     )
+//   );
+// } catch (error) {
+//   handleError(error);
+// }
