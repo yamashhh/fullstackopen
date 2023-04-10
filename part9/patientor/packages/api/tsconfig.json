@@ -5,6 +5,10 @@
   ],
   "compilerOptions": {
     "rootDir": ".",
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+    },
     "outDir": "./build/",
     "module": "NodeNext"
   }
