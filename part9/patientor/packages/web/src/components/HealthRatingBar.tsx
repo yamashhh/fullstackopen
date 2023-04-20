@@ -1,12 +1,11 @@
-import { Rating } from '@mui/material';
-import { Favorite } from '@mui/icons-material';
+import { Favorite } from "@mui/icons-material";
+import { Rating } from "@mui/material";
+import { styled } from "@mui/material/styles";
 
-import { styled } from '@mui/material/styles';
-
-type BarProps = {
+interface BarProps {
   rating: number;
   showText: boolean;
-};
+}
 
 const StyledRating = styled(Rating)({
   iconFilled: {
@@ -14,7 +13,7 @@ const StyledRating = styled(Rating)({
   },
   iconHover: {
     color: "#ff3d47",
-  }
+  },
 });
 
 const HEALTHBAR_TEXTS = [

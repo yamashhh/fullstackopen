@@ -1,16 +1,14 @@
-import { SyntheticEvent, useState } from "react";
-
+import { Gender, type PatientFormValues } from "@/types";
 import {
   Button,
   Grid,
   InputLabel,
   MenuItem,
   Select,
-  SelectChangeEvent,
   TextField,
+  type SelectChangeEvent,
 } from "@mui/material";
-
-import { Gender, PatientFormValues } from "@/types";
+import { useState, type SyntheticEvent } from "react";
 
 interface Props {
   onCancel: () => void;
@@ -63,26 +61,34 @@ const AddPatientForm = ({ onCancel, onSubmit }: Props) => {
           label="Name"
           fullWidth
           value={name}
-          onChange={({ target }) => setName(target.value)}
+          onChange={({ target }) => {
+            setName(target.value);
+          }}
         />
         <TextField
           label="Social security number"
           fullWidth
           value={ssn}
-          onChange={({ target }) => setSsn(target.value)}
+          onChange={({ target }) => {
+            setSsn(target.value);
+          }}
         />
         <TextField
           label="Date of birth"
           placeholder="YYYY-MM-DD"
           fullWidth
           value={dateOfBirth}
-          onChange={({ target }) => setDateOfBirth(target.value)}
+          onChange={({ target }) => {
+            setDateOfBirth(target.value);
+          }}
         />
         <TextField
           label="Occupation"
           fullWidth
           value={occupation}
-          onChange={({ target }) => setOccupation(target.value)}
+          onChange={({ target }) => {
+            setOccupation(target.value);
+          }}
         />
 
         <InputLabel style={{ marginTop: 20 }}>Gender</InputLabel>
