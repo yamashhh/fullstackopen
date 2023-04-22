@@ -11,7 +11,6 @@ module.exports = {
     "standard-with-typescript",
     "prettier",
   ],
-
   parserOptions: {
     ecmaVersion: "latest",
     sourceType: "module",
