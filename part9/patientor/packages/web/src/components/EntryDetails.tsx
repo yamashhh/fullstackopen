@@ -1,26 +1,11 @@
 import {
-  FavoriteBorder as FavoriteBorderIcon,
-  Favorite as FavoriteIcon,
   LocalHospital as LocalHospitalIcon,
   MonitorHeart as MonitorHeartIcon,
   Work as WorkIcon,
 } from "@mui/icons-material";
-import {
-  Container,
-  Divider,
-  List,
-  ListItem,
-  Rating,
-  Typography,
-  styled,
-} from "@mui/material";
+import { Container, Divider, List, ListItem, Typography } from "@mui/material";
 import { EntryTypes, type Diagnosis, type Entry } from "../types";
-
-const StyledRating = styled(Rating)({
-  "& .MuiRating-iconFilled": {
-    color: "#ff6d75",
-  },
-});
+import HealthRatingBar from "./HealthRatingBar";
 
 const EntryDetails = ({
   entry,
@@ -113,12 +98,9 @@ const EntryDetails = ({
               </ListItem>
             ))}
           </List>
-          <StyledRating
-            readOnly
-            max={3}
-            value={3 - entry.healthCheckRating}
-            icon={<FavoriteIcon fontSize="inherit" />}
-            emptyIcon={<FavoriteBorderIcon fontSize="inherit" />}
+          <HealthRatingBar
+            healthCheckRating={entry.healthCheckRating}
+            showText
           />
           <Divider sx={{ marginBlock: 2 }} />
           <footer>

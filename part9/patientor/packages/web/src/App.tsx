@@ -3,25 +3,26 @@ import { apiBaseUrl } from "@/constants";
 import patientService from "@/services/patients";
 import { type Patient } from "@/types";
 import { Button, Container, Divider, Typography } from "@mui/material";
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Link, Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import PatientInfoPage from "./components/PatientInfoPage";
 
-const App = () => {
+const App = (): JSX.Element => {
   const [patients, setPatients] = useState<Patient[]>([]);
-
-  useEffect(() => {
-    void axios.get(`${apiBaseUrl}/ping`);
-    const fetchPatientList = async () => {
-      const patients = await patientService.getAll();
-      setPatients(patients);
-    };
-    void fetchPatientList();
+  const fetchPatientList = useCallback(async () => {
+    const patients = await patientService.getAll();
+    setPatients(patients);
   }, []);
 
+  useEffect(() => {
+    void Promise.all([axios.get(`${apiBaseUrl}/ping`), fetchPatientList()]);
+  }, [fetchPatientList]);
+
   return (
-    <div className="App">
+    <LocalizationProvider dateAdapter={AdapterDayjs} className="App">
       <Router>
         <Container>
           <Typography variant="h3" style={{ marginBottom: "0.5em" }}>
@@ -45,7 +46,7 @@ const App = () => {
           </Routes>
         </Container>
       </Router>
-    </div>
+    </LocalizationProvider>
   );
 };
 

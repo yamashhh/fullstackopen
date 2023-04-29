@@ -1,4 +1,5 @@
 import {
+  Button,
   Container,
   Stack,
   Table,
@@ -13,12 +14,14 @@ import { useParams } from "react-router-dom";
 import diagnosisService from "../services/diagnoses";
 import patientService from "../services/patients";
 import { type Diagnosis, type Patient } from "../types";
+import AddEntryModal from "./AddEntryModal";
 import EntryDetails from "./EntryDetails";
 
 const PatientInfoPage = (): JSX.Element => {
   const { patientId } = useParams();
   const [patient, setPatient] = useState<Patient | undefined>();
   const [diagnoses, setDiagnoses] = useState<Diagnosis[] | undefined>();
+  const [open, setOpen] = useState(false);
 
   const fetchPatient = useCallback(async () => {
     if (patientId === undefined) {
@@ -76,6 +79,24 @@ const PatientInfoPage = (): JSX.Element => {
           <EntryDetails key={entry.id} entry={entry} diagnoses={diagnoses} />
         ))}
       </Stack>
+      <Button
+        variant="contained"
+        onClick={() => {
+          setOpen(true);
+        }}
+        sx={{
+          marginBlockStart: 4,
+        }}
+      >
+        Add New Entry
+      </Button>
+      <AddEntryModal
+        key={String(open)}
+        open={open}
+        setOpen={setOpen}
+        diagnoses={diagnoses}
+        setPatient={setPatient}
+      />
     </Container>
   );
 };

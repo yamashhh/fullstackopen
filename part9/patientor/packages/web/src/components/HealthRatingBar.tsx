@@ -1,17 +1,23 @@
-import { Favorite } from "@mui/icons-material";
-import { Rating } from "@mui/material";
+import {
+  Favorite,
+  FavoriteBorder as FavoriteBorderIcon,
+} from "@mui/icons-material";
+import { Rating, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
+import { type Dispatch, type SetStateAction } from "react";
+import { type HealthCheckRating } from "../types";
 
 interface BarProps {
-  rating: number;
-  showText: boolean;
+  healthCheckRating: number;
+  showText?: boolean;
+  setHealthCheckRating?: Dispatch<SetStateAction<HealthCheckRating>>;
 }
 
 const StyledRating = styled(Rating)({
-  iconFilled: {
+  "& .MuiRating-iconFilled": {
     color: "#ff6d75",
   },
-  iconHover: {
+  "& .MuiRating-iconHover": {
     color: "#ff3d47",
   },
 });
@@ -23,17 +29,26 @@ const HEALTHBAR_TEXTS = [
   "The patient has a diagnosed condition",
 ];
 
-const HealthRatingBar = ({ rating, showText }: BarProps) => {
+const HealthRatingBar = ({
+  healthCheckRating,
+  setHealthCheckRating,
+  showText = false,
+}: BarProps): JSX.Element => {
   return (
     <div className="health-bar">
       <StyledRating
-        readOnly
-        value={4 - rating}
+        readOnly={setHealthCheckRating == null}
+        value={4 - healthCheckRating}
         max={4}
         icon={<Favorite fontSize="inherit" />}
+        emptyIcon={<FavoriteBorderIcon fontSize="inherit" />}
+        onChange={(_, newValue) => {
+          newValue != null && setHealthCheckRating?.(4 - newValue);
+        }}
       />
-
-      {showText ? <p>{HEALTHBAR_TEXTS[rating]}</p> : null}
+      {showText ? (
+        <Typography>{HEALTHBAR_TEXTS[healthCheckRating]}</Typography>
+      ) : null}
     </div>
   );
 };

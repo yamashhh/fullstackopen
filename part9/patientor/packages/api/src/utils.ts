@@ -45,19 +45,6 @@ const parseGender = (param: unknown): Gender => {
   return param;
 };
 
-const parseDiagnosisCodes = (object: unknown): Array<Diagnosis["code"]> => {
-  if (
-    object == null ||
-    typeof object !== "object" ||
-    !("diagnosisCodes" in object)
-  ) {
-    // we will just trust the data to be in correct form
-    return [] as Array<Diagnosis["code"]>;
-  }
-
-  return object.diagnosisCodes as Array<Diagnosis["code"]>;
-};
-
 const isObject = (param: unknown): param is object => {
   return (
     param != null &&
@@ -118,6 +105,7 @@ export const toNewPatient = (body: unknown): NewPatient => {
     ssn: parseString(body.ssn, "Social security number"),
     gender: parseGender(body.gender),
     occupation: parseString(body.occupation, "Occupation"),
+    entries: [],
   };
   return newPatient;
 };
@@ -138,8 +126,8 @@ export const toNewEntry = (body: unknown): EntryWithoutId => {
     date: parseDate(body.date, "Date"),
     specialist: parseString(body.specialist, "Specialist"),
   };
-  if ("daiagnosisCodes" in body) {
-    baseEntry.diagnosisCodes = parseDiagnosisCodes(body.daiagnosisCodes);
+  if ("diagnosisCodes" in body && Array.isArray(body.diagnosisCodes)) {
+    baseEntry.diagnosisCodes = body.diagnosisCodes as Array<Diagnosis["code"]>;
   }
   if ("discharge" in body) {
     return {

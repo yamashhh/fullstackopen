@@ -35,8 +35,7 @@ const addEntry = (
     return patient;
   }
   patient.entries.push(newEntry);
-  const { ssn, ...rest } = patient;
-  return rest;
+  return patient;
 };
 
 export default {

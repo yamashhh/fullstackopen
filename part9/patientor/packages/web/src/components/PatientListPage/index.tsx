@@ -1,7 +1,7 @@
 import AddPatientModal from "@/components/AddPatientModal";
 import HealthRatingBar from "@/components/HealthRatingBar";
 import patientService from "@/services/patients";
-import { Patient, PatientFormValues } from "@/types";
+import { type Patient, type PatientFormValues } from "@/types";
 import {
   Box,
   Button,
@@ -22,25 +22,27 @@ interface Props {
   setPatients: React.Dispatch<React.SetStateAction<Patient[]>>;
 }
 
-const PatientListPage = ({ patients, setPatients }: Props) => {
+const PatientListPage = ({ patients, setPatients }: Props): JSX.Element => {
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [error, setError] = useState<string>();
 
-  const openModal = (): void => setModalOpen(true);
+  const openModal = (): void => {
+    setModalOpen(true);
+  };
 
   const closeModal = (): void => {
     setModalOpen(false);
     setError(undefined);
   };
 
-  const submitNewPatient = async (values: PatientFormValues) => {
+  const submitNewPatient = async (values: PatientFormValues): Promise<void> => {
     try {
       const patient = await patientService.create(values);
       setPatients(patients.concat(patient));
       setModalOpen(false);
     } catch (e: unknown) {
       if (axios.isAxiosError(e)) {
-        if (e?.response?.data && typeof e?.response?.data === "string") {
+        if (e?.response?.data != null && typeof e.response.data === "string") {
           const message = e.response.data.replace(
             "Something went wrong. Error: ",
             ""
@@ -84,7 +86,7 @@ const PatientListPage = ({ patients, setPatients }: Props) => {
               <TableCell>{patient.gender}</TableCell>
               <TableCell>{patient.occupation}</TableCell>
               <TableCell>
-                <HealthRatingBar showText={false} rating={1} />
+                <HealthRatingBar healthCheckRating={1} />
               </TableCell>
             </TableRow>
           ))}
@@ -96,7 +98,12 @@ const PatientListPage = ({ patients, setPatients }: Props) => {
         error={error}
         onClose={closeModal}
       />
-      <Button variant="contained" onClick={() => openModal()}>
+      <Button
+        variant="contained"
+        onClick={() => {
+          openModal();
+        }}
+      >
         Add New Patient
       </Button>
     </div>
