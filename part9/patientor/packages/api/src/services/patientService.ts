@@ -1,5 +1,10 @@
 import patients from "@/data/patients";
-import type { NewPatient, Patient, PublicPatient } from "@/types";
+import type {
+  EntryWithoutId,
+  NewPatient,
+  Patient,
+  PublicPatient,
+} from "@/types";
 import { randomUUID } from "crypto";
 
 const getPatients = (): PublicPatient[] => {
@@ -20,8 +25,23 @@ const addPatient = (newPatient: NewPatient): PublicPatient => {
   return rest;
 };
 
+const addEntry = (
+  id: string,
+  entry: EntryWithoutId
+): PublicPatient | undefined => {
+  const newEntry = { ...entry, id: randomUUID() };
+  const patient = getPatient(id);
+  if (patient === undefined) {
+    return patient;
+  }
+  patient.entries.push(newEntry);
+  const { ssn, ...rest } = patient;
+  return rest;
+};
+
 export default {
   getPatients,
   getPatient,
   addPatient,
+  addEntry,
 };
