@@ -1,0 +1,16 @@
+{
+  "extends": [
+    "@tsconfig/strictest/tsconfig",
+    "@tsconfig/node-lts/tsconfig.json"
+  ],
+  "compilerOptions": {
+    "module": "NodeNext",
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "strictPropertyInitialization": true,
+    "strictBindCallApply": true,
+    "noImplicitThis": true,
+    "alwaysStrict": true,
+    "declaration": true
+  }
+}
