@@ -23,4 +23,7 @@ module.exports = {
       version: "detect",
     },
   },
+  rules: {
+    "import/order": ["warn", { "newlines-between": "ignore" }],
+  },
 };
