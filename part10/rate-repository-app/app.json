@@ -11,11 +11,13 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      // NOTE:
+      // hermes does not support Intl.NumberFormat
+      // https://github.com/facebook/hermes/issues/23#issuecomment-1253927200
+      "jsEngine": "jsc"
     },
     "android": {
       "adaptiveIcon": {
