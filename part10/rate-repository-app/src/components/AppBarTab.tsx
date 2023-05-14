@@ -1,24 +1,26 @@
 import { type ReactNode } from "react";
-import { Pressable, StyleSheet } from "react-native";
+import { StyleSheet } from "react-native";
+import { Link, type To } from "react-router-native";
 import Text from "./Text";
 
 interface AppBarTabProps {
   children: ReactNode;
+  to: To;
 }
 
 const styles = StyleSheet.create({
-  pressable: {
+  link: {
     padding: 4,
   },
 });
 
-const AppBarTab = ({ children }: AppBarTabProps): JSX.Element => {
+const AppBarTab = ({ children, to }: AppBarTabProps): JSX.Element => {
   return (
-    <Pressable style={styles.pressable}>
+    <Link style={styles.link} to={to}>
       <Text color="white" fontSize="subheading" fontWeight="bold">
         {children}
       </Text>
-    </Pressable>
+    </Link>
   );
 };
 
