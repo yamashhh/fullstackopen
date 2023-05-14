@@ -1,4 +1,5 @@
 import { StyleSheet, View } from "react-native";
+import { Navigate, Route, Routes } from "react-router-native";
 import AppBar from "./AppBar";
 import RepositoryList from "./RepositoryList";
 
@@ -13,7 +14,10 @@ const Main = (): JSX.Element => {
   return (
     <View style={styles.container}>
       <AppBar />
-      <RepositoryList />
+      <Routes>
+        <Route path="/" element={<RepositoryList />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
     </View>
   );
 };
