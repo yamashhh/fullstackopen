@@ -1,5 +1,6 @@
 import { Formik } from "formik";
 import { Pressable, StyleSheet, Text, View } from "react-native";
+import { object, string } from "yup";
 import theme from "../theme";
 import FormikTextInput from "./FormikTextInput";
 
@@ -29,6 +30,11 @@ interface SignInFormValues {
   password: string;
 }
 
+const signInFormSchema = object({
+  username: string().required("Username is required"),
+  password: string().required("Password is required"),
+});
+
 const SignIn = (): JSX.Element => {
   const initialValues: SignInFormValues = { username: "", password: "" };
   return (
@@ -38,6 +44,7 @@ const SignIn = (): JSX.Element => {
         onSubmit={(values) => {
           console.log(values);
         }}
+        validationSchema={signInFormSchema}
       >
         {({ handleSubmit }) => (
           <View style={styles.form}>

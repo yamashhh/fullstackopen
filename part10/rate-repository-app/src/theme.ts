@@ -5,6 +5,7 @@ const theme = {
     primary: "#0366d6",
     white: "#ffffff",
     background: "#e1e4e8",
+    red: "#d73a4a",
   },
   fontSizes: {
     body: 14,

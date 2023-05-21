@@ -13,10 +13,22 @@ const styles = StyleSheet.create({
     height: 40,
     paddingHorizontal: 10,
   },
+  error: {
+    borderColor: theme.colors.red,
+  },
 });
 
-const TextInput = ({ style, ...props }: TextInputProps): JSX.Element => {
-  return <NativeTextInput style={[styles.textInput, style]} {...props} />;
+interface Props extends TextInputProps {
+  error: boolean;
+}
+
+const TextInput = ({ error, style, ...props }: Props): JSX.Element => {
+  return (
+    <NativeTextInput
+      style={[styles.textInput, ...(error ? [styles.error] : []), style]}
+      {...props}
+    />
+  );
 };
 
 export default TextInput;
