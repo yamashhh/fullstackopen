@@ -7,13 +7,15 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "lint": "eslint . --ext .js,.jsx,.ts,.tsx --ignore-path .gitignore"
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx --ignore-path .gitignore",
+    "codegen": "graphql-codegen --config codegen.ts"
   },
   "dependencies": {
     "@expo/webpack-config": "^18.0.1",
     "expo": "~48.0.15",
     "expo-status-bar": "~1.4.4",
     "formik": "^2.2.9",
+    "graphql": "^16.6.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-native": "0.71.8",
@@ -23,6 +25,9 @@
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
+    "@graphql-codegen/add": "^5.0.0",
+    "@graphql-codegen/cli": "4.0.1",
+    "@graphql-codegen/typescript": "4.0.0",
     "@types/react": "~18.0.38",
     "@typescript-eslint/eslint-plugin": "^5.43.0",
     "eslint": "^8.0.1",

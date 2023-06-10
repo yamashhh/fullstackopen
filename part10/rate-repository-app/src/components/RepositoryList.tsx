@@ -1,8 +1,11 @@
+import { useCallback, useEffect, useState } from "react";
 import { FlatList, StyleSheet, View } from "react-native";
+import {
+  type Repository,
+  type RepositoryConnection,
+} from "../generated/graphql";
 import theme from "../theme";
 import RepositoryItem from "./RepositoryItem";
-
-export type Repository = (typeof repositories)[number];
 
 const styles = StyleSheet.create({
   list: {
@@ -13,56 +16,22 @@ const styles = StyleSheet.create({
   },
 });
 
-const repositories = [
-  {
-    id: "jaredpalmer.formik",
-    fullName: "jaredpalmer/formik",
-    description: "Build forms in React, without the tears",
-    language: "TypeScript",
-    forksCount: 1589,
-    stargazersCount: 21553,
-    ratingAverage: 88,
-    reviewCount: 4,
-    ownerAvatarUrl: "https://avatars2.githubusercontent.com/u/4060187?v=4",
-  },
-  {
-    id: "rails.rails",
-    fullName: "rails/rails",
-    description: "Ruby on Rails",
-    language: "Ruby",
-    forksCount: 18349,
-    stargazersCount: 45377,
-    ratingAverage: 100,
-    reviewCount: 2,
-    ownerAvatarUrl: "https://avatars1.githubusercontent.com/u/4223?v=4",
-  },
-  {
-    id: "django.django",
-    fullName: "django/django",
-    description: "The Web framework for perfectionists with deadlines.",
-    language: "Python",
-    forksCount: 21015,
-    stargazersCount: 48496,
-    ratingAverage: 73,
-    reviewCount: 5,
-    ownerAvatarUrl: "https://avatars2.githubusercontent.com/u/27804?v=4",
-  },
-  {
-    id: "reduxjs.redux",
-    fullName: "reduxjs/redux",
-    description: "Predictable state container for JavaScript apps",
-    language: "TypeScript",
-    forksCount: 13902,
-    stargazersCount: 52869,
-    ratingAverage: 0,
-    reviewCount: 0,
-    ownerAvatarUrl: "https://avatars3.githubusercontent.com/u/13142323?v=4",
-  },
-];
-
 const ItemSeparator = (): JSX.Element => <View style={styles.separator} />;
 
 const RepositoryList = (): JSX.Element => {
+  const [repositories, setRepositories] = useState<Repository[]>([]);
+
+  const fetchRepositories = useCallback(async () => {
+    const data: RepositoryConnection = await (
+      await fetch("http://192.168.0.104:5001/api/repositories")
+    ).json();
+    setRepositories(data.edges.map((edge) => edge.node));
+  }, []);
+
+  useEffect(() => {
+    void fetchRepositories();
+  }, [fetchRepositories]);
+
   return (
     <FlatList
       style={styles.list}
