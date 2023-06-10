@@ -1,9 +1,7 @@
-import { useCallback, useEffect, useState } from "react";
+import { useQuery } from "@apollo/client";
 import { FlatList, StyleSheet, View } from "react-native";
-import {
-  type Repository,
-  type RepositoryConnection,
-} from "../generated/graphql";
+import { OrderDirection } from "../generated/gql/graphql";
+import { PaginatedRepositoriesQueryDocument } from "../graphql/queries/PaginatedRepositories";
 import theme from "../theme";
 import RepositoryItem from "./RepositoryItem";
 
@@ -19,23 +17,19 @@ const styles = StyleSheet.create({
 const ItemSeparator = (): JSX.Element => <View style={styles.separator} />;
 
 const RepositoryList = (): JSX.Element => {
-  const [repositories, setRepositories] = useState<Repository[]>([]);
-
-  const fetchRepositories = useCallback(async () => {
-    const data: RepositoryConnection = await (
-      await fetch("http://192.168.0.104:5001/api/repositories")
-    ).json();
-    setRepositories(data.edges.map((edge) => edge.node));
-  }, []);
-
-  useEffect(() => {
-    void fetchRepositories();
-  }, [fetchRepositories]);
+  const { data } = useQuery(PaginatedRepositoriesQueryDocument, {
+    variables: {
+      first: 30,
+      orderDirection: OrderDirection.Asc,
+    },
+  });
 
   return (
     <FlatList
       style={styles.list}
-      data={repositories}
+      data={
+        data != null ? data.repositories.edges.map((edge) => edge.node) : null
+      }
       ItemSeparatorComponent={ItemSeparator}
       renderItem={({ item }) => <RepositoryItem item={item} />}
     />

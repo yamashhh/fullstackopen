@@ -26,4 +26,19 @@ module.exports = {
   rules: {
     "import/order": ["warn", { "newlines-between": "ignore" }],
   },
+  ignorePatterns: ["./src/gql/**"],
+  overrides: [
+    {
+      files: ["*.js", "*.ts", "*.jsx", "*.tsx"],
+      processor: "@graphql-eslint/graphql",
+    },
+    {
+      files: ["*.graphql"],
+      extends: "plugin:@graphql-eslint/operations-recommended",
+      parserOptions: {
+        operations: "./src/**/*.ts",
+        schema: "http://localhost:4000",
+      },
+    },
+  ],
 };

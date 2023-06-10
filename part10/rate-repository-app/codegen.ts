@@ -3,16 +3,16 @@ import type { CodegenConfig } from "@graphql-codegen/cli";
 const config: CodegenConfig = {
   overwrite: true,
   schema: "http://localhost:4000",
+  documents: ["src/**/*.ts?(x)"],
   generates: {
-    "src/generated/graphql.ts": {
+    "./src/generated/gql/": {
+      preset: "client",
       plugins: [
         {
           add: {
-            content: `/* eslint-disable */
-// @ts-nocheck`,
+            content: "// @ts-nocheck",
           },
         },
-        "typescript",
       ],
     },
   },
