@@ -1,8 +1,14 @@
+import Constants from "expo-constants";
 import { useCallback, useEffect, useState } from "react";
 import {
   type Repository,
   type RepositoryConnection,
 } from "../generated/gql/graphql";
+const REST_URI = Constants.manifest?.extra?.restUri;
+
+if (REST_URI == null) {
+  throw new Error("Failed to load environment variable: restUri");
+}
 
 const useRepositories = (): {
   repositories: Repository[];
@@ -14,9 +20,7 @@ const useRepositories = (): {
 
   const fetchRepositories = useCallback(async () => {
     setLoading(true);
-    const data: RepositoryConnection = await (
-      await fetch("http://192.168.0.101:5001/api/repositories")
-    ).json();
+    const data: RepositoryConnection = await (await fetch(REST_URI)).json();
     setRepositories(data.edges.map((edge) => edge.node));
     setLoading(false);
   }, []);

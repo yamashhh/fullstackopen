@@ -17,6 +17,8 @@ const documents = {
     types.PageInfoFragmentDoc,
   "\n  fragment RepositoryItem on Repository {\n    id\n    fullName\n    language\n    stargazersCount\n    forksCount\n    ratingAverage\n    reviewCount\n    description\n    ownerAvatarUrl\n  }\n":
     types.RepositoryItemFragmentDoc,
+  "\n  mutation Authenticate($credentials: AuthenticateInput) {\n    authenticate(credentials: $credentials) {\n      accessToken\n    }\n  }\n":
+    types.AuthenticateDocument,
   "\n  query PaginatedRepositories($first: Int, $orderDirection: OrderDirection) {\n    repositories(first: $first, orderDirection: $orderDirection) {\n      edges {\n        node {\n          ...RepositoryItem\n        }\n        cursor\n      }\n      pageInfo {\n        ...PageInfo\n      }\n      totalCount\n    }\n  }\n":
     types.PaginatedRepositoriesDocument,
 };
@@ -47,6 +49,12 @@ export function graphql(
 export function graphql(
   source: "\n  fragment RepositoryItem on Repository {\n    id\n    fullName\n    language\n    stargazersCount\n    forksCount\n    ratingAverage\n    reviewCount\n    description\n    ownerAvatarUrl\n  }\n"
 ): (typeof documents)["\n  fragment RepositoryItem on Repository {\n    id\n    fullName\n    language\n    stargazersCount\n    forksCount\n    ratingAverage\n    reviewCount\n    description\n    ownerAvatarUrl\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: "\n  mutation Authenticate($credentials: AuthenticateInput) {\n    authenticate(credentials: $credentials) {\n      accessToken\n    }\n  }\n"
+): (typeof documents)["\n  mutation Authenticate($credentials: AuthenticateInput) {\n    authenticate(credentials: $credentials) {\n      accessToken\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

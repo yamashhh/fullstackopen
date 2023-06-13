@@ -247,6 +247,18 @@ export type RepositoryItemFragment = {
   ownerAvatarUrl?: string | null;
 } & { " $fragmentName"?: "RepositoryItemFragment" };
 
+export type AuthenticateMutationVariables = Exact<{
+  credentials?: InputMaybe<AuthenticateInput>;
+}>;
+
+export type AuthenticateMutation = {
+  __typename?: "Mutation";
+  authenticate?: {
+    __typename?: "AuthenticatePayload";
+    accessToken: string;
+  } | null;
+};
+
 export type PaginatedRepositoriesQueryVariables = Exact<{
   first?: InputMaybe<Scalars["Int"]["input"]>;
   orderDirection?: InputMaybe<OrderDirection>;
@@ -319,6 +331,57 @@ export const RepositoryItemFragmentDoc = {
     },
   ],
 } as unknown as DocumentNode<RepositoryItemFragment, unknown>;
+export const AuthenticateDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "mutation",
+      name: { kind: "Name", value: "Authenticate" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "credentials" },
+          },
+          type: {
+            kind: "NamedType",
+            name: { kind: "Name", value: "AuthenticateInput" },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "authenticate" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "credentials" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "credentials" },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "accessToken" } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  AuthenticateMutation,
+  AuthenticateMutationVariables
+>;
 export const PaginatedRepositoriesDocument = {
   kind: "Document",
   definitions: [

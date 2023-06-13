@@ -1,12 +1,18 @@
 import {
   ApolloClient,
-  InMemoryCache,
   createHttpLink,
+  InMemoryCache,
   type NormalizedCacheObject,
 } from "@apollo/client";
+import Constants from "expo-constants";
+const APOLLO_URI = Constants.manifest?.extra?.apolloUri;
+
+if (APOLLO_URI == null) {
+  throw new Error("Failed to load environment variable: apolloUri");
+}
 
 const httpLink = createHttpLink({
-  uri: "http://192.168.0.101:4000/graphql",
+  uri: APOLLO_URI,
 });
 
 const createApolloClient = (): ApolloClient<NormalizedCacheObject> => {
