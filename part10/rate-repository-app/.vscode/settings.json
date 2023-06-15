@@ -19,5 +19,7 @@
     "titleBar.inactiveForeground": "#e7e7e799"
   },
   "peacock.color": "#36566d",
-  "typescript.tsdk": "./node_modules/typescript/lib"
+  "typescript.tsdk": "./node_modules/typescript/lib",
+  "eslint.packageManager": "pnpm",
+  "eslint.runtime": "/Users/shogo-yamato/Library/Application Support/fnm/node-versions/v18.16.0/installation/bin/node"
 }

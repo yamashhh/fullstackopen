@@ -1,6 +1,7 @@
 import { Image, StyleSheet, View } from "react-native";
+import { useFragment, type FragmentType } from "../generated/gql";
+import { RepositoryItemFragment } from "../graphql/fragments/RepositoryItem";
 import theme from "../theme";
-import { type Repository } from "./RepositoryList";
 import Text from "./Text";
 
 const styles = StyleSheet.create({
@@ -51,7 +52,7 @@ const styles = StyleSheet.create({
 });
 
 interface RepositoryItemProps {
-  item: Repository;
+  item: FragmentType<typeof RepositoryItemFragment>;
 }
 
 const formatCount = (count: number): string => {
@@ -61,14 +62,16 @@ const formatCount = (count: number): string => {
   });
 };
 
-const RepositoryItem = ({ item }: RepositoryItemProps): JSX.Element => {
+const RepositoryItem = (props: RepositoryItemProps): JSX.Element => {
+  const item = useFragment(RepositoryItemFragment, props.item);
+
   return (
     <View style={styles.container}>
       <View style={styles.top}>
         <Image
           style={styles.topLeft}
           source={{
-            uri: item.ownerAvatarUrl,
+            uri: item.ownerAvatarUrl ?? undefined,
           }}
         />
         <View style={styles.topRight}>
@@ -83,11 +86,17 @@ const RepositoryItem = ({ item }: RepositoryItemProps): JSX.Element => {
       </View>
       <View style={styles.bottom}>
         <View style={styles.stats}>
-          <Text fontWeight="bold">{formatCount(item.stargazersCount)}</Text>
+          <Text fontWeight="bold">
+            {item.stargazersCount != null
+              ? formatCount(item.stargazersCount)
+              : "-"}
+          </Text>
           <Text color="textSecondary">Stars</Text>
         </View>
         <View style={styles.stats}>
-          <Text fontWeight="bold">{formatCount(item.forksCount)}</Text>
+          <Text fontWeight="bold">
+            {item.forksCount != null ? formatCount(item.forksCount) : "-"}
+          </Text>
           <Text color="textSecondary">Forks</Text>
         </View>
         <View style={styles.stats}>
