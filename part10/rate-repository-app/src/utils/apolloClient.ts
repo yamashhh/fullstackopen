@@ -4,7 +4,9 @@ import {
   InMemoryCache,
   type NormalizedCacheObject,
 } from "@apollo/client";
+import { setContext } from "@apollo/client/link/context";
 import Constants from "expo-constants";
+import type AuthStorage from "./authStorage";
 const APOLLO_URI = Constants.manifest?.extra?.apolloUri;
 
 if (APOLLO_URI == null) {
@@ -15,9 +17,30 @@ const httpLink = createHttpLink({
   uri: APOLLO_URI,
 });
 
-const createApolloClient = (): ApolloClient<NormalizedCacheObject> => {
+const createApolloClient = (
+  authStorage: AuthStorage
+): ApolloClient<NormalizedCacheObject> => {
+  const authLink = setContext(async (_, { headers }) => {
+    try {
+      const accessToken = await authStorage.getAccessToken();
+      const authorizationHeader =
+        accessToken === null ? "" : `Bearer ${accessToken}`;
+      return {
+        headers: {
+          ...headers,
+          authorization: authorizationHeader,
+        },
+      };
+    } catch (error) {
+      console.dir(error);
+      return {
+        headers,
+      };
+    }
+  });
+
   return new ApolloClient({
-    link: httpLink,
+    link: authLink.concat(httpLink),
     cache: new InMemoryCache(),
   });
 };

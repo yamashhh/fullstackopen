@@ -1,9 +1,8 @@
-import { useMutation } from "@apollo/client";
 import { Formik } from "formik";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { object, string } from "yup";
 import { type AuthenticateInput } from "../generated/gql/graphql";
-import { AuthenticateDocument } from "../graphql/mutations/Authenticate";
+import useSignIn from "../hooks/useSignIn";
 import theme from "../theme";
 import FormikTextInput from "./FormikTextInput";
 
@@ -35,20 +34,13 @@ const signInFormSchema = object({
 
 const SignIn = (): JSX.Element => {
   const initialValues: AuthenticateInput = { username: "", password: "" };
-  const [signIn, { loading }] = useMutation(AuthenticateDocument);
+  const [signIn, { loading }] = useSignIn();
 
   return (
     <View>
       <Formik
         initialValues={initialValues}
-        onSubmit={async (input) => {
-          const { data } = await signIn({
-            variables: {
-              credentials: input,
-            },
-          });
-          console.log(data);
-        }}
+        onSubmit={signIn}
         validationSchema={signInFormSchema}
       >
         {({ handleSubmit }) => (

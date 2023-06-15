@@ -259,6 +259,13 @@ export type AuthenticateMutation = {
   } | null;
 };
 
+export type MeQueryVariables = Exact<{ [key: string]: never }>;
+
+export type MeQuery = {
+  __typename?: "Query";
+  me?: { __typename?: "User"; id: string; username: string } | null;
+};
+
 export type PaginatedRepositoriesQueryVariables = Exact<{
   first?: InputMaybe<Scalars["Int"]["input"]>;
   orderDirection?: InputMaybe<OrderDirection>;
@@ -382,6 +389,32 @@ export const AuthenticateDocument = {
   AuthenticateMutation,
   AuthenticateMutationVariables
 >;
+export const MeDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "query",
+      name: { kind: "Name", value: "Me" },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "me" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "id" } },
+                { kind: "Field", name: { kind: "Name", value: "username" } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<MeQuery, MeQueryVariables>;
 export const PaginatedRepositoriesDocument = {
   kind: "Document",
   definitions: [
