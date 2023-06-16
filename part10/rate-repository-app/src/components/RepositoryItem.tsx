@@ -55,7 +55,7 @@ interface RepositoryItemProps {
   item: FragmentType<typeof RepositoryItemFragment>;
 }
 
-const formatCount = (count: number): string => {
+export const formatCount = (count: number): string => {
   return count.toLocaleString("en-US", {
     notation: "compact",
     maximumFractionDigits: 1,
@@ -66,7 +66,7 @@ const RepositoryItem = (props: RepositoryItemProps): JSX.Element => {
   const item = useFragment(RepositoryItemFragment, props.item);
 
   return (
-    <View style={styles.container} testID="repositoryItem">
+    <View style={styles.container}>
       <View style={styles.top}>
         <Image
           style={styles.topLeft}
@@ -75,18 +75,22 @@ const RepositoryItem = (props: RepositoryItemProps): JSX.Element => {
           }}
         />
         <View style={styles.topRight}>
-          <Text fontSize="subheading" fontWeight="bold">
+          <Text fontSize="subheading" fontWeight="bold" testID="name">
             {item.fullName}
           </Text>
-          <Text color="textSecondary">{item.description}</Text>
+          <Text color="textSecondary" testID="description">
+            {item.description}
+          </Text>
           <View style={styles.language}>
-            <Text color="white">{item.language}</Text>
+            <Text color="white" testID="language">
+              {item.language}
+            </Text>
           </View>
         </View>
       </View>
       <View style={styles.bottom}>
         <View style={styles.stats}>
-          <Text fontWeight="bold">
+          <Text fontWeight="bold" testID="stars">
             {item.stargazersCount != null
               ? formatCount(item.stargazersCount)
               : "-"}
@@ -94,17 +98,21 @@ const RepositoryItem = (props: RepositoryItemProps): JSX.Element => {
           <Text color="textSecondary">Stars</Text>
         </View>
         <View style={styles.stats}>
-          <Text fontWeight="bold">
+          <Text fontWeight="bold" testID="forks">
             {item.forksCount != null ? formatCount(item.forksCount) : "-"}
           </Text>
           <Text color="textSecondary">Forks</Text>
         </View>
         <View style={styles.stats}>
-          <Text fontWeight="bold">{formatCount(item.reviewCount)}</Text>
+          <Text fontWeight="bold" testID="reviews">
+            {formatCount(item.reviewCount)}
+          </Text>
           <Text color="textSecondary">Reviews</Text>
         </View>
         <View style={styles.stats}>
-          <Text fontWeight="bold">{formatCount(item.ratingAverage)}</Text>
+          <Text fontWeight="bold" testID="rating">
+            {formatCount(item.ratingAverage)}
+          </Text>
           <Text color="textSecondary">Rating</Text>
         </View>
       </View>
