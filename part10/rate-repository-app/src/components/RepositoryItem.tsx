@@ -66,7 +66,7 @@ const RepositoryItem = (props: RepositoryItemProps): JSX.Element => {
   const item = useFragment(RepositoryItemFragment, props.item);
 
   return (
-    <View style={styles.container}>
+    <View style={styles.container} testID="repositoryItem">
       <View style={styles.top}>
         <Image
           style={styles.topLeft}

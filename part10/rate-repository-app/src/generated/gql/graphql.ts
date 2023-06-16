@@ -238,12 +238,12 @@ export type RepositoryItemFragment = {
   __typename?: "Repository";
   id: string;
   fullName: string;
+  description?: string | null;
   language?: string | null;
-  stargazersCount?: number | null;
   forksCount?: number | null;
+  stargazersCount?: number | null;
   ratingAverage: number;
   reviewCount: number;
-  description?: string | null;
   ownerAvatarUrl?: string | null;
 } & { " $fragmentName"?: "RepositoryItemFragment" };
 
@@ -326,12 +326,12 @@ export const RepositoryItemFragmentDoc = {
         selections: [
           { kind: "Field", name: { kind: "Name", value: "id" } },
           { kind: "Field", name: { kind: "Name", value: "fullName" } },
+          { kind: "Field", name: { kind: "Name", value: "description" } },
           { kind: "Field", name: { kind: "Name", value: "language" } },
-          { kind: "Field", name: { kind: "Name", value: "stargazersCount" } },
           { kind: "Field", name: { kind: "Name", value: "forksCount" } },
+          { kind: "Field", name: { kind: "Name", value: "stargazersCount" } },
           { kind: "Field", name: { kind: "Name", value: "ratingAverage" } },
           { kind: "Field", name: { kind: "Name", value: "reviewCount" } },
-          { kind: "Field", name: { kind: "Name", value: "description" } },
           { kind: "Field", name: { kind: "Name", value: "ownerAvatarUrl" } },
         ],
       },
@@ -528,12 +528,12 @@ export const PaginatedRepositoriesDocument = {
         selections: [
           { kind: "Field", name: { kind: "Name", value: "id" } },
           { kind: "Field", name: { kind: "Name", value: "fullName" } },
+          { kind: "Field", name: { kind: "Name", value: "description" } },
           { kind: "Field", name: { kind: "Name", value: "language" } },
-          { kind: "Field", name: { kind: "Name", value: "stargazersCount" } },
           { kind: "Field", name: { kind: "Name", value: "forksCount" } },
+          { kind: "Field", name: { kind: "Name", value: "stargazersCount" } },
           { kind: "Field", name: { kind: "Name", value: "ratingAverage" } },
           { kind: "Field", name: { kind: "Name", value: "reviewCount" } },
-          { kind: "Field", name: { kind: "Name", value: "description" } },
           { kind: "Field", name: { kind: "Name", value: "ownerAvatarUrl" } },
         ],
       },

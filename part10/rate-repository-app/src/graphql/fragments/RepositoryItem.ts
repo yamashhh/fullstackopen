@@ -4,12 +4,12 @@ export const RepositoryItemFragment = graphql(`
   fragment RepositoryItem on Repository {
     id
     fullName
+    description
     language
-    stargazersCount
     forksCount
+    stargazersCount
     ratingAverage
     reviewCount
-    description
     ownerAvatarUrl
   }
 `);

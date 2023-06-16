@@ -1,9 +1,7 @@
-import { useQuery } from "@apollo/client";
 import { FlatList, StyleSheet, View } from "react-native";
-import { OrderDirection } from "../generated/gql/graphql";
-import { PaginatedRepositoriesQueryDocument } from "../graphql/queries/PaginatedRepositories";
-import theme from "../theme";
-import RepositoryItem from "./RepositoryItem";
+import { type PaginatedRepositoriesQuery } from "../../generated/gql/graphql";
+import theme from "../../theme";
+import RepositoryItem from "../RepositoryItem";
 
 const styles = StyleSheet.create({
   list: {
@@ -16,14 +14,11 @@ const styles = StyleSheet.create({
 
 const ItemSeparator = (): JSX.Element => <View style={styles.separator} />;
 
-const RepositoryList = (): JSX.Element => {
-  const { data } = useQuery(PaginatedRepositoriesQueryDocument, {
-    variables: {
-      first: 30,
-      orderDirection: OrderDirection.Asc,
-    },
-  });
+interface Props {
+  data?: PaginatedRepositoriesQuery;
+}
 
+const PureRepositoryList = ({ data }: Props): JSX.Element => {
   return (
     <FlatList
       style={styles.list}
@@ -36,4 +31,4 @@ const RepositoryList = (): JSX.Element => {
   );
 };
 
-export default RepositoryList;
+export default PureRepositoryList;
