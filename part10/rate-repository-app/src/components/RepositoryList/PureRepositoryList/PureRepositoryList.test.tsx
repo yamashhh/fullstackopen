@@ -1,10 +1,11 @@
-import { render } from "@testing-library/react-native";
-import { makeFragmentData } from "../../generated/gql";
-import { type PaginatedRepositoriesQuery } from "../../generated/gql/graphql";
-import { PageInfoFragment } from "../../graphql/fragments/PageInfo";
-import { RepositoryItemFragment } from "../../graphql/fragments/RepositoryItem";
-import { formatCount } from "../RepositoryItem";
-import PureRepositoryList from "./PureRepositoryList";
+import { render, screen } from "@testing-library/react-native";
+// eslint-disable-next-line import/order
+import PureRepositoryList from ".";
+import { makeFragmentData } from "../../../generated/gql";
+import { type PaginatedRepositoriesQuery } from "../../../generated/gql/graphql";
+import { PageInfoFragment } from "../../../graphql/fragments/PageInfo";
+import { RepositoryItemFragment } from "../../../graphql/fragments/RepositoryItem";
+import { formatCount, TEST_IDS } from "../../RepositoryItem";
 
 const FIRST_REPOSITORY_ITEM = {
   id: "jaredpalmer.formik",
@@ -56,14 +57,13 @@ const MOCK_DATA: PaginatedRepositoriesQuery = {
   },
 };
 
-describe("RepositoryList", () => {
+describe("PureRepositoryList", () => {
   describe("renders repository information correctly", () => {
     test("name", () => {
-      const { getAllByTestId } = render(
-        <PureRepositoryList data={MOCK_DATA} />
+      render(<PureRepositoryList data={MOCK_DATA} />);
+      const [firstRepositoryName, secondRepositoryName] = screen.getAllByTestId(
+        TEST_IDS.NAME
       );
-      const [firstRepositoryName, secondRepositoryName] =
-        getAllByTestId("name");
       expect(firstRepositoryName).toHaveTextContent(
         FIRST_REPOSITORY_ITEM.fullName
       );
@@ -73,11 +73,9 @@ describe("RepositoryList", () => {
     });
 
     test("description", () => {
-      const { getAllByTestId } = render(
-        <PureRepositoryList data={MOCK_DATA} />
-      );
+      render(<PureRepositoryList data={MOCK_DATA} />);
       const [firstRepositoryDescription, secondRepositoryDescription] =
-        getAllByTestId("description");
+        screen.getAllByTestId(TEST_IDS.DESCRIPTION);
       expect(firstRepositoryDescription).toHaveTextContent(
         FIRST_REPOSITORY_ITEM.description
       );
@@ -87,11 +85,9 @@ describe("RepositoryList", () => {
     });
 
     test("language", () => {
-      const { getAllByTestId } = render(
-        <PureRepositoryList data={MOCK_DATA} />
-      );
+      render(<PureRepositoryList data={MOCK_DATA} />);
       const [firstRepositoryLanguage, secondRepositoryLanguage] =
-        getAllByTestId("language");
+        screen.getAllByTestId(TEST_IDS.LANGUAGE);
       expect(firstRepositoryLanguage).toHaveTextContent(
         FIRST_REPOSITORY_ITEM.language
       );
@@ -101,11 +97,9 @@ describe("RepositoryList", () => {
     });
 
     test("forks count", () => {
-      const { getAllByTestId } = render(
-        <PureRepositoryList data={MOCK_DATA} />
-      );
+      render(<PureRepositoryList data={MOCK_DATA} />);
       const [firstRepositoryForksCount, secondRepositoryForksCount] =
-        getAllByTestId("forks");
+        screen.getAllByTestId(TEST_IDS.FORKS);
       expect(firstRepositoryForksCount).toHaveTextContent(
         formatCount(FIRST_REPOSITORY_ITEM.forksCount)
       );
@@ -115,11 +109,9 @@ describe("RepositoryList", () => {
     });
 
     test("stargazers count", () => {
-      const { getAllByTestId } = render(
-        <PureRepositoryList data={MOCK_DATA} />
-      );
+      render(<PureRepositoryList data={MOCK_DATA} />);
       const [firstRepositoryStargazersCount, secondRepositoryStargazersCount] =
-        getAllByTestId("stars");
+        screen.getAllByTestId(TEST_IDS.STARS);
       expect(firstRepositoryStargazersCount).toHaveTextContent(
         formatCount(FIRST_REPOSITORY_ITEM.stargazersCount)
       );
@@ -129,11 +121,9 @@ describe("RepositoryList", () => {
     });
 
     test("rating average", () => {
-      const { getAllByTestId } = render(
-        <PureRepositoryList data={MOCK_DATA} />
-      );
+      render(<PureRepositoryList data={MOCK_DATA} />);
       const [firstRepositoryRatingAverage, secondRepositoryRatingAverage] =
-        getAllByTestId("rating");
+        screen.getAllByTestId(TEST_IDS.RATING);
       expect(firstRepositoryRatingAverage).toHaveTextContent(
         formatCount(FIRST_REPOSITORY_ITEM.ratingAverage)
       );
@@ -143,11 +133,9 @@ describe("RepositoryList", () => {
     });
 
     test("review count", () => {
-      const { getAllByTestId } = render(
-        <PureRepositoryList data={MOCK_DATA} />
-      );
+      render(<PureRepositoryList data={MOCK_DATA} />);
       const [firstRepositoryReviewCount, secondRepositoryReviewCount] =
-        getAllByTestId("reviews");
+        screen.getAllByTestId(TEST_IDS.REVIEWS);
       expect(firstRepositoryReviewCount).toHaveTextContent(
         formatCount(FIRST_REPOSITORY_ITEM.reviewCount)
       );

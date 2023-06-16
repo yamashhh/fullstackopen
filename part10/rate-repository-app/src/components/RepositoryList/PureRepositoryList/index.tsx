@@ -1,18 +1,14 @@
-import { FlatList, StyleSheet, View } from "react-native";
-import { type PaginatedRepositoriesQuery } from "../../generated/gql/graphql";
-import theme from "../../theme";
-import RepositoryItem from "../RepositoryItem";
+import { FlatList, StyleSheet } from "react-native";
+import { type PaginatedRepositoriesQuery } from "../../../generated/gql/graphql";
+import theme from "../../../theme";
+import RepositoryItem from "../../RepositoryItem";
+import ItemSeparator from "./ItemSeparator";
 
 const styles = StyleSheet.create({
   list: {
     backgroundColor: theme.colors.background,
   },
-  separator: {
-    height: 10,
-  },
 });
-
-const ItemSeparator = (): JSX.Element => <View style={styles.separator} />;
 
 interface Props {
   data?: PaginatedRepositoriesQuery;
