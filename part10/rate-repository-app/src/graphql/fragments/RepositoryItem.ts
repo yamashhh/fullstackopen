@@ -11,5 +11,6 @@ export const RepositoryItemFragment = graphql(`
     ratingAverage
     reviewCount
     ownerAvatarUrl
+    url
   }
 `);

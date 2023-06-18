@@ -1,5 +1,8 @@
 import { FlatList, StyleSheet } from "react-native";
+import { Link } from "react-router-native";
+import { useFragment } from "../../../generated/gql";
 import { type PaginatedRepositoriesQuery } from "../../../generated/gql/graphql";
+import { RepositoryItemFragment } from "../../../graphql/fragments/RepositoryItem";
 import theme from "../../../theme";
 import RepositoryItem from "../../RepositoryItem";
 import ItemSeparator from "./ItemSeparator";
@@ -22,7 +25,15 @@ const PureRepositoryList = ({ data }: Props): JSX.Element => {
         data != null ? data.repositories.edges.map((edge) => edge.node) : null
       }
       ItemSeparatorComponent={ItemSeparator}
-      renderItem={({ item }) => <RepositoryItem item={item} />}
+      renderItem={({ item: repository }) => {
+        // eslint-disable-next-line react-hooks/rules-of-hooks
+        const item = useFragment(RepositoryItemFragment, repository);
+        return (
+          <Link to={`/repository/${item.id}`}>
+            <RepositoryItem item={repository} />
+          </Link>
+        );
+      }}
     />
   );
 };

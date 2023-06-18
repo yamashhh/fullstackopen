@@ -1,8 +1,8 @@
 import { type ReactNode } from "react";
 import { Pressable, StyleSheet, type PressableProps } from "react-native";
-import Text from "./Text";
+import Text from "../Text";
 
-interface AppBarTabProps {
+interface AppBarButtonProps {
   children: ReactNode;
   onPress: PressableProps["onPress"];
 }
@@ -13,7 +13,10 @@ const styles = StyleSheet.create({
   },
 });
 
-const AppBarTab = ({ children, onPress }: AppBarTabProps): JSX.Element => {
+const AppBarButton = ({
+  children,
+  onPress,
+}: AppBarButtonProps): JSX.Element => {
   return (
     <Pressable style={styles.link} onPress={onPress}>
       <Text color="white" fontSize="subheading" fontWeight="bold">
@@ -23,4 +26,4 @@ const AppBarTab = ({ children, onPress }: AppBarTabProps): JSX.Element => {
   );
 };
 
-export default AppBarTab;
+export default AppBarButton;

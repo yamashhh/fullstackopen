@@ -1,9 +1,9 @@
 import { useQuery } from "@apollo/client";
 import Constants from "expo-constants";
 import { ScrollView, StyleSheet, View } from "react-native";
-import { MeDocument } from "../graphql/queries/Me";
-import useSignOut from "../hooks/useSignOut";
-import theme from "../theme";
+import { MeDocument } from "../../graphql/queries/Me";
+import useSignOut from "../../hooks/useSignOut";
+import theme from "../../theme";
 import AppBarButton from "./AppBarButton";
 import AppBarTab from "./AppBarTab";
 

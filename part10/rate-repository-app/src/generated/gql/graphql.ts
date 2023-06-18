@@ -245,6 +245,7 @@ export type RepositoryItemFragment = {
   ratingAverage: number;
   reviewCount: number;
   ownerAvatarUrl?: string | null;
+  url?: string | null;
 } & { " $fragmentName"?: "RepositoryItemFragment" };
 
 export type AuthenticateMutationVariables = Exact<{
@@ -287,6 +288,19 @@ export type PaginatedRepositoriesQuery = {
       " $fragmentRefs"?: { PageInfoFragment: PageInfoFragment };
     };
   };
+};
+
+export type RepositoryQueryVariables = Exact<{
+  repositoryId: Scalars["ID"]["input"];
+}>;
+
+export type RepositoryQuery = {
+  __typename?: "Query";
+  repository?:
+    | ({ __typename?: "Repository" } & {
+        " $fragmentRefs"?: { RepositoryItemFragment: RepositoryItemFragment };
+      })
+    | null;
 };
 
 export const PageInfoFragmentDoc = {
@@ -333,6 +347,7 @@ export const RepositoryItemFragmentDoc = {
           { kind: "Field", name: { kind: "Name", value: "ratingAverage" } },
           { kind: "Field", name: { kind: "Name", value: "reviewCount" } },
           { kind: "Field", name: { kind: "Name", value: "ownerAvatarUrl" } },
+          { kind: "Field", name: { kind: "Name", value: "url" } },
         ],
       },
     },
@@ -535,6 +550,7 @@ export const PaginatedRepositoriesDocument = {
           { kind: "Field", name: { kind: "Name", value: "ratingAverage" } },
           { kind: "Field", name: { kind: "Name", value: "reviewCount" } },
           { kind: "Field", name: { kind: "Name", value: "ownerAvatarUrl" } },
+          { kind: "Field", name: { kind: "Name", value: "url" } },
         ],
       },
     },
@@ -560,3 +576,77 @@ export const PaginatedRepositoriesDocument = {
   PaginatedRepositoriesQuery,
   PaginatedRepositoriesQueryVariables
 >;
+export const RepositoryDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "query",
+      name: { kind: "Name", value: "Repository" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "repositoryId" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: { kind: "NamedType", name: { kind: "Name", value: "ID" } },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "repository" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "id" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "repositoryId" },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "FragmentSpread",
+                  name: { kind: "Name", value: "RepositoryItem" },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "RepositoryItem" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "Repository" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "id" } },
+          { kind: "Field", name: { kind: "Name", value: "fullName" } },
+          { kind: "Field", name: { kind: "Name", value: "description" } },
+          { kind: "Field", name: { kind: "Name", value: "language" } },
+          { kind: "Field", name: { kind: "Name", value: "forksCount" } },
+          { kind: "Field", name: { kind: "Name", value: "stargazersCount" } },
+          { kind: "Field", name: { kind: "Name", value: "ratingAverage" } },
+          { kind: "Field", name: { kind: "Name", value: "reviewCount" } },
+          { kind: "Field", name: { kind: "Name", value: "ownerAvatarUrl" } },
+          { kind: "Field", name: { kind: "Name", value: "url" } },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<RepositoryQuery, RepositoryQueryVariables>;

@@ -1,4 +1,4 @@
-lockfileVersion: '6.0'
+lockfileVersion: '6.1'
 
 settings:
   autoInstallPeers: true
@@ -23,6 +23,9 @@ dependencies:
   expo:
     specifier: ~48.0.15
     version: 48.0.15(@babel/core@7.20.2)
+  expo-linking:
+    specifier: ~4.0.1
+    version: 4.0.1(expo@48.0.15)
   expo-status-bar:
     specifier: ~1.4.4
     version: 1.4.4
@@ -6933,6 +6936,19 @@ packages:
       expo: '*'
     dependencies:
       expo: 48.0.15(@babel/core@7.20.2)
+    dev: false
+
+  /expo-linking@4.0.1(expo@48.0.15):
+    resolution: {integrity: sha512-geRMmKLhtaCigptRzOGW8ZZJKGl47gyu0KFtQOtGf26ELxyt/AietgQjyzF24i7cVD08TnWUJDHgWZkpRHTa7g==}
+    dependencies:
+      '@types/qs': 6.9.7
+      expo-constants: 14.2.1(expo@48.0.15)
+      invariant: 2.2.4
+      qs: 6.11.0
+      url-parse: 1.5.10
+    transitivePeerDependencies:
+      - expo
+      - supports-color
     dev: false
 
   /expo-modules-autolinking@1.2.0:

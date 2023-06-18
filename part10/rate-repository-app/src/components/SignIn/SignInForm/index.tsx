@@ -1,9 +1,9 @@
 import { Formik } from "formik";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { object, string } from "yup";
 import { type AuthenticateInput } from "../../../generated/gql/graphql";
 import type useSignIn from "../../../hooks/useSignIn";
-import theme from "../../../theme";
+import AppButton from "../../AppButton";
 import FormikTextInput from "../../FormikTextInput";
 
 const styles = StyleSheet.create({
@@ -11,19 +11,6 @@ const styles = StyleSheet.create({
     display: "flex",
     rowGap: 12,
     padding: 16,
-  },
-  button: {
-    backgroundColor: theme.colors.primary,
-    borderRadius: 4,
-    height: 40,
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  buttonText: {
-    color: theme.colors.white,
-    fontSize: theme.fontSizes.subheading,
-    fontWeight: theme.fontWeights.bold,
   },
 });
 
@@ -63,17 +50,16 @@ const SignInForm = ({ signIn, loading }: Props): JSX.Element => {
             placeholder={PLACEHOLDER.PASSWORD}
             secureTextEntry
           />
-          <Pressable
-            style={styles.button}
+          <AppButton
             // HACK:
             // https://github.com/jaredpalmer/formik/issues/376
             onPress={(event) => {
               handleSubmit(event as any);
             }}
-            disabled={loading}
+            disabled={false}
           >
-            <Text style={styles.buttonText}>{SIGN_IN_TEXT}</Text>
-          </Pressable>
+            {SIGN_IN_TEXT}
+          </AppButton>
         </View>
       )}
     </Formik>
