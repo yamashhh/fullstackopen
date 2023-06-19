@@ -23,6 +23,7 @@ const Repository = (): JSX.Element | null => {
           }
         : undefined,
     skip: repositoryId == null,
+    fetchPolicy: "cache-and-network",
   });
   const repositoryItem = data?.repository;
 

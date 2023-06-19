@@ -21,6 +21,8 @@ const documents = {
     types.ReviewItemFragmentDoc,
   "\n  mutation Authenticate($credentials: AuthenticateInput) {\n    authenticate(credentials: $credentials) {\n      accessToken\n    }\n  }\n":
     types.AuthenticateDocument,
+  "\n  mutation CreateReview($review: CreateReviewInput) {\n    createReview(review: $review) {\n      id\n      repositoryId\n    }\n  }\n":
+    types.CreateReviewDocument,
   "\n  query Me {\n    me {\n      id\n      username\n    }\n  }\n":
     types.MeDocument,
   "\n  query PaginatedRepositories($first: Int, $orderDirection: OrderDirection) {\n    repositories(first: $first, orderDirection: $orderDirection) {\n      edges {\n        node {\n          ...RepositoryItem\n        }\n        cursor\n      }\n      pageInfo {\n        ...PageInfo\n      }\n      totalCount\n    }\n  }\n":
@@ -67,6 +69,12 @@ export function graphql(
 export function graphql(
   source: "\n  mutation Authenticate($credentials: AuthenticateInput) {\n    authenticate(credentials: $credentials) {\n      accessToken\n    }\n  }\n"
 ): (typeof documents)["\n  mutation Authenticate($credentials: AuthenticateInput) {\n    authenticate(credentials: $credentials) {\n      accessToken\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: "\n  mutation CreateReview($review: CreateReviewInput) {\n    createReview(review: $review) {\n      id\n      repositoryId\n    }\n  }\n"
+): (typeof documents)["\n  mutation CreateReview($review: CreateReviewInput) {\n    createReview(review: $review) {\n      id\n      repositoryId\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

@@ -30,13 +30,16 @@ const AppBar = (): JSX.Element => {
       <ScrollView horizontal style={styles.scroll}>
         <AppBarTab to="/">Repositories</AppBarTab>
         {isLoggedIn ? (
-          <AppBarButton
-            onPress={() => {
-              void signOut();
-            }}
-          >
-            Sign out
-          </AppBarButton>
+          <>
+            <AppBarTab to="/create-review">Create a review</AppBarTab>
+            <AppBarButton
+              onPress={() => {
+                void signOut();
+              }}
+            >
+              Sign out
+            </AppBarButton>
+          </>
         ) : (
           <AppBarTab to="/sign-in">Sign in</AppBarTab>
         )}

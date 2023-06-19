@@ -269,6 +269,19 @@ export type AuthenticateMutation = {
   } | null;
 };
 
+export type CreateReviewMutationVariables = Exact<{
+  review?: InputMaybe<CreateReviewInput>;
+}>;
+
+export type CreateReviewMutation = {
+  __typename?: "Mutation";
+  createReview?: {
+    __typename?: "Review";
+    id: string;
+    repositoryId: string;
+  } | null;
+};
+
 export type MeQueryVariables = Exact<{ [key: string]: never }>;
 
 export type MeQuery = {
@@ -456,6 +469,61 @@ export const AuthenticateDocument = {
 } as unknown as DocumentNode<
   AuthenticateMutation,
   AuthenticateMutationVariables
+>;
+export const CreateReviewDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "mutation",
+      name: { kind: "Name", value: "CreateReview" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "review" },
+          },
+          type: {
+            kind: "NamedType",
+            name: { kind: "Name", value: "CreateReviewInput" },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "createReview" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "review" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "review" },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "id" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "repositoryId" },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  CreateReviewMutation,
+  CreateReviewMutationVariables
 >;
 export const MeDocument = {
   kind: "Document",

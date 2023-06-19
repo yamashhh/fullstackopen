@@ -8,11 +8,11 @@ import {
   type AuthenticateInput,
   type AuthenticateMutation,
 } from "../generated/gql/graphql";
-import { AuthenticateDocument } from "../graphql/mutations/Authenticate";
+import { AuthenticateMutationDocument } from "../graphql/mutations/Authenticate";
 import useAuthStorage from "./useAuthStorage";
 
 const useSignIn = (): [typeof signIn, MutationResult<AuthenticateMutation>] => {
-  const [mutate, result] = useMutation(AuthenticateDocument);
+  const [mutate, result] = useMutation(AuthenticateMutationDocument);
   const authStorage = useAuthStorage();
   const apolloClient = useApolloClient();
   const navigate = useNavigate();

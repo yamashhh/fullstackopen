@@ -56,7 +56,7 @@ const SignInForm = ({ signIn, loading }: Props): JSX.Element => {
             onPress={(event) => {
               handleSubmit(event as any);
             }}
-            disabled={false}
+            disabled={loading}
           >
             {SIGN_IN_TEXT}
           </AppButton>
