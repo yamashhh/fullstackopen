@@ -17,13 +17,15 @@ const documents = {
     types.PageInfoFragmentDoc,
   "\n  fragment RepositoryItem on Repository {\n    id\n    fullName\n    description\n    language\n    forksCount\n    stargazersCount\n    ratingAverage\n    reviewCount\n    ownerAvatarUrl\n    url\n  }\n":
     types.RepositoryItemFragmentDoc,
+  "\n  fragment ReviewItem on Review {\n    createdAt\n    id\n    rating\n    text\n    user {\n      id\n      username\n    }\n  }\n":
+    types.ReviewItemFragmentDoc,
   "\n  mutation Authenticate($credentials: AuthenticateInput) {\n    authenticate(credentials: $credentials) {\n      accessToken\n    }\n  }\n":
     types.AuthenticateDocument,
   "\n  query Me {\n    me {\n      id\n      username\n    }\n  }\n":
     types.MeDocument,
   "\n  query PaginatedRepositories($first: Int, $orderDirection: OrderDirection) {\n    repositories(first: $first, orderDirection: $orderDirection) {\n      edges {\n        node {\n          ...RepositoryItem\n        }\n        cursor\n      }\n      pageInfo {\n        ...PageInfo\n      }\n      totalCount\n    }\n  }\n":
     types.PaginatedRepositoriesDocument,
-  "\n  query Repository($repositoryId: ID!) {\n    repository(id: $repositoryId) {\n      ...RepositoryItem\n    }\n  }\n":
+  "\n  query Repository($repositoryId: ID!) {\n    repository(id: $repositoryId) {\n      ...RepositoryItem\n      reviews {\n        edges {\n          node {\n            ...ReviewItem\n          }\n        }\n      }\n    }\n  }\n":
     types.RepositoryDocument,
 };
 
@@ -57,6 +59,12 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
+  source: "\n  fragment ReviewItem on Review {\n    createdAt\n    id\n    rating\n    text\n    user {\n      id\n      username\n    }\n  }\n"
+): (typeof documents)["\n  fragment ReviewItem on Review {\n    createdAt\n    id\n    rating\n    text\n    user {\n      id\n      username\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
   source: "\n  mutation Authenticate($credentials: AuthenticateInput) {\n    authenticate(credentials: $credentials) {\n      accessToken\n    }\n  }\n"
 ): (typeof documents)["\n  mutation Authenticate($credentials: AuthenticateInput) {\n    authenticate(credentials: $credentials) {\n      accessToken\n    }\n  }\n"];
 /**
@@ -75,8 +83,8 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: "\n  query Repository($repositoryId: ID!) {\n    repository(id: $repositoryId) {\n      ...RepositoryItem\n    }\n  }\n"
-): (typeof documents)["\n  query Repository($repositoryId: ID!) {\n    repository(id: $repositoryId) {\n      ...RepositoryItem\n    }\n  }\n"];
+  source: "\n  query Repository($repositoryId: ID!) {\n    repository(id: $repositoryId) {\n      ...RepositoryItem\n      reviews {\n        edges {\n          node {\n            ...ReviewItem\n          }\n        }\n      }\n    }\n  }\n"
+): (typeof documents)["\n  query Repository($repositoryId: ID!) {\n    repository(id: $repositoryId) {\n      ...RepositoryItem\n      reviews {\n        edges {\n          node {\n            ...ReviewItem\n          }\n        }\n      }\n    }\n  }\n"];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};

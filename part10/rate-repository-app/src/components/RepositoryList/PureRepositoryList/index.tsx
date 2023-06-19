@@ -5,7 +5,7 @@ import { type PaginatedRepositoriesQuery } from "../../../generated/gql/graphql"
 import { RepositoryItemFragment } from "../../../graphql/fragments/RepositoryItem";
 import theme from "../../../theme";
 import RepositoryItem from "../../RepositoryItem";
-import ItemSeparator from "./ItemSeparator";
+import ItemSeparator from "../../ItemSeparator";
 
 const styles = StyleSheet.create({
   list: {

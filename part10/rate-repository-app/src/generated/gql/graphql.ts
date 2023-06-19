@@ -248,6 +248,15 @@ export type RepositoryItemFragment = {
   url?: string | null;
 } & { " $fragmentName"?: "RepositoryItemFragment" };
 
+export type ReviewItemFragment = {
+  __typename?: "Review";
+  createdAt: any;
+  id: string;
+  rating: number;
+  text?: string | null;
+  user: { __typename?: "User"; id: string; username: string };
+} & { " $fragmentName"?: "ReviewItemFragment" };
+
 export type AuthenticateMutationVariables = Exact<{
   credentials?: InputMaybe<AuthenticateInput>;
 }>;
@@ -297,7 +306,18 @@ export type RepositoryQueryVariables = Exact<{
 export type RepositoryQuery = {
   __typename?: "Query";
   repository?:
-    | ({ __typename?: "Repository" } & {
+    | ({
+        __typename?: "Repository";
+        reviews: {
+          __typename?: "ReviewConnection";
+          edges: Array<{
+            __typename?: "ReviewEdge";
+            node: { __typename?: "Review" } & {
+              " $fragmentRefs"?: { ReviewItemFragment: ReviewItemFragment };
+            };
+          }>;
+        };
+      } & {
         " $fragmentRefs"?: { RepositoryItemFragment: RepositoryItemFragment };
       })
     | null;
@@ -353,6 +373,39 @@ export const RepositoryItemFragmentDoc = {
     },
   ],
 } as unknown as DocumentNode<RepositoryItemFragment, unknown>;
+export const ReviewItemFragmentDoc = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "ReviewItem" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "Review" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "createdAt" } },
+          { kind: "Field", name: { kind: "Name", value: "id" } },
+          { kind: "Field", name: { kind: "Name", value: "rating" } },
+          { kind: "Field", name: { kind: "Name", value: "text" } },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "user" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "id" } },
+                { kind: "Field", name: { kind: "Name", value: "username" } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<ReviewItemFragment, unknown>;
 export const AuthenticateDocument = {
   kind: "Document",
   definitions: [
@@ -619,6 +672,37 @@ export const RepositoryDocument = {
                   kind: "FragmentSpread",
                   name: { kind: "Name", value: "RepositoryItem" },
                 },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "reviews" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "edges" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "node" },
+                              selectionSet: {
+                                kind: "SelectionSet",
+                                selections: [
+                                  {
+                                    kind: "FragmentSpread",
+                                    name: { kind: "Name", value: "ReviewItem" },
+                                  },
+                                ],
+                              },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
               ],
             },
           },
@@ -645,6 +729,34 @@ export const RepositoryDocument = {
           { kind: "Field", name: { kind: "Name", value: "reviewCount" } },
           { kind: "Field", name: { kind: "Name", value: "ownerAvatarUrl" } },
           { kind: "Field", name: { kind: "Name", value: "url" } },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "ReviewItem" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "Review" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "createdAt" } },
+          { kind: "Field", name: { kind: "Name", value: "id" } },
+          { kind: "Field", name: { kind: "Name", value: "rating" } },
+          { kind: "Field", name: { kind: "Name", value: "text" } },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "user" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "id" } },
+                { kind: "Field", name: { kind: "Name", value: "username" } },
+              ],
+            },
+          },
         ],
       },
     },

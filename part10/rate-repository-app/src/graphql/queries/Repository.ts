@@ -4,6 +4,13 @@ export const RepositoryQueryDocument = graphql(`
   query Repository($repositoryId: ID!) {
     repository(id: $repositoryId) {
       ...RepositoryItem
+      reviews {
+        edges {
+          node {
+            ...ReviewItem
+          }
+        }
+      }
     }
   }
 `);
