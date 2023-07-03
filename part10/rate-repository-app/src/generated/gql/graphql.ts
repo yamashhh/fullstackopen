@@ -301,6 +301,7 @@ export type MeQuery = {
 export type PaginatedRepositoriesQueryVariables = Exact<{
   first?: InputMaybe<Scalars["Int"]["input"]>;
   orderDirection?: InputMaybe<OrderDirection>;
+  orderBy?: InputMaybe<AllRepositoriesOrderBy>;
 }>;
 
 export type PaginatedRepositoriesQuery = {
@@ -632,6 +633,17 @@ export const PaginatedRepositoriesDocument = {
             name: { kind: "Name", value: "OrderDirection" },
           },
         },
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "orderBy" },
+          },
+          type: {
+            kind: "NamedType",
+            name: { kind: "Name", value: "AllRepositoriesOrderBy" },
+          },
+        },
       ],
       selectionSet: {
         kind: "SelectionSet",
@@ -654,6 +666,14 @@ export const PaginatedRepositoriesDocument = {
                 value: {
                   kind: "Variable",
                   name: { kind: "Name", value: "orderDirection" },
+                },
+              },
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "orderBy" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "orderBy" },
                 },
               },
             ],
