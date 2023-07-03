@@ -282,6 +282,15 @@ export type CreateReviewMutation = {
   } | null;
 };
 
+export type CreateUserMutationVariables = Exact<{
+  user?: InputMaybe<CreateUserInput>;
+}>;
+
+export type CreateUserMutation = {
+  __typename?: "Mutation";
+  createUser?: { __typename?: "User"; id: string } | null;
+};
+
 export type MeQueryVariables = Exact<{ [key: string]: never }>;
 
 export type MeQuery = {
@@ -525,6 +534,51 @@ export const CreateReviewDocument = {
   CreateReviewMutation,
   CreateReviewMutationVariables
 >;
+export const CreateUserDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "mutation",
+      name: { kind: "Name", value: "CreateUser" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: { kind: "Variable", name: { kind: "Name", value: "user" } },
+          type: {
+            kind: "NamedType",
+            name: { kind: "Name", value: "CreateUserInput" },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "createUser" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "user" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "user" },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "id" } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<CreateUserMutation, CreateUserMutationVariables>;
 export const MeDocument = {
   kind: "Document",
   definitions: [

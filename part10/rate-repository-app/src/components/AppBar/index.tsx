@@ -15,8 +15,7 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.textPrimary,
   },
   scroll: {
-    display: "flex",
-    columnGap: 8,
+    columnGap: 12,
   },
 });
 
@@ -27,7 +26,11 @@ const AppBar = (): JSX.Element => {
 
   return (
     <View style={styles.container}>
-      <ScrollView horizontal style={styles.scroll}>
+      <ScrollView
+        horizontal
+        // https://github.com/facebook/react-native/issues/36024
+        contentContainerStyle={styles.scroll}
+      >
         <AppBarTab to="/">Repositories</AppBarTab>
         {isLoggedIn ? (
           <>
@@ -41,7 +44,10 @@ const AppBar = (): JSX.Element => {
             </AppBarButton>
           </>
         ) : (
-          <AppBarTab to="/sign-in">Sign in</AppBarTab>
+          <>
+            <AppBarTab to="/sign-in">Sign in</AppBarTab>
+            <AppBarTab to="/sign-up">Sign Up</AppBarTab>
+          </>
         )}
       </ScrollView>
     </View>

@@ -3,6 +3,7 @@ import {
   useMutation,
   type MutationResult,
 } from "@apollo/client";
+import { Alert } from "react-native";
 import { useNavigate } from "react-router-native";
 import {
   type AuthenticateInput,
@@ -18,17 +19,25 @@ const useSignIn = (): [typeof signIn, MutationResult<AuthenticateMutation>] => {
   const navigate = useNavigate();
 
   const signIn = async (input: AuthenticateInput): Promise<void> => {
-    const { data } = await mutate({
-      variables: {
-        credentials: input,
-      },
-    });
-    if (authStorage == null || data?.authenticate?.accessToken == null) {
-      throw new Error("Failed to login.");
+    try {
+      const { data } = await mutate({
+        variables: {
+          credentials: input,
+        },
+      });
+      if (authStorage == null || data?.authenticate?.accessToken == null) {
+        throw new Error("Failed to login.");
+      }
+      await authStorage.setAccessToken(data.authenticate.accessToken);
+      await apolloClient.resetStore();
+      navigate("/");
+    } catch (error) {
+      Alert.alert(
+        error instanceof Error
+          ? error.message
+          : "An unknown error occurred during sign-in"
+      );
     }
-    await authStorage.setAccessToken(data.authenticate.accessToken);
-    await apolloClient.resetStore();
-    navigate("/");
   };
 
   return [signIn, result];
