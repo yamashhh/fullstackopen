@@ -5,13 +5,9 @@ import {
   OrderDirection,
 } from "../../generated/gql/graphql";
 import { PaginatedRepositoriesQueryDocument } from "../../graphql/queries/PaginatedRepositories";
+import { useDebounce } from "../../hooks/useDebounce";
 import PureRepositoryList from "./PureRepositoryList";
-
-export const SORT_KEY = {
-  LATEST: "LATEST",
-  HIGHEST: "HIGHEST",
-  LOWEST: "LOWEST",
-} as const;
+import { RepositoryListContext, SORT_KEY } from "./RepositoryListContext";
 
 const RepositoryList = (): JSX.Element => {
   const [sortKey, setSortKey] = useState<
@@ -42,15 +38,23 @@ const RepositoryList = (): JSX.Element => {
       }
     }
   }, [sortKey]);
+  const [searchKeyword, setSearchKeyword] = useState("");
+  const debouncedSearchKeyword = useDebounce(searchKeyword, 500);
+
   const { data } = useQuery(PaginatedRepositoriesQueryDocument, {
     variables: {
       first: 30,
       ...sortVariables,
+      searchKeyword: debouncedSearchKeyword,
     },
   });
 
   return (
-    <PureRepositoryList data={data} sortKey={sortKey} setSortKey={setSortKey} />
+    <RepositoryListContext.Provider
+      value={{ sortKey, setSortKey, searchKeyword, setSearchKeyword }}
+    >
+      <PureRepositoryList data={data} />
+    </RepositoryListContext.Provider>
   );
 };
 

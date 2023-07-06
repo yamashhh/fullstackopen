@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
 });
 
 interface Props extends TextInputProps {
-  error: boolean;
+  error?: boolean;
 }
 
 const TextInput = ({ error, style, ...props }: Props): JSX.Element => {
