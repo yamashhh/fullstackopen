@@ -10,5 +10,9 @@ export const ReviewItemFragment = graphql(`
       id
       username
     }
+    repository {
+      id
+      fullName
+    }
   }
 `);

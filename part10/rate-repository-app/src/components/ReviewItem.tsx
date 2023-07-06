@@ -1,6 +1,7 @@
 import { StyleSheet, View } from "react-native";
+import { useMatch } from "react-router-native";
 import { useFragment, type FragmentType } from "../generated/gql";
-import { ReviewItemFragment } from "../graphql/fragments/Review";
+import { ReviewItemFragment } from "../graphql/fragments/ReviewItem";
 import theme from "../theme";
 import Text from "./Text";
 
@@ -45,7 +46,9 @@ const ReviewItem = (props: Props): JSX.Element => {
       </View>
       <View style={styles.content}>
         <Text fontSize="heading" fontWeight="bold">
-          {reviewItem.user.username}
+          {useMatch("/my-reviews") != null
+            ? reviewItem.repository.fullName
+            : reviewItem.user.username}
         </Text>
         <Text color="textSecondary" fontSize="subheading">
           {new Date(reviewItem.createdAt)

@@ -35,6 +35,7 @@ const AppBar = (): JSX.Element => {
         {isLoggedIn ? (
           <>
             <AppBarTab to="/create-review">Create a review</AppBarTab>
+            <AppBarTab to="/my-reviews">My reviews</AppBarTab>
             <AppBarButton
               onPress={() => {
                 void signOut();
