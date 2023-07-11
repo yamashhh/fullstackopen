@@ -25,6 +25,8 @@ const documents = {
     types.CreateReviewDocument,
   "\n  mutation CreateUser($user: CreateUserInput) {\n    createUser(user: $user) {\n      id\n    }\n  }\n":
     types.CreateUserDocument,
+  "\n  mutation DeleteReview($deleteReviewId: ID!) {\n    deleteReview(id: $deleteReviewId)\n  }\n":
+    types.DeleteReviewDocument,
   "\n  query Me {\n    me {\n      id\n      username\n    }\n  }\n":
     types.MeDocument,
   "\n  query MyReviews {\n    me {\n      id\n      reviews {\n        totalCount\n        pageInfo {\n          ...PageInfo\n        }\n        edges {\n          cursor\n          node {\n            ...ReviewItem\n          }\n        }\n      }\n    }\n  }\n":
@@ -85,6 +87,12 @@ export function graphql(
 export function graphql(
   source: "\n  mutation CreateUser($user: CreateUserInput) {\n    createUser(user: $user) {\n      id\n    }\n  }\n"
 ): (typeof documents)["\n  mutation CreateUser($user: CreateUserInput) {\n    createUser(user: $user) {\n      id\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: "\n  mutation DeleteReview($deleteReviewId: ID!) {\n    deleteReview(id: $deleteReviewId)\n  }\n"
+): (typeof documents)["\n  mutation DeleteReview($deleteReviewId: ID!) {\n    deleteReview(id: $deleteReviewId)\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

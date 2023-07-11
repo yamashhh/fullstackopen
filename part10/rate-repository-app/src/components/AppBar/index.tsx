@@ -1,7 +1,7 @@
 import { useQuery } from "@apollo/client";
 import Constants from "expo-constants";
 import { ScrollView, StyleSheet, View } from "react-native";
-import { MeDocument } from "../../graphql/queries/Me";
+import { MeQueryDocument } from "../../graphql/queries/Me";
 import useSignOut from "../../hooks/useSignOut";
 import theme from "../../theme";
 import AppBarButton from "./AppBarButton";
@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
 });
 
 const AppBar = (): JSX.Element => {
-  const { data } = useQuery(MeDocument);
+  const { data } = useQuery(MeQueryDocument);
   const { signOut } = useSignOut();
   const isLoggedIn = data?.me != null;
 

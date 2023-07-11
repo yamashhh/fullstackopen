@@ -292,6 +292,15 @@ export type CreateUserMutation = {
   createUser?: { __typename?: "User"; id: string } | null;
 };
 
+export type DeleteReviewMutationVariables = Exact<{
+  deleteReviewId: Scalars["ID"]["input"];
+}>;
+
+export type DeleteReviewMutation = {
+  __typename?: "Mutation";
+  deleteReview?: boolean | null;
+};
+
 export type MeQueryVariables = Exact<{ [key: string]: never }>;
 
 export type MeQuery = {
@@ -617,6 +626,51 @@ export const CreateUserDocument = {
     },
   ],
 } as unknown as DocumentNode<CreateUserMutation, CreateUserMutationVariables>;
+export const DeleteReviewDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "mutation",
+      name: { kind: "Name", value: "DeleteReview" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "deleteReviewId" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: { kind: "NamedType", name: { kind: "Name", value: "ID" } },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "deleteReview" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "id" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "deleteReviewId" },
+                },
+              },
+            ],
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  DeleteReviewMutation,
+  DeleteReviewMutationVariables
+>;
 export const MeDocument = {
   kind: "Document",
   definitions: [

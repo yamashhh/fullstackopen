@@ -47,6 +47,7 @@ const RepositoryList = (): JSX.Element => {
       ...sortVariables,
       searchKeyword: debouncedSearchKeyword,
     },
+    fetchPolicy: "cache-and-network",
   });
 
   return (

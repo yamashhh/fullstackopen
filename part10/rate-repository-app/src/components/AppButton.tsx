@@ -1,5 +1,11 @@
 import { type ComponentPropsWithoutRef, type ReactNode } from "react";
-import { Pressable, StyleSheet, Text } from "react-native";
+import {
+  Pressable,
+  StyleProp,
+  StyleSheet,
+  Text,
+  ViewStyle,
+} from "react-native";
 import theme from "../theme";
 
 const styles = StyleSheet.create({
@@ -20,11 +26,12 @@ const styles = StyleSheet.create({
 
 interface Props extends ComponentPropsWithoutRef<typeof Pressable> {
   children: ReactNode;
+  style: StyleProp<ViewStyle>;
 }
 
-const AppButton = ({ children, ...props }: Props): JSX.Element => {
+const AppButton = ({ children, style, ...props }: Props): JSX.Element => {
   return (
-    <Pressable style={styles.button} {...props}>
+    <Pressable style={[styles.button, style]} {...props}>
       <Text style={styles.text}>{children}</Text>
     </Pressable>
   );

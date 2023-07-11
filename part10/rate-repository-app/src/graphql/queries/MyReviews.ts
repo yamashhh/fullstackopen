@@ -1,6 +1,6 @@
 import { graphql } from "../../generated/gql";
 
-export const MyReviewsDocument = graphql(`
+export const MyReviewsQueryDocument = graphql(`
   query MyReviews {
     me {
       id

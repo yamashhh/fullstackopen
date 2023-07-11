@@ -1,9 +1,9 @@
 import { useQuery } from "@apollo/client";
 import { FlatList, StyleSheet } from "react-native";
-import { MyReviewsDocument } from "../graphql/queries/MyReviews";
-import theme from "../theme";
-import ItemSeparator from "./ItemSeparator";
-import ReviewItem from "./ReviewItem";
+import { MyReviewsQueryDocument } from "../../graphql/queries/MyReviews";
+import theme from "../../theme";
+import ItemSeparator from "../ItemSeparator";
+import MyReview from "./MyReview";
 
 const styles = StyleSheet.create({
   list: {
@@ -12,13 +12,15 @@ const styles = StyleSheet.create({
 });
 
 const MyReviews = (): JSX.Element => {
-  const { data } = useQuery(MyReviewsDocument);
+  const { data } = useQuery(MyReviewsQueryDocument, {
+    fetchPolicy: "cache-and-network",
+  });
 
   return (
     <FlatList
       style={styles.list}
       data={data?.me?.reviews.edges.map((edge) => edge.node)}
-      renderItem={({ item }) => <ReviewItem review={item} />}
+      renderItem={({ item }) => <MyReview review={item} />}
       ItemSeparatorComponent={ItemSeparator}
     />
   );
