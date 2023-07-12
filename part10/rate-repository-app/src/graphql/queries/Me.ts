@@ -1,6 +1,6 @@
 import { graphql } from "../../generated/gql";
 
-export const MeDocument = graphql(`
+export const MeQueryDocument = graphql(`
   query Me {
     me {
       id

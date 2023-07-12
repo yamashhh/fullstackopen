@@ -23,19 +23,19 @@ const FormikTextInput = <T extends string>({
   name,
   ...props
 }: Props<T>): JSX.Element => {
-  const [field, meta] = useField(name);
-  const isError = meta.touched && meta.error !== undefined;
+  const [{ value, onChange, onBlur }, { touched, error }] = useField(name);
+  const isError = touched && error !== undefined;
 
   return (
     <View style={styles.wrap}>
       <TextInput
-        onChangeText={field.onChange(name)}
-        onBlur={field.onBlur(name)}
-        value={field.value}
+        onChangeText={onChange(name)}
+        onBlur={onBlur(name)}
+        value={value}
         error={isError}
         {...props}
       />
-      {isError && <Text style={styles.errorText}>{meta.error}</Text>}
+      {isError && <Text style={styles.errorText}>{error}</Text>}
     </View>
   );
 };

@@ -238,14 +238,25 @@ export type RepositoryItemFragment = {
   __typename?: "Repository";
   id: string;
   fullName: string;
+  description?: string | null;
   language?: string | null;
-  stargazersCount?: number | null;
   forksCount?: number | null;
+  stargazersCount?: number | null;
   ratingAverage: number;
   reviewCount: number;
-  description?: string | null;
   ownerAvatarUrl?: string | null;
+  url?: string | null;
 } & { " $fragmentName"?: "RepositoryItemFragment" };
+
+export type ReviewItemFragment = {
+  __typename?: "Review";
+  createdAt: any;
+  id: string;
+  rating: number;
+  text?: string | null;
+  user: { __typename?: "User"; id: string; username: string };
+  repository: { __typename?: "Repository"; id: string; fullName: string };
+} & { " $fragmentName"?: "ReviewItemFragment" };
 
 export type AuthenticateMutationVariables = Exact<{
   credentials?: InputMaybe<AuthenticateInput>;
@@ -259,6 +270,37 @@ export type AuthenticateMutation = {
   } | null;
 };
 
+export type CreateReviewMutationVariables = Exact<{
+  review?: InputMaybe<CreateReviewInput>;
+}>;
+
+export type CreateReviewMutation = {
+  __typename?: "Mutation";
+  createReview?: {
+    __typename?: "Review";
+    id: string;
+    repositoryId: string;
+  } | null;
+};
+
+export type CreateUserMutationVariables = Exact<{
+  user?: InputMaybe<CreateUserInput>;
+}>;
+
+export type CreateUserMutation = {
+  __typename?: "Mutation";
+  createUser?: { __typename?: "User"; id: string } | null;
+};
+
+export type DeleteReviewMutationVariables = Exact<{
+  deleteReviewId: Scalars["ID"]["input"];
+}>;
+
+export type DeleteReviewMutation = {
+  __typename?: "Mutation";
+  deleteReview?: boolean | null;
+};
+
 export type MeQueryVariables = Exact<{ [key: string]: never }>;
 
 export type MeQuery = {
@@ -266,9 +308,36 @@ export type MeQuery = {
   me?: { __typename?: "User"; id: string; username: string } | null;
 };
 
+export type MyReviewsQueryVariables = Exact<{ [key: string]: never }>;
+
+export type MyReviewsQuery = {
+  __typename?: "Query";
+  me?: {
+    __typename?: "User";
+    id: string;
+    reviews: {
+      __typename?: "ReviewConnection";
+      totalCount: number;
+      pageInfo: { __typename?: "PageInfo" } & {
+        " $fragmentRefs"?: { PageInfoFragment: PageInfoFragment };
+      };
+      edges: Array<{
+        __typename?: "ReviewEdge";
+        cursor: string;
+        node: { __typename?: "Review" } & {
+          " $fragmentRefs"?: { ReviewItemFragment: ReviewItemFragment };
+        };
+      }>;
+    };
+  } | null;
+};
+
 export type PaginatedRepositoriesQueryVariables = Exact<{
   first?: InputMaybe<Scalars["Int"]["input"]>;
   orderDirection?: InputMaybe<OrderDirection>;
+  orderBy?: InputMaybe<AllRepositoriesOrderBy>;
+  searchKeyword?: InputMaybe<Scalars["String"]["input"]>;
+  after?: InputMaybe<Scalars["String"]["input"]>;
 }>;
 
 export type PaginatedRepositoriesQuery = {
@@ -287,6 +356,36 @@ export type PaginatedRepositoriesQuery = {
       " $fragmentRefs"?: { PageInfoFragment: PageInfoFragment };
     };
   };
+};
+
+export type RepositoryQueryVariables = Exact<{
+  repositoryId: Scalars["ID"]["input"];
+  first?: InputMaybe<Scalars["Int"]["input"]>;
+  after?: InputMaybe<Scalars["String"]["input"]>;
+}>;
+
+export type RepositoryQuery = {
+  __typename?: "Query";
+  repository?:
+    | ({
+        __typename?: "Repository";
+        reviews: {
+          __typename?: "ReviewConnection";
+          totalCount: number;
+          edges: Array<{
+            __typename?: "ReviewEdge";
+            node: { __typename?: "Review" } & {
+              " $fragmentRefs"?: { ReviewItemFragment: ReviewItemFragment };
+            };
+          }>;
+          pageInfo: { __typename?: "PageInfo" } & {
+            " $fragmentRefs"?: { PageInfoFragment: PageInfoFragment };
+          };
+        };
+      } & {
+        " $fragmentRefs"?: { RepositoryItemFragment: RepositoryItemFragment };
+      })
+    | null;
 };
 
 export const PageInfoFragmentDoc = {
@@ -326,18 +425,63 @@ export const RepositoryItemFragmentDoc = {
         selections: [
           { kind: "Field", name: { kind: "Name", value: "id" } },
           { kind: "Field", name: { kind: "Name", value: "fullName" } },
+          { kind: "Field", name: { kind: "Name", value: "description" } },
           { kind: "Field", name: { kind: "Name", value: "language" } },
-          { kind: "Field", name: { kind: "Name", value: "stargazersCount" } },
           { kind: "Field", name: { kind: "Name", value: "forksCount" } },
+          { kind: "Field", name: { kind: "Name", value: "stargazersCount" } },
           { kind: "Field", name: { kind: "Name", value: "ratingAverage" } },
           { kind: "Field", name: { kind: "Name", value: "reviewCount" } },
-          { kind: "Field", name: { kind: "Name", value: "description" } },
           { kind: "Field", name: { kind: "Name", value: "ownerAvatarUrl" } },
+          { kind: "Field", name: { kind: "Name", value: "url" } },
         ],
       },
     },
   ],
 } as unknown as DocumentNode<RepositoryItemFragment, unknown>;
+export const ReviewItemFragmentDoc = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "ReviewItem" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "Review" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "createdAt" } },
+          { kind: "Field", name: { kind: "Name", value: "id" } },
+          { kind: "Field", name: { kind: "Name", value: "rating" } },
+          { kind: "Field", name: { kind: "Name", value: "text" } },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "user" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "id" } },
+                { kind: "Field", name: { kind: "Name", value: "username" } },
+              ],
+            },
+          },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "repository" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "id" } },
+                { kind: "Field", name: { kind: "Name", value: "fullName" } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<ReviewItemFragment, unknown>;
 export const AuthenticateDocument = {
   kind: "Document",
   definitions: [
@@ -389,6 +533,151 @@ export const AuthenticateDocument = {
   AuthenticateMutation,
   AuthenticateMutationVariables
 >;
+export const CreateReviewDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "mutation",
+      name: { kind: "Name", value: "CreateReview" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "review" },
+          },
+          type: {
+            kind: "NamedType",
+            name: { kind: "Name", value: "CreateReviewInput" },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "createReview" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "review" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "review" },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "id" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "repositoryId" },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  CreateReviewMutation,
+  CreateReviewMutationVariables
+>;
+export const CreateUserDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "mutation",
+      name: { kind: "Name", value: "CreateUser" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: { kind: "Variable", name: { kind: "Name", value: "user" } },
+          type: {
+            kind: "NamedType",
+            name: { kind: "Name", value: "CreateUserInput" },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "createUser" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "user" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "user" },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "id" } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<CreateUserMutation, CreateUserMutationVariables>;
+export const DeleteReviewDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "mutation",
+      name: { kind: "Name", value: "DeleteReview" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "deleteReviewId" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: { kind: "NamedType", name: { kind: "Name", value: "ID" } },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "deleteReview" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "id" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "deleteReviewId" },
+                },
+              },
+            ],
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  DeleteReviewMutation,
+  DeleteReviewMutationVariables
+>;
 export const MeDocument = {
   kind: "Document",
   definitions: [
@@ -415,6 +704,139 @@ export const MeDocument = {
     },
   ],
 } as unknown as DocumentNode<MeQuery, MeQueryVariables>;
+export const MyReviewsDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "query",
+      name: { kind: "Name", value: "MyReviews" },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "me" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "id" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "reviews" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "totalCount" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "pageInfo" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "FragmentSpread",
+                              name: { kind: "Name", value: "PageInfo" },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "edges" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "cursor" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "node" },
+                              selectionSet: {
+                                kind: "SelectionSet",
+                                selections: [
+                                  {
+                                    kind: "FragmentSpread",
+                                    name: { kind: "Name", value: "ReviewItem" },
+                                  },
+                                ],
+                              },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "PageInfo" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "PageInfo" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "endCursor" } },
+          { kind: "Field", name: { kind: "Name", value: "hasNextPage" } },
+          { kind: "Field", name: { kind: "Name", value: "hasPreviousPage" } },
+          { kind: "Field", name: { kind: "Name", value: "startCursor" } },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "ReviewItem" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "Review" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "createdAt" } },
+          { kind: "Field", name: { kind: "Name", value: "id" } },
+          { kind: "Field", name: { kind: "Name", value: "rating" } },
+          { kind: "Field", name: { kind: "Name", value: "text" } },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "user" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "id" } },
+                { kind: "Field", name: { kind: "Name", value: "username" } },
+              ],
+            },
+          },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "repository" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "id" } },
+                { kind: "Field", name: { kind: "Name", value: "fullName" } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<MyReviewsQuery, MyReviewsQueryVariables>;
 export const PaginatedRepositoriesDocument = {
   kind: "Document",
   definitions: [
@@ -442,6 +864,33 @@ export const PaginatedRepositoriesDocument = {
             name: { kind: "Name", value: "OrderDirection" },
           },
         },
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "orderBy" },
+          },
+          type: {
+            kind: "NamedType",
+            name: { kind: "Name", value: "AllRepositoriesOrderBy" },
+          },
+        },
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "searchKeyword" },
+          },
+          type: { kind: "NamedType", name: { kind: "Name", value: "String" } },
+        },
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "after" },
+          },
+          type: { kind: "NamedType", name: { kind: "Name", value: "String" } },
+        },
       ],
       selectionSet: {
         kind: "SelectionSet",
@@ -464,6 +913,30 @@ export const PaginatedRepositoriesDocument = {
                 value: {
                   kind: "Variable",
                   name: { kind: "Name", value: "orderDirection" },
+                },
+              },
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "orderBy" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "orderBy" },
+                },
+              },
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "searchKeyword" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "searchKeyword" },
+                },
+              },
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "after" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "after" },
                 },
               },
             ],
@@ -528,13 +1001,14 @@ export const PaginatedRepositoriesDocument = {
         selections: [
           { kind: "Field", name: { kind: "Name", value: "id" } },
           { kind: "Field", name: { kind: "Name", value: "fullName" } },
+          { kind: "Field", name: { kind: "Name", value: "description" } },
           { kind: "Field", name: { kind: "Name", value: "language" } },
-          { kind: "Field", name: { kind: "Name", value: "stargazersCount" } },
           { kind: "Field", name: { kind: "Name", value: "forksCount" } },
+          { kind: "Field", name: { kind: "Name", value: "stargazersCount" } },
           { kind: "Field", name: { kind: "Name", value: "ratingAverage" } },
           { kind: "Field", name: { kind: "Name", value: "reviewCount" } },
-          { kind: "Field", name: { kind: "Name", value: "description" } },
           { kind: "Field", name: { kind: "Name", value: "ownerAvatarUrl" } },
+          { kind: "Field", name: { kind: "Name", value: "url" } },
         ],
       },
     },
@@ -560,3 +1034,215 @@ export const PaginatedRepositoriesDocument = {
   PaginatedRepositoriesQuery,
   PaginatedRepositoriesQueryVariables
 >;
+export const RepositoryDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "query",
+      name: { kind: "Name", value: "Repository" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "repositoryId" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: { kind: "NamedType", name: { kind: "Name", value: "ID" } },
+          },
+        },
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "first" },
+          },
+          type: { kind: "NamedType", name: { kind: "Name", value: "Int" } },
+        },
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "after" },
+          },
+          type: { kind: "NamedType", name: { kind: "Name", value: "String" } },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "repository" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "id" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "repositoryId" },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "FragmentSpread",
+                  name: { kind: "Name", value: "RepositoryItem" },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "reviews" },
+                  arguments: [
+                    {
+                      kind: "Argument",
+                      name: { kind: "Name", value: "first" },
+                      value: {
+                        kind: "Variable",
+                        name: { kind: "Name", value: "first" },
+                      },
+                    },
+                    {
+                      kind: "Argument",
+                      name: { kind: "Name", value: "after" },
+                      value: {
+                        kind: "Variable",
+                        name: { kind: "Name", value: "after" },
+                      },
+                    },
+                  ],
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "edges" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "node" },
+                              selectionSet: {
+                                kind: "SelectionSet",
+                                selections: [
+                                  {
+                                    kind: "FragmentSpread",
+                                    name: { kind: "Name", value: "ReviewItem" },
+                                  },
+                                ],
+                              },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "pageInfo" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "FragmentSpread",
+                              name: { kind: "Name", value: "PageInfo" },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "totalCount" },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "RepositoryItem" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "Repository" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "id" } },
+          { kind: "Field", name: { kind: "Name", value: "fullName" } },
+          { kind: "Field", name: { kind: "Name", value: "description" } },
+          { kind: "Field", name: { kind: "Name", value: "language" } },
+          { kind: "Field", name: { kind: "Name", value: "forksCount" } },
+          { kind: "Field", name: { kind: "Name", value: "stargazersCount" } },
+          { kind: "Field", name: { kind: "Name", value: "ratingAverage" } },
+          { kind: "Field", name: { kind: "Name", value: "reviewCount" } },
+          { kind: "Field", name: { kind: "Name", value: "ownerAvatarUrl" } },
+          { kind: "Field", name: { kind: "Name", value: "url" } },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "ReviewItem" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "Review" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "createdAt" } },
+          { kind: "Field", name: { kind: "Name", value: "id" } },
+          { kind: "Field", name: { kind: "Name", value: "rating" } },
+          { kind: "Field", name: { kind: "Name", value: "text" } },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "user" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "id" } },
+                { kind: "Field", name: { kind: "Name", value: "username" } },
+              ],
+            },
+          },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "repository" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "id" } },
+                { kind: "Field", name: { kind: "Name", value: "fullName" } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "PageInfo" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "PageInfo" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "endCursor" } },
+          { kind: "Field", name: { kind: "Name", value: "hasNextPage" } },
+          { kind: "Field", name: { kind: "Name", value: "hasPreviousPage" } },
+          { kind: "Field", name: { kind: "Name", value: "startCursor" } },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<RepositoryQuery, RepositoryQueryVariables>;

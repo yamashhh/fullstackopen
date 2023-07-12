@@ -8,6 +8,8 @@ module.exports = {
     "plugin:react/recommended",
     "plugin:react/jsx-runtime",
     "plugin:react-hooks/recommended",
+    "plugin:jest/recommended",
+    "plugin:jest/style",
     "standard-with-typescript",
     "prettier",
   ],
@@ -17,7 +19,6 @@ module.exports = {
     project: "./tsconfig.json",
     tsconfigRootDir: __dirname,
   },
-  plugins: ["react"],
   settings: {
     react: {
       version: "detect",

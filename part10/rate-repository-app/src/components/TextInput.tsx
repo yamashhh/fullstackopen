@@ -1,6 +1,6 @@
 import {
-  TextInput as NativeTextInput,
   StyleSheet,
+  TextInput as NativeTextInput,
   type TextInputProps,
 } from "react-native";
 import theme from "../theme";
@@ -19,13 +19,17 @@ const styles = StyleSheet.create({
 });
 
 interface Props extends TextInputProps {
-  error: boolean;
+  error?: boolean;
 }
 
 const TextInput = ({ error, style, ...props }: Props): JSX.Element => {
   return (
     <NativeTextInput
-      style={[styles.textInput, ...(error ? [styles.error] : []), style]}
+      style={[
+        styles.textInput,
+        ...(error == null || !error ? [] : [styles.error]),
+        style,
+      ]}
       {...props}
     />
   );

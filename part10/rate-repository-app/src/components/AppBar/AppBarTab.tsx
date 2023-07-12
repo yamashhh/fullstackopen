@@ -1,7 +1,7 @@
 import { type ReactNode } from "react";
 import { StyleSheet } from "react-native";
 import { Link, type To } from "react-router-native";
-import Text from "./Text";
+import Text from "../Text";
 
 interface AppBarTabProps {
   children: ReactNode;

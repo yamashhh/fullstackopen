@@ -51,11 +51,21 @@ const styles = StyleSheet.create({
   },
 });
 
+export const TEST_IDS = {
+  NAME: "name",
+  DESCRIPTION: "description",
+  LANGUAGE: "language",
+  STARS: "stars",
+  FORKS: "forks",
+  REVIEWS: "reviews",
+  RATING: "rating",
+};
+
 interface RepositoryItemProps {
   item: FragmentType<typeof RepositoryItemFragment>;
 }
 
-const formatCount = (count: number): string => {
+export const formatCount = (count: number): string => {
   return count.toLocaleString("en-US", {
     notation: "compact",
     maximumFractionDigits: 1,
@@ -75,18 +85,22 @@ const RepositoryItem = (props: RepositoryItemProps): JSX.Element => {
           }}
         />
         <View style={styles.topRight}>
-          <Text fontSize="subheading" fontWeight="bold">
+          <Text fontSize="subheading" fontWeight="bold" testID={TEST_IDS.NAME}>
             {item.fullName}
           </Text>
-          <Text color="textSecondary">{item.description}</Text>
+          <Text color="textSecondary" testID={TEST_IDS.DESCRIPTION}>
+            {item.description}
+          </Text>
           <View style={styles.language}>
-            <Text color="white">{item.language}</Text>
+            <Text color="white" testID={TEST_IDS.LANGUAGE}>
+              {item.language}
+            </Text>
           </View>
         </View>
       </View>
       <View style={styles.bottom}>
         <View style={styles.stats}>
-          <Text fontWeight="bold">
+          <Text fontWeight="bold" testID={TEST_IDS.STARS}>
             {item.stargazersCount != null
               ? formatCount(item.stargazersCount)
               : "-"}
@@ -94,17 +108,21 @@ const RepositoryItem = (props: RepositoryItemProps): JSX.Element => {
           <Text color="textSecondary">Stars</Text>
         </View>
         <View style={styles.stats}>
-          <Text fontWeight="bold">
+          <Text fontWeight="bold" testID={TEST_IDS.FORKS}>
             {item.forksCount != null ? formatCount(item.forksCount) : "-"}
           </Text>
           <Text color="textSecondary">Forks</Text>
         </View>
         <View style={styles.stats}>
-          <Text fontWeight="bold">{formatCount(item.reviewCount)}</Text>
+          <Text fontWeight="bold" testID={TEST_IDS.REVIEWS}>
+            {formatCount(item.reviewCount)}
+          </Text>
           <Text color="textSecondary">Reviews</Text>
         </View>
         <View style={styles.stats}>
-          <Text fontWeight="bold">{formatCount(item.ratingAverage)}</Text>
+          <Text fontWeight="bold" testID={TEST_IDS.RATING}>
+            {formatCount(item.ratingAverage)}
+          </Text>
           <Text color="textSecondary">Rating</Text>
         </View>
       </View>
