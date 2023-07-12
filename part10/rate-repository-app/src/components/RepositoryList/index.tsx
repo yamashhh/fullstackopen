@@ -41,20 +41,28 @@ const RepositoryList = (): JSX.Element => {
   const [searchKeyword, setSearchKeyword] = useState("");
   const debouncedSearchKeyword = useDebounce(searchKeyword, 500);
 
-  const { data } = useQuery(PaginatedRepositoriesQueryDocument, {
-    variables: {
-      first: 30,
-      ...sortVariables,
-      searchKeyword: debouncedSearchKeyword,
-    },
-    fetchPolicy: "cache-and-network",
-  });
+  const { data, loading, fetchMore, variables } = useQuery(
+    PaginatedRepositoriesQueryDocument,
+    {
+      variables: {
+        first: 5,
+        ...sortVariables,
+        searchKeyword: debouncedSearchKeyword,
+      },
+      fetchPolicy: "cache-and-network",
+    }
+  );
 
   return (
     <RepositoryListContext.Provider
       value={{ sortKey, setSortKey, searchKeyword, setSearchKeyword }}
     >
-      <PureRepositoryList data={data} />
+      <PureRepositoryList
+        data={data}
+        fetchMore={fetchMore}
+        loading={loading}
+        variables={variables}
+      />
     </RepositoryListContext.Provider>
   );
 };

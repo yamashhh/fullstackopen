@@ -1,7 +1,7 @@
 import { useMutation } from "@apollo/client";
 import { Alert, StyleSheet, View } from "react-native";
 import { useNavigate } from "react-router-native";
-import { FragmentType, useFragment } from "../../generated/gql";
+import { useFragment, type FragmentType } from "../../generated/gql";
 import { ReviewItemFragment } from "../../graphql/fragments/ReviewItem";
 import { DeleteReviewMutationDocument } from "../../graphql/mutations/DeleteReview";
 import { MyReviewsQueryDocument } from "../../graphql/queries/MyReviews";
@@ -43,13 +43,15 @@ const MyReview = (props: Props): JSX.Element => {
       <View style={styles.buttons}>
         <AppButton
           style={styles.button}
-          onPress={() => navigate(`/repository/${review.repository.id}`)}
+          onPress={() => {
+            navigate(`/repository/${review.repository.id}`);
+          }}
         >
           View repository
         </AppButton>
         <AppButton
           style={[styles.button, styles.red]}
-          onPress={() =>
+          onPress={() => {
             Alert.alert(
               "Delete review",
               "Are you sure you want to delete this review?",
@@ -58,15 +60,15 @@ const MyReview = (props: Props): JSX.Element => {
                 {
                   text: "Delete",
                   style: "destructive",
-                  async onPress() {
-                    await deleteReview({
+                  onPress() {
+                    void deleteReview({
                       variables: { deleteReviewId: review.id },
                     });
                   },
                 },
               ]
-            )
-          }
+            );
+          }}
         >
           Delete review
         </AppButton>

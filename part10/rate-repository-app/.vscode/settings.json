@@ -20,7 +20,6 @@
   },
   "peacock.color": "#36566d",
   "typescript.tsdk": "./node_modules/typescript/lib",
-  "eslint.packageManager": "pnpm",
-  "eslint.runtime": "/Users/shogo-yamato/Library/Application Support/fnm/node-versions/v18.16.0/installation/bin/node"
+  "eslint.runtime": "/Users/shogo-yamato/Library/Caches/fnm_multishells/85849_1689069337225/bin/node"
   // "eslint.runtime": "/Users/yamashh/Library/Application Support/fnm/node-versions/v18.16.0/installation/bin/node"
 }

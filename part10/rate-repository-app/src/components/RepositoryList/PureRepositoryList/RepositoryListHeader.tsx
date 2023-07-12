@@ -14,7 +14,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const RepositoryListHeader = () => {
+const RepositoryListHeader = (): JSX.Element => {
   const { sortKey, setSortKey, searchKeyword, setSearchKeyword } =
     useContext(RepositoryListContext) ?? {};
 

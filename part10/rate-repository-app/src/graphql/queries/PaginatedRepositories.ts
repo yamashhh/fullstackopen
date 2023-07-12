@@ -6,12 +6,14 @@ export const PaginatedRepositoriesQueryDocument = graphql(`
     $orderDirection: OrderDirection
     $orderBy: AllRepositoriesOrderBy
     $searchKeyword: String
+    $after: String
   ) {
     repositories(
       first: $first
       orderDirection: $orderDirection
       orderBy: $orderBy
       searchKeyword: $searchKeyword
+      after: $after
     ) {
       edges {
         node {

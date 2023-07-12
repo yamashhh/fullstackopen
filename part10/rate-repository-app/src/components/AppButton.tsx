@@ -1,10 +1,10 @@
 import { type ComponentPropsWithoutRef, type ReactNode } from "react";
 import {
   Pressable,
-  StyleProp,
   StyleSheet,
   Text,
-  ViewStyle,
+  type StyleProp,
+  type ViewStyle,
 } from "react-native";
 import theme from "../theme";
 

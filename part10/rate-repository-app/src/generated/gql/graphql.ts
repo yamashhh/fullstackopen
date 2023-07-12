@@ -337,6 +337,7 @@ export type PaginatedRepositoriesQueryVariables = Exact<{
   orderDirection?: InputMaybe<OrderDirection>;
   orderBy?: InputMaybe<AllRepositoriesOrderBy>;
   searchKeyword?: InputMaybe<Scalars["String"]["input"]>;
+  after?: InputMaybe<Scalars["String"]["input"]>;
 }>;
 
 export type PaginatedRepositoriesQuery = {
@@ -876,6 +877,14 @@ export const PaginatedRepositoriesDocument = {
           },
           type: { kind: "NamedType", name: { kind: "Name", value: "String" } },
         },
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "after" },
+          },
+          type: { kind: "NamedType", name: { kind: "Name", value: "String" } },
+        },
       ],
       selectionSet: {
         kind: "SelectionSet",
@@ -914,6 +923,14 @@ export const PaginatedRepositoriesDocument = {
                 value: {
                   kind: "Variable",
                   name: { kind: "Name", value: "searchKeyword" },
+                },
+              },
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "after" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "after" },
                 },
               },
             ],

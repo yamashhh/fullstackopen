@@ -1,7 +1,12 @@
+import { type useQuery } from "@apollo/client";
 import { FlatList, StyleSheet } from "react-native";
 import { Link } from "react-router-native";
 import { useFragment } from "../../../generated/gql";
-import { type PaginatedRepositoriesQuery } from "../../../generated/gql/graphql";
+import {
+  type PaginatedRepositoriesQuery,
+  type PaginatedRepositoriesQueryVariables,
+} from "../../../generated/gql/graphql";
+import { PageInfoFragment } from "../../../graphql/fragments/PageInfo";
 import { RepositoryItemFragment } from "../../../graphql/fragments/RepositoryItem";
 import theme from "../../../theme";
 import ItemSeparator from "../../ItemSeparator";
@@ -16,9 +21,34 @@ const styles = StyleSheet.create({
 
 interface Props {
   data?: PaginatedRepositoriesQuery;
+  fetchMore: ReturnType<
+    typeof useQuery<
+      PaginatedRepositoriesQuery,
+      PaginatedRepositoriesQueryVariables
+    >
+  >["fetchMore"];
+  loading: boolean;
+  variables?: PaginatedRepositoriesQueryVariables;
 }
 
-const PureRepositoryList = ({ data }: Props): JSX.Element => {
+const PureRepositoryList = ({
+  data,
+  fetchMore,
+  loading,
+  variables,
+}: Props): JSX.Element => {
+  const pageInfo = useFragment(PageInfoFragment, data?.repositories.pageInfo);
+  const handleFetchMore = async (): Promise<void> => {
+    if (loading || pageInfo?.hasNextPage == null || !pageInfo.hasNextPage) {
+      return;
+    }
+    await fetchMore({
+      variables: {
+        after: pageInfo.endCursor,
+      },
+    });
+  };
+
   return (
     <FlatList
       style={styles.list}
@@ -36,6 +66,10 @@ const PureRepositoryList = ({ data }: Props): JSX.Element => {
           </Link>
         );
       }}
+      onEndReached={() => {
+        void handleFetchMore();
+      }}
+      onEndReachedThreshold={0.5}
     />
   );
 };
