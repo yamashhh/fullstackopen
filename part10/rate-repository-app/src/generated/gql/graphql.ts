@@ -360,6 +360,8 @@ export type PaginatedRepositoriesQuery = {
 
 export type RepositoryQueryVariables = Exact<{
   repositoryId: Scalars["ID"]["input"];
+  first?: InputMaybe<Scalars["Int"]["input"]>;
+  after?: InputMaybe<Scalars["String"]["input"]>;
 }>;
 
 export type RepositoryQuery = {
@@ -369,12 +371,16 @@ export type RepositoryQuery = {
         __typename?: "Repository";
         reviews: {
           __typename?: "ReviewConnection";
+          totalCount: number;
           edges: Array<{
             __typename?: "ReviewEdge";
             node: { __typename?: "Review" } & {
               " $fragmentRefs"?: { ReviewItemFragment: ReviewItemFragment };
             };
           }>;
+          pageInfo: { __typename?: "PageInfo" } & {
+            " $fragmentRefs"?: { PageInfoFragment: PageInfoFragment };
+          };
         };
       } & {
         " $fragmentRefs"?: { RepositoryItemFragment: RepositoryItemFragment };
@@ -1047,6 +1053,22 @@ export const RepositoryDocument = {
             type: { kind: "NamedType", name: { kind: "Name", value: "ID" } },
           },
         },
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "first" },
+          },
+          type: { kind: "NamedType", name: { kind: "Name", value: "Int" } },
+        },
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "after" },
+          },
+          type: { kind: "NamedType", name: { kind: "Name", value: "String" } },
+        },
       ],
       selectionSet: {
         kind: "SelectionSet",
@@ -1074,6 +1096,24 @@ export const RepositoryDocument = {
                 {
                   kind: "Field",
                   name: { kind: "Name", value: "reviews" },
+                  arguments: [
+                    {
+                      kind: "Argument",
+                      name: { kind: "Name", value: "first" },
+                      value: {
+                        kind: "Variable",
+                        name: { kind: "Name", value: "first" },
+                      },
+                    },
+                    {
+                      kind: "Argument",
+                      name: { kind: "Name", value: "after" },
+                      value: {
+                        kind: "Variable",
+                        name: { kind: "Name", value: "after" },
+                      },
+                    },
+                  ],
                   selectionSet: {
                     kind: "SelectionSet",
                     selections: [
@@ -1098,6 +1138,23 @@ export const RepositoryDocument = {
                             },
                           ],
                         },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "pageInfo" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "FragmentSpread",
+                              name: { kind: "Name", value: "PageInfo" },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "totalCount" },
                       },
                     ],
                   },
@@ -1167,6 +1224,23 @@ export const RepositoryDocument = {
               ],
             },
           },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "PageInfo" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "PageInfo" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "endCursor" } },
+          { kind: "Field", name: { kind: "Name", value: "hasNextPage" } },
+          { kind: "Field", name: { kind: "Name", value: "hasPreviousPage" } },
+          { kind: "Field", name: { kind: "Name", value: "startCursor" } },
         ],
       },
     },

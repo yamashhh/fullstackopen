@@ -28,14 +28,12 @@ interface Props {
     >
   >["fetchMore"];
   loading: boolean;
-  variables?: PaginatedRepositoriesQueryVariables;
 }
 
 const PureRepositoryList = ({
   data,
   fetchMore,
   loading,
-  variables,
 }: Props): JSX.Element => {
   const pageInfo = useFragment(PageInfoFragment, data?.repositories.pageInfo);
   const handleFetchMore = async (): Promise<void> => {

@@ -33,7 +33,7 @@ const documents = {
     types.MyReviewsDocument,
   "\n  query PaginatedRepositories(\n    $first: Int\n    $orderDirection: OrderDirection\n    $orderBy: AllRepositoriesOrderBy\n    $searchKeyword: String\n    $after: String\n  ) {\n    repositories(\n      first: $first\n      orderDirection: $orderDirection\n      orderBy: $orderBy\n      searchKeyword: $searchKeyword\n      after: $after\n    ) {\n      edges {\n        node {\n          ...RepositoryItem\n        }\n        cursor\n      }\n      pageInfo {\n        ...PageInfo\n      }\n      totalCount\n    }\n  }\n":
     types.PaginatedRepositoriesDocument,
-  "\n  query Repository($repositoryId: ID!) {\n    repository(id: $repositoryId) {\n      ...RepositoryItem\n      reviews {\n        edges {\n          node {\n            ...ReviewItem\n          }\n        }\n      }\n    }\n  }\n":
+  "\n  query Repository($repositoryId: ID!, $first: Int, $after: String) {\n    repository(id: $repositoryId) {\n      ...RepositoryItem\n      reviews(first: $first, after: $after) {\n        edges {\n          node {\n            ...ReviewItem\n          }\n        }\n        pageInfo {\n          ...PageInfo\n        }\n        totalCount\n      }\n    }\n  }\n":
     types.RepositoryDocument,
 };
 
@@ -115,8 +115,8 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: "\n  query Repository($repositoryId: ID!) {\n    repository(id: $repositoryId) {\n      ...RepositoryItem\n      reviews {\n        edges {\n          node {\n            ...ReviewItem\n          }\n        }\n      }\n    }\n  }\n"
-): (typeof documents)["\n  query Repository($repositoryId: ID!) {\n    repository(id: $repositoryId) {\n      ...RepositoryItem\n      reviews {\n        edges {\n          node {\n            ...ReviewItem\n          }\n        }\n      }\n    }\n  }\n"];
+  source: "\n  query Repository($repositoryId: ID!, $first: Int, $after: String) {\n    repository(id: $repositoryId) {\n      ...RepositoryItem\n      reviews(first: $first, after: $after) {\n        edges {\n          node {\n            ...ReviewItem\n          }\n        }\n        pageInfo {\n          ...PageInfo\n        }\n        totalCount\n      }\n    }\n  }\n"
+): (typeof documents)["\n  query Repository($repositoryId: ID!, $first: Int, $after: String) {\n    repository(id: $repositoryId) {\n      ...RepositoryItem\n      reviews(first: $first, after: $after) {\n        edges {\n          node {\n            ...ReviewItem\n          }\n        }\n        pageInfo {\n          ...PageInfo\n        }\n        totalCount\n      }\n    }\n  }\n"];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};
